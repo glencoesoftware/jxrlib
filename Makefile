@@ -59,8 +59,12 @@ ifndef DIR_BUILD
 DIR_BUILD=$(CURDIR)/build
 endif
 
+ifndef PREFIX
+PREFIX=/usr/local
+endif
+
 ifndef DIR_INSTALL
-DIR_INSTALL=/usr/lib/jxrlib-$(JXR_VERSION)
+DIR_INSTALL=$(PREFIX)/lib/jxrlib-$(JXR_VERSION)
 endif
 
 CD=cd
