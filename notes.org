@@ -1,0 +1,14 @@
+#+TITLE: Java wrapper for jxrlib
+#+AUTHOR: Joshua Ballanco
+#+EMAIL: jballanc@glencoesoftware.com
+#+DATE: 2016-06-10
+
+
+* General Approach
+** Use SWIG to generate JNI wrapper C++ classes
+** Package JNI wrapper with SWIG-generated Java classes
+** Finalize compatibility in context of Bioformats project
+* SWIG
+** Background
+*** [[http://swig.org/Doc3.0/Introduction.html#Introduction][Introduction]]
+*** [[http://swig.org/Doc3.0/Java.html#Java][Using SWIG with Java]]
