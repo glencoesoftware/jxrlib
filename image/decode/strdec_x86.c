@@ -2,16 +2,16 @@
 //
 // Copyright © Microsoft Corp.
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
-// 
+//
 // • Redistributions of source code must retain the above copyright notice,
 //   this list of conditions and the following disclaimer.
 // • Redistributions in binary form must reproduce the above copyright notice,
 //   this list of conditions and the following disclaimer in the documentation
 //   and/or other materials provided with the distribution.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 // AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,8 +25,8 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 //*@@@---@@@@******************************************************************
-#include "strcodec.h"
 #include "decode.h"
+#include "strcodec.h"
 
 #if defined(WMP_OPT_SSE2)
 #include <emmintrin.h>
@@ -44,47 +44,44 @@ __m128i g_const_b0x80;
 
 //================================================================
 #if defined(WMP_OPT_CC_DEC)
-__declspec(naked) void __stdcall storeRGB24_5(
-    U8* pbYCoCg,
-    size_t cbYCoCg,
-    const U8* pbRGB,
-    size_t cbRGB,
+__declspec(naked) void __stdcall storeRGB24_5(U8* pbYCoCg, size_t cbYCoCg,
+    const U8* pbRGB, size_t cbRGB,
     size_t cmb)
 {
 #define DISP 8
-    UNREFERENCED_PARAMETER( pbYCoCg );
-    UNREFERENCED_PARAMETER( cbYCoCg );
-    UNREFERENCED_PARAMETER( pbRGB );
-    UNREFERENCED_PARAMETER( cbRGB );
-    UNREFERENCED_PARAMETER( cmb );
+    UNREFERENCED_PARAMETER(pbYCoCg);
+    UNREFERENCED_PARAMETER(cbYCoCg);
+    UNREFERENCED_PARAMETER(pbRGB);
+    UNREFERENCED_PARAMETER(cbRGB);
+    UNREFERENCED_PARAMETER(cmb);
     __asm {
         push ebp
         push ebx    
         push esi
         push edi
 
-        mov ebx, [esp + 36]         // $ebx = cmb
-        mov edi, [esp + 28]         // $edi = pbRGB
-        lea ebx, [ebx + ebx * 2]    // $ebx = cmb * 3
-        mov edx, [esp + 32]         // $edx = cbRGB
-        shl ebx, 4                  // $ebx = cmb * 3 * 16
-        mov esi, [esp + 20]         // $esi = pbYCoCg
-        add edi, ebx                // $edi = pbRGB + 3 * 16 * cmb
-        mov ebp, [esp + 24]         // $ebp = cbYCoCg
+        mov ebx, [esp + 36] // $ebx = cmb
+        mov edi, [esp + 28] // $edi = pbRGB
+        lea ebx, [ebx + ebx * 2] // $ebx = cmb * 3
+        mov edx, [esp + 32] // $edx = cbRGB
+        shl ebx, 4 // $ebx = cmb * 3 * 16
+        mov esi, [esp + 20] // $esi = pbYCoCg
+        add edi, ebx // $edi = pbRGB + 3 * 16 * cmb
+        mov ebp, [esp + 24] // $ebp = cbYCoCg
         neg ebx
 
         mov eax, esp
         and esp, 0xffffff80
         sub esp, 64 * 4 + DISP
 
-        mov [esp], eax              // original $esp
+        mov [esp], eax // original $esp
         mov [esp + 4], edi
     }
 Loop0:
     __asm {
-        mov edi, [esp + 4]          // $edi = pbRGB + 3 * 16 * cmb
+        mov edi, [esp + 4] // $edi = pbRGB + 3 * 16 * cmb
 
-            // first 8 pixels
+        // first 8 pixels
             pxor xmm1, xmm1
             pxor xmm5, xmm5
             movdqa xmm0, [esi]
@@ -97,15 +94,15 @@ Loop0:
             paddd xmm0, [g_const_d0x80]
             paddd xmm4, [g_const_d0x80]
 
-            // ICC
-            movdqa xmm3, xmm1           // g -= r >> 1
+        // ICC
+            movdqa xmm3, xmm1 // g -= r >> 1
             movdqa xmm7, xmm5
             psrad xmm3, 1
             psrad xmm7, 1
             psubd xmm0, xmm3
             psubd xmm4, xmm7
 
-            movdqa xmm3, [g_const_d1]   // r -= ((b + 1) >> 1) - g
+            movdqa xmm3, [g_const_d1] // r -= ((b + 1) >> 1) - g
             movdqa xmm7, [g_const_d1]
             paddd xmm3, xmm2
             paddd xmm7, xmm6
@@ -116,7 +113,7 @@ Loop0:
             psubd xmm1, xmm3
             psubd xmm5, xmm7
 
-            paddd xmm2, xmm1            // b += r
+            paddd xmm2, xmm1 // b += r
             paddd xmm6, xmm5
 
             pslld xmm0, 8
@@ -135,7 +132,7 @@ Loop0:
             movdqa [esp + DISP + 64 * 0 + 16 * 2], xmm0
             movdqa [esp + DISP + 64 * 0 + 16 * 3], xmm4
 
-            // second 8 pixels
+        // second 8 pixels
             pxor xmm1, xmm1
             pxor xmm5, xmm5
             movdqa xmm0, [esi + 32]
@@ -148,15 +145,15 @@ Loop0:
             paddd xmm0, [g_const_d0x80]
             paddd xmm4, [g_const_d0x80]
 
-            // ICC
-            movdqa xmm3, xmm1           // g -= r >> 1
+        // ICC
+            movdqa xmm3, xmm1 // g -= r >> 1
             movdqa xmm7, xmm5
             psrad xmm3, 1
             psrad xmm7, 1
             psubd xmm0, xmm3
             psubd xmm4, xmm7
 
-            movdqa xmm3, [g_const_d1]   // r -= ((b + 1) >> 1) - g
+            movdqa xmm3, [g_const_d1] // r -= ((b + 1) >> 1) - g
             movdqa xmm7, [g_const_d1]
             paddd xmm3, xmm2
             paddd xmm7, xmm6
@@ -167,7 +164,7 @@ Loop0:
             psubd xmm1, xmm3
             psubd xmm5, xmm7
 
-            paddd xmm2, xmm1            // b += r
+            paddd xmm2, xmm1 // b += r
             paddd xmm6, xmm5
 
             pslld xmm0, 8
@@ -186,10 +183,10 @@ Loop0:
             movdqa [esp + DISP + 64 * 1 + 16 * 2], xmm0
             movdqa [esp + DISP + 64 * 1 + 16 * 3], xmm4
 
-            //================
+        //================
             add esi, 64
 
-            // first 8 pixels
+        // first 8 pixels
             pxor xmm1, xmm1
             pxor xmm5, xmm5
             movdqa xmm0, [esi]
@@ -202,15 +199,15 @@ Loop0:
             paddd xmm0, [g_const_d0x80]
             paddd xmm4, [g_const_d0x80]
 
-            // ICC
-            movdqa xmm3, xmm1           // g -= r >> 1
+        // ICC
+            movdqa xmm3, xmm1 // g -= r >> 1
             movdqa xmm7, xmm5
             psrad xmm3, 1
             psrad xmm7, 1
             psubd xmm0, xmm3
             psubd xmm4, xmm7
 
-            movdqa xmm3, [g_const_d1]   // r -= ((b + 1) >> 1) - g
+            movdqa xmm3, [g_const_d1] // r -= ((b + 1) >> 1) - g
             movdqa xmm7, [g_const_d1]
             paddd xmm3, xmm2
             paddd xmm7, xmm6
@@ -221,7 +218,7 @@ Loop0:
             psubd xmm1, xmm3
             psubd xmm5, xmm7
 
-            paddd xmm2, xmm1            // b += r
+            paddd xmm2, xmm1 // b += r
             paddd xmm6, xmm5
 
             pslld xmm0, 8
@@ -241,7 +238,7 @@ Loop0:
             movdqa [esp + DISP + 64 * 2 + 16 * 2], xmm0
             movdqa [esp + DISP + 64 * 2 + 16 * 3], xmm4
 
-            // second 8 pixels
+        // second 8 pixels
             pxor xmm1, xmm1
             pxor xmm5, xmm5
             movdqa xmm0, [esi + 32]
@@ -254,15 +251,15 @@ Loop0:
             paddd xmm0, [g_const_d0x80]
             paddd xmm4, [g_const_d0x80]
 
-            // ICC
-            movdqa xmm3, xmm1           // g -= r >> 1
+        // ICC
+            movdqa xmm3, xmm1 // g -= r >> 1
             movdqa xmm7, xmm5
             psrad xmm3, 1
             psrad xmm7, 1
             psubd xmm0, xmm3
             psubd xmm4, xmm7
 
-            movdqa xmm3, [g_const_d1]   // r -= ((b + 1) >> 1) - g
+            movdqa xmm3, [g_const_d1] // r -= ((b + 1) >> 1) - g
             movdqa xmm7, [g_const_d1]
             paddd xmm3, xmm2
             paddd xmm7, xmm6
@@ -273,7 +270,7 @@ Loop0:
             psubd xmm1, xmm3
             psubd xmm5, xmm7
 
-            paddd xmm2, xmm1            // b += r
+            paddd xmm2, xmm1 // b += r
             paddd xmm6, xmm5
 
             pslld xmm0, 8
@@ -292,120 +289,120 @@ Loop0:
             movdqa [esp + DISP + 64 * 3 + 16 * 2], xmm0
             movdqa [esp + DISP + 64 * 3 + 16 * 3], xmm4
 
-            //================================
-            // RGBX32 -> RGB24
-            mov eax, [esp + DISP + 64 * 0 + 4]      // ..B1G1R1
-            mov ecx, [esp + DISP + 64 * 0 + 32]     // B0G0R0..
-            shld eax, ecx, 24                       // R1B0G0R0
+        //================================
+        // RGBX32 -> RGB24
+            mov eax, [esp + DISP + 64 * 0 + 4] // ..B1G1R1
+            mov ecx, [esp + DISP + 64 * 0 + 32] // B0G0R0..
+            shld eax, ecx, 24 // R1B0G0R0
             mov [edi + ebx + 0], eax
-            mov eax, [esp + DISP + 64 * 0 + 20]     // ..B5G5R5
-            mov ecx, [esp + DISP + 64 * 0 + 36]     // B1G1R1..
-            shld eax, ecx, 16                       // G5R5B1G1
+            mov eax, [esp + DISP + 64 * 0 + 20] // ..B5G5R5
+            mov ecx, [esp + DISP + 64 * 0 + 36] // B1G1R1..
+            shld eax, ecx, 16 // G5R5B1G1
             mov [edi + ebx + 4], eax
-            mov eax, [esp + DISP + 64 * 0 + 16]     // ..B4G4R4
-            mov ecx, [esp + DISP + 64 * 0 + 52]     // B5G5R5..
-            shld eax, ecx, 8                        // B4G4R4B5
+            mov eax, [esp + DISP + 64 * 0 + 16] // ..B4G4R4
+            mov ecx, [esp + DISP + 64 * 0 + 52] // B5G5R5..
+            shld eax, ecx, 8 // B4G4R4B5
             mov [edi + ebx + 8], eax
-            add edi, edx                // $edi = pbRGB += cbRGB
+            add edi, edx // $edi = pbRGB += cbRGB
 
-            mov eax, [esp + DISP + 64 * 0 + 4 + 8]  // ..B3G3R3
+            mov eax, [esp + DISP + 64 * 0 + 4 + 8] // ..B3G3R3
             mov ecx, [esp + DISP + 64 * 0 + 32 + 8] // B2G2R2..
-            shld eax, ecx, 24                       // R3B2G2R2
+            shld eax, ecx, 24 // R3B2G2R2
             mov [edi + ebx + 0], eax
             mov eax, [esp + DISP + 64 * 0 + 20 + 8] // ..B7G7R7
             mov ecx, [esp + DISP + 64 * 0 + 36 + 8] // B3G3R3..
-            shld eax, ecx, 16                       // G7R7B3G3
+            shld eax, ecx, 16 // G7R7B3G3
             mov [edi + ebx + 4], eax
             mov eax, [esp + DISP + 64 * 0 + 16 + 8] // ..B6G6R6
             mov ecx, [esp + DISP + 64 * 0 + 52 + 8] // B7G7R7..
-            shld eax, ecx, 8                        // B6G6R6B7
+            shld eax, ecx, 8 // B6G6R6B7
             mov [edi + ebx + 8], eax
-            add edi, edx                // $edi = pbRGB += cbRGB
+            add edi, edx // $edi = pbRGB += cbRGB
 
-            // RGBX32 -> RGB24
-            mov eax, [esp + DISP + 64 * 1 + 4 + 8]  // ..B3G3R3
+        // RGBX32 -> RGB24
+            mov eax, [esp + DISP + 64 * 1 + 4 + 8] // ..B3G3R3
             mov ecx, [esp + DISP + 64 * 1 + 32 + 8] // B2G2R2..
-            shld eax, ecx, 24                       // R3B2G2R2
+            shld eax, ecx, 24 // R3B2G2R2
             mov [edi + ebx + 0], eax
             mov eax, [esp + DISP + 64 * 1 + 20 + 8] // ..B7G7R7
             mov ecx, [esp + DISP + 64 * 1 + 36 + 8] // B3G3R3..
-            shld eax, ecx, 16                       // G7R7B3G3
+            shld eax, ecx, 16 // G7R7B3G3
             mov [edi + ebx + 4], eax
             mov eax, [esp + DISP + 64 * 1 + 16 + 8] // ..B6G6R6
             mov ecx, [esp + DISP + 64 * 1 + 52 + 8] // B7G7R7..
-            shld eax, ecx, 8                        // B6G6R6B7
+            shld eax, ecx, 8 // B6G6R6B7
             mov [edi + ebx + 8], eax
-            add edi, edx                // $edi = pbRGB += cbRGB
+            add edi, edx // $edi = pbRGB += cbRGB
 
-            mov eax, [esp + DISP + 64 * 1 + 4]  // ..B1G1R1
+            mov eax, [esp + DISP + 64 * 1 + 4] // ..B1G1R1
             mov ecx, [esp + DISP + 64 * 1 + 32] // B0G0R0..
-            shld eax, ecx, 24                   // R1B0G0R0
+            shld eax, ecx, 24 // R1B0G0R0
             mov [edi + ebx + 0], eax
             mov eax, [esp + DISP + 64 * 1 + 20] // ..B5G5R5
             mov ecx, [esp + DISP + 64 * 1 + 36] // B1G1R1..
-            shld eax, ecx, 16                   // G5R5B1G1
+            shld eax, ecx, 16 // G5R5B1G1
             mov [edi + ebx + 4], eax
             mov eax, [esp + DISP + 64 * 1 + 16] // ..B4G4R4
             mov ecx, [esp + DISP + 64 * 1 + 52] // B5G5R5..
-            shld eax, ecx, 8                    // B4G4R4B5
+            shld eax, ecx, 8 // B4G4R4B5
             mov [edi + ebx + 8], eax
-            add edi, edx                // $edi = pbRGB += cbRGB
+            add edi, edx // $edi = pbRGB += cbRGB
 
-            // RGBX32 -> RGB24
-            mov eax, [esp + DISP + 64 * 2 + 4]  // ..B1G1R1
+        // RGBX32 -> RGB24
+            mov eax, [esp + DISP + 64 * 2 + 4] // ..B1G1R1
             mov ecx, [esp + DISP + 64 * 2 + 32] // B0G0R0..
-            shld eax, ecx, 24                   // R1B0G0R0
+            shld eax, ecx, 24 // R1B0G0R0
             mov [edi + ebx + 0], eax
             mov eax, [esp + DISP + 64 * 2 + 20] // ..B5G5R5
             mov ecx, [esp + DISP + 64 * 2 + 36] // B1G1R1..
-            shld eax, ecx, 16                   // G5R5B1G1
+            shld eax, ecx, 16 // G5R5B1G1
             mov [edi + ebx + 4], eax
             mov eax, [esp + DISP + 64 * 2 + 16] // ..B4G4R4
             mov ecx, [esp + DISP + 64 * 2 + 52] // B5G5R5..
-            shld eax, ecx, 8                    // B4G4R4B5
+            shld eax, ecx, 8 // B4G4R4B5
             mov [edi + ebx + 8], eax
-            add edi, edx                // $edi = pbRGB += cbRGB
+            add edi, edx // $edi = pbRGB += cbRGB
 
-            mov eax, [esp + DISP + 64 * 2 + 4 + 8]  // ..B3G3R3
+            mov eax, [esp + DISP + 64 * 2 + 4 + 8] // ..B3G3R3
             mov ecx, [esp + DISP + 64 * 2 + 32 + 8] // B2G2R2..
-            shld eax, ecx, 24                       // R3B2G2R2
+            shld eax, ecx, 24 // R3B2G2R2
             mov [edi + ebx + 0], eax
             mov eax, [esp + DISP + 64 * 2 + 20 + 8] // ..B7G7R7
             mov ecx, [esp + DISP + 64 * 2 + 36 + 8] // B3G3R3..
-            shld eax, ecx, 16                       // G7R7B3G3
+            shld eax, ecx, 16 // G7R7B3G3
             mov [edi + ebx + 4], eax
             mov eax, [esp + DISP + 64 * 2 + 16 + 8] // ..B6G6R6
             mov ecx, [esp + DISP + 64 * 2 + 52 + 8] // B7G7R7..
-            shld eax, ecx, 8                        // B6G6R6B7
+            shld eax, ecx, 8 // B6G6R6B7
             mov [edi + ebx + 8], eax
-            add edi, edx                // $edi = pbRGB += cbRGB
+            add edi, edx // $edi = pbRGB += cbRGB
 
-            // RGBX32 -> RGB24
-            mov eax, [esp + DISP + 64 * 3 + 4 + 8]  // ..B3G3R3
+        // RGBX32 -> RGB24
+            mov eax, [esp + DISP + 64 * 3 + 4 + 8] // ..B3G3R3
             mov ecx, [esp + DISP + 64 * 3 + 32 + 8] // B2G2R2..
-            shld eax, ecx, 24                       // R3B2G2R2
+            shld eax, ecx, 24 // R3B2G2R2
             mov [edi + ebx + 0], eax
             mov eax, [esp + DISP + 64 * 3 + 20 + 8] // ..B7G7R7
             mov ecx, [esp + DISP + 64 * 3 + 36 + 8] // B3G3R3..
-            shld eax, ecx, 16                       // G7R7B3G3
+            shld eax, ecx, 16 // G7R7B3G3
             mov [edi + ebx + 4], eax
             mov eax, [esp + DISP + 64 * 3 + 16 + 8] // ..B6G6R6
             mov ecx, [esp + DISP + 64 * 3 + 52 + 8] // B7G7R7..
-            shld eax, ecx, 8                        // B6G6R6B7
+            shld eax, ecx, 8 // B6G6R6B7
             mov [edi + ebx + 8], eax
-            add edi, edx                // $edi = pbRGB += cbRGB
+            add edi, edx // $edi = pbRGB += cbRGB
 
-            mov eax, [esp + DISP + 64 * 3 + 4]      // ..B1G1R1
-            mov ecx, [esp + DISP + 64 * 3 + 32]     // B0G0R0..
-            shld eax, ecx, 24                       // R1B0G0R0
+            mov eax, [esp + DISP + 64 * 3 + 4] // ..B1G1R1
+            mov ecx, [esp + DISP + 64 * 3 + 32] // B0G0R0..
+            shld eax, ecx, 24 // R1B0G0R0
             mov [edi + ebx + 0], eax
-            mov eax, [esp + DISP + 64 * 3 + 20]     // ..B5G5R5
-            mov ecx, [esp + DISP + 64 * 3 + 36]     // B1G1R1..
-            shld eax, ecx, 16                       // G5R5B1G1
+            mov eax, [esp + DISP + 64 * 3 + 20] // ..B5G5R5
+            mov ecx, [esp + DISP + 64 * 3 + 36] // B1G1R1..
+            shld eax, ecx, 16 // G5R5B1G1
             mov [edi + ebx + 4], eax
-            mov eax, [esp + DISP + 64 * 3 + 16]     // ..B4G4R4
-            mov ecx, [esp + DISP + 64 * 3 + 52]     // B5G5R5..
-            shld eax, ecx, 8                        // B4G4R4B5
+            mov eax, [esp + DISP + 64 * 3 + 16] // ..B4G4R4
+            mov ecx, [esp + DISP + 64 * 3 + 52] // B5G5R5..
+            shld eax, ecx, 8 // B4G4R4B5
             mov [edi + ebx + 8], eax
 
         //================================
@@ -427,7 +424,9 @@ Int outputMBRow_RGB24_Lossless_1(CWMImageStrCodec* pSC)
 {
 #ifdef REENTRANT_MODE
     const size_t cHeight = min((pSC->m_Dparam->cROIBottomY + 1) - (pSC->cRow - 1) * 16, 16);
-    const size_t iFirstRow = ((pSC->cRow - 1) * 16 > pSC->m_Dparam->cROITopY ? 0 : (pSC->m_Dparam->cROITopY & 0xf));
+    const size_t iFirstRow = ((pSC->cRow - 1) * 16 > pSC->m_Dparam->cROITopY
+            ? 0
+            : (pSC->m_Dparam->cROITopY & 0xf));
 #endif
     const size_t cbRGB = pSC->WMIBI.cbStride;
     const U8* const pbRGB = (U8*)pSC->WMIBI.pv + cbRGB * (pSC->cRow - 1) * 16;
@@ -449,8 +448,8 @@ Int outputMBRow_RGB24_Lossless_1(CWMImageStrCodec* pSC)
 
     assert(pSC->m_Dparam->bDecodeFullFrame);
 
-    storeRGB24_5(pbY + 64 * 0, pbU - pbY, pbRGB + cbRGB *  0, cbRGB, cmbColumn);
-    storeRGB24_5(pbY + 64 * 2, pbU - pbY, pbRGB + cbRGB *  8, cbRGB, cmbColumn);
+    storeRGB24_5(pbY + 64 * 0, pbU - pbY, pbRGB + cbRGB * 0, cbRGB, cmbColumn);
+    storeRGB24_5(pbY + 64 * 2, pbU - pbY, pbRGB + cbRGB * 8, cbRGB, cmbColumn);
 
 #ifdef REENTRANT_MODE
     pSC->WMIBI.cLinesDecoded = cHeight - iFirstRow;
@@ -458,52 +457,47 @@ Int outputMBRow_RGB24_Lossless_1(CWMImageStrCodec* pSC)
     return ICERR_OK;
 }
 
-
-__declspec(naked) void __stdcall storeRGB24_3(
-    U8* pbYCoCg,
-    size_t cbYCoCg,
-    const U8* pbRGB,
-    size_t cbRGB,
-    size_t cmb,
-    const U8* Shift)
+__declspec(naked) void __stdcall storeRGB24_3(U8* pbYCoCg, size_t cbYCoCg,
+    const U8* pbRGB, size_t cbRGB,
+    size_t cmb, const U8* Shift)
 {
-    UNREFERENCED_PARAMETER( pbYCoCg );
-    UNREFERENCED_PARAMETER( cbYCoCg );
-    UNREFERENCED_PARAMETER( pbRGB );
-    UNREFERENCED_PARAMETER( cbRGB );
-    UNREFERENCED_PARAMETER( cmb );
-    UNREFERENCED_PARAMETER( Shift );
+    UNREFERENCED_PARAMETER(pbYCoCg);
+    UNREFERENCED_PARAMETER(cbYCoCg);
+    UNREFERENCED_PARAMETER(pbRGB);
+    UNREFERENCED_PARAMETER(cbRGB);
+    UNREFERENCED_PARAMETER(cmb);
+    UNREFERENCED_PARAMETER(Shift);
     __asm {
         push ebp
         push ebx    
         push esi
         push edi
 
-        mov ecx, [esp + 40]         // $ecx = Shift
-        mov ebx, [esp + 36]         // $ebx = cmb
-        mov edi, [esp + 28]         // $edi = pbRGB
-        lea ebx, [ebx + ebx * 2]    // $ebx = cmb * 3
-        mov edx, [esp + 32]         // $edx = cbRGB
-        shl ebx, 4                  // $ebx = cmb * 3 * 16
-        mov esi, [esp + 20]         // $esi = pbYCoCg
-        add edi, ebx                // $edi = pbRGB + 3 * 16 * cmb
-        mov ebp, [esp + 24]         // $ebp = cbYCoCg
+        mov ecx, [esp + 40] // $ecx = Shift
+        mov ebx, [esp + 36] // $ebx = cmb
+        mov edi, [esp + 28] // $edi = pbRGB
+        lea ebx, [ebx + ebx * 2] // $ebx = cmb * 3
+        mov edx, [esp + 32] // $edx = cbRGB
+        shl ebx, 4 // $ebx = cmb * 3 * 16
+        mov esi, [esp + 20] // $esi = pbYCoCg
+        add edi, ebx // $edi = pbRGB + 3 * 16 * cmb
+        mov ebp, [esp + 24] // $ebp = cbYCoCg
         neg ebx
 
         mov eax, esp
         and esp, 0xffffff80
         sub esp, 320
 
-        mov [esp], eax              // original $esp
+        mov [esp], eax // original $esp
         mov [esp + 4], edi
         mov [esp + 8], ecx
     }
 Loop0:
     __asm {
-        mov edi, [esp + 4]          // $edi = pbRGB + 3 * 16 * cmb
+        mov edi, [esp + 4] // $edi = pbRGB + 3 * 16 * cmb
 
-            //================
-            // first 8 pixels
+        //================
+        // first 8 pixels
             movdqa xmm0, [esi]
             movdqa xmm4, [esi + 16]
             movdqa xmm3, [esi + ebp]
@@ -516,22 +510,22 @@ Loop0:
             movdqa xmm5, [g_const_d0x80]
             pslld xmm5, xmm1
             paddd xmm5, xmm1
-            paddd xmm0, xmm5            // bias
-            paddd xmm4, xmm5            // bias
+            paddd xmm0, xmm5 // bias
+            paddd xmm4, xmm5 // bias
             pxor xmm1, xmm1
             pxor xmm5, xmm5
             psubd xmm1, xmm3
             psubd xmm5, xmm7
 
-            // ICC
-            movdqa xmm3, xmm1           // g -= r >> 1
+        // ICC
+            movdqa xmm3, xmm1 // g -= r >> 1
             movdqa xmm7, xmm5
             psrad xmm3, 1
             psrad xmm7, 1
             psubd xmm0, xmm3
             psubd xmm4, xmm7
 
-            movdqa xmm3, [g_const_d1]   // r -= ((b + 1) >> 1) - g
+            movdqa xmm3, [g_const_d1] // r -= ((b + 1) >> 1) - g
             movdqa xmm7, [g_const_d1]
             paddd xmm3, xmm2
             paddd xmm7, xmm6
@@ -542,10 +536,10 @@ Loop0:
             psubd xmm1, xmm3
             psubd xmm5, xmm7
 
-            paddd xmm2, xmm1            // b += r
+            paddd xmm2, xmm1 // b += r
             paddd xmm6, xmm5
 
-            // clip
+        // clip
             movdqa xmm3, [g_const_w0x80]
             packssdw xmm0, xmm4
             packssdw xmm1, xmm5
@@ -565,8 +559,8 @@ Loop0:
             movdqa [esp + 32], xmm1
             movdqa [esp + 48], xmm2
 
-            //================
-            // second 8 pixels
+        //================
+        // second 8 pixels
             movdqa xmm0, [esi + 32]
             movdqa xmm4, [esi + 48]
             movdqa xmm3, [esi + ebp + 32]
@@ -579,22 +573,22 @@ Loop0:
             movdqa xmm5, [g_const_d0x80]
             pslld xmm5, xmm1
             paddd xmm5, xmm1
-            paddd xmm0, xmm5            // bias
-            paddd xmm4, xmm5            // bias
+            paddd xmm0, xmm5 // bias
+            paddd xmm4, xmm5 // bias
             pxor xmm1, xmm1
             pxor xmm5, xmm5
             psubd xmm1, xmm3
             psubd xmm5, xmm7
 
-            // ICC
-            movdqa xmm3, xmm1           // g -= r >> 1
+        // ICC
+            movdqa xmm3, xmm1 // g -= r >> 1
             movdqa xmm7, xmm5
             psrad xmm3, 1
             psrad xmm7, 1
             psubd xmm0, xmm3
             psubd xmm4, xmm7
 
-            movdqa xmm3, [g_const_d1]   // r -= ((b + 1) >> 1) - g
+            movdqa xmm3, [g_const_d1] // r -= ((b + 1) >> 1) - g
             movdqa xmm7, [g_const_d1]
             paddd xmm3, xmm2
             paddd xmm7, xmm6
@@ -605,10 +599,10 @@ Loop0:
             psubd xmm1, xmm3
             psubd xmm5, xmm7
 
-            paddd xmm2, xmm1            // b += r
+            paddd xmm2, xmm1 // b += r
             paddd xmm6, xmm5
 
-            // clip
+        // clip
             movdqa xmm3, [g_const_w0x80]
             packssdw xmm0, xmm4
             packssdw xmm1, xmm5
@@ -624,8 +618,8 @@ Loop0:
             psubw xmm1, xmm3
             psubw xmm2, xmm3
 
-            //================
-            // 16 pixels
+        //================
+        // 16 pixels
             movdqa xmm3, [g_const_b0x80]
             packsswb xmm0, [esp + 16]
             packsswb xmm1, [esp + 32]
@@ -647,12 +641,12 @@ Loop0:
             punpcklbw xmm5, xmm7
             punpcklbw xmm6, xmm7
 
-            // spill second 8 pixels
+        // spill second 8 pixels
             movdqa [esp + 16], xmm4
             movdqa [esp + 32], xmm5
             movdqa [esp + 48], xmm6
 
-            // first 8 pixels
+        // first 8 pixels
             movdqa xmm4, xmm0
             movdqa xmm5, xmm1
             movdqa xmm6, xmm2
@@ -682,7 +676,7 @@ Loop0:
             movdqa [esp + 96], xmm0
             movdqa [esp + 112], xmm4
 
-            // second 8 pixels
+        // second 8 pixels
             movdqa xmm0, [esp + 16]
             movdqa xmm1, [esp + 32]
             movdqa xmm2, [esp + 48]
@@ -716,8 +710,8 @@ Loop0:
         //================================
         add esi, 64
 
-            //================
-            // first 8 pixels
+        //================
+        // first 8 pixels
             movdqa xmm0, [esi]
             movdqa xmm4, [esi + 16]
             movdqa xmm3, [esi + ebp]
@@ -730,22 +724,22 @@ Loop0:
             movdqa xmm5, [g_const_d0x80]
             pslld xmm5, xmm1
             paddd xmm5, xmm1
-            paddd xmm0, xmm5            // bias
-            paddd xmm4, xmm5            // bias
+            paddd xmm0, xmm5 // bias
+            paddd xmm4, xmm5 // bias
             pxor xmm1, xmm1
             pxor xmm5, xmm5
             psubd xmm1, xmm3
             psubd xmm5, xmm7
 
-            // ICC
-            movdqa xmm3, xmm1           // g -= r >> 1
+        // ICC
+            movdqa xmm3, xmm1 // g -= r >> 1
             movdqa xmm7, xmm5
             psrad xmm3, 1
             psrad xmm7, 1
             psubd xmm0, xmm3
             psubd xmm4, xmm7
 
-            movdqa xmm3, [g_const_d1]   // r -= ((b + 1) >> 1) - g
+            movdqa xmm3, [g_const_d1] // r -= ((b + 1) >> 1) - g
             movdqa xmm7, [g_const_d1]
             paddd xmm3, xmm2
             paddd xmm7, xmm6
@@ -756,10 +750,10 @@ Loop0:
             psubd xmm1, xmm3
             psubd xmm5, xmm7
 
-            paddd xmm2, xmm1            // b += r
+            paddd xmm2, xmm1 // b += r
             paddd xmm6, xmm5
 
-            // clip
+        // clip
             movdqa xmm3, [g_const_w0x80]
             packssdw xmm0, xmm4
             packssdw xmm1, xmm5
@@ -779,8 +773,8 @@ Loop0:
             movdqa [esp + 32], xmm1
             movdqa [esp + 48], xmm2
 
-            //================
-            // second 8 pixels
+        //================
+        // second 8 pixels
             movdqa xmm0, [esi + 32]
             movdqa xmm4, [esi + 48]
             movdqa xmm3, [esi + ebp + 32]
@@ -793,22 +787,22 @@ Loop0:
             movdqa xmm5, [g_const_d0x80]
             pslld xmm5, xmm1
             paddd xmm5, xmm1
-            paddd xmm0, xmm5            // bias
-            paddd xmm4, xmm5            // bias
+            paddd xmm0, xmm5 // bias
+            paddd xmm4, xmm5 // bias
             pxor xmm1, xmm1
             pxor xmm5, xmm5
             psubd xmm1, xmm3
             psubd xmm5, xmm7
 
-            // ICC
-            movdqa xmm3, xmm1           // g -= r >> 1
+        // ICC
+            movdqa xmm3, xmm1 // g -= r >> 1
             movdqa xmm7, xmm5
             psrad xmm3, 1
             psrad xmm7, 1
             psubd xmm0, xmm3
             psubd xmm4, xmm7
 
-            movdqa xmm3, [g_const_d1]   // r -= ((b + 1) >> 1) - g
+            movdqa xmm3, [g_const_d1] // r -= ((b + 1) >> 1) - g
             movdqa xmm7, [g_const_d1]
             paddd xmm3, xmm2
             paddd xmm7, xmm6
@@ -819,10 +813,10 @@ Loop0:
             psubd xmm1, xmm3
             psubd xmm5, xmm7
 
-            paddd xmm2, xmm1            // b += r
+            paddd xmm2, xmm1 // b += r
             paddd xmm6, xmm5
 
-            // clip
+        // clip
             movdqa xmm3, [g_const_w0x80]
             packssdw xmm0, xmm4
             packssdw xmm1, xmm5
@@ -838,8 +832,8 @@ Loop0:
             psubw xmm1, xmm3
             psubw xmm2, xmm3
 
-            //================
-            // 16 pixels
+        //================
+        // 16 pixels
             movdqa xmm3, [g_const_b0x80]
             packsswb xmm0, [esp + 16]
             packsswb xmm1, [esp + 32]
@@ -861,12 +855,12 @@ Loop0:
             punpcklbw xmm5, xmm7
             punpcklbw xmm6, xmm7
 
-            // spill second 8 pixels
+        // spill second 8 pixels
             movdqa [esp + 16], xmm4
             movdqa [esp + 32], xmm5
             movdqa [esp + 48], xmm6
 
-            // first 8 pixels
+        // first 8 pixels
             movdqa xmm4, xmm0
             movdqa xmm5, xmm1
             movdqa xmm6, xmm2
@@ -896,7 +890,7 @@ Loop0:
             movdqa [esp + 224], xmm0
             movdqa [esp + 240], xmm4
 
-            // second 8 pixels
+        // second 8 pixels
             movdqa xmm0, [esp + 16]
             movdqa xmm1, [esp + 32]
             movdqa xmm2, [esp + 48]
@@ -927,121 +921,121 @@ Loop0:
             movdqa [esp + 288], xmm0
             movdqa [esp + 304], xmm4
 
-            // RGBX32 -> RGB24
-            mov eax, [esp + 68]         // ..B1G1R1
-            mov ecx, [esp + 96]         // B0G0R0..
-            shld eax, ecx, 24           // R1B0G0R0
+        // RGBX32 -> RGB24
+            mov eax, [esp + 68] // ..B1G1R1
+            mov ecx, [esp + 96] // B0G0R0..
+            shld eax, ecx, 24 // R1B0G0R0
             mov [edi + ebx + 0], eax
-            mov eax, [esp + 84]         // ..B5G5R5
-            mov ecx, [esp + 100]        // B1G1R1..
-            shld eax, ecx, 16           // G5R5B1G1
+            mov eax, [esp + 84] // ..B5G5R5
+            mov ecx, [esp + 100] // B1G1R1..
+            shld eax, ecx, 16 // G5R5B1G1
             mov [edi + ebx + 4], eax
-            mov eax, [esp + 80]         // ..B4G4R4
-            mov ecx, [esp + 116]        // B5G5R5..
-            shld eax, ecx, 8            // B4G4R4B5
+            mov eax, [esp + 80] // ..B4G4R4
+            mov ecx, [esp + 116] // B5G5R5..
+            shld eax, ecx, 8 // B4G4R4B5
             mov [edi + ebx + 8], eax
-            add edi, edx                // $edi = pbRGB += cbRGB
+            add edi, edx // $edi = pbRGB += cbRGB
 
-            mov eax, [esp + 76]         // ..B3G3R3
-            mov ecx, [esp + 104]        // B2G2R2..
-            shld eax, ecx, 24           // R3B2G2R2
+            mov eax, [esp + 76] // ..B3G3R3
+            mov ecx, [esp + 104] // B2G2R2..
+            shld eax, ecx, 24 // R3B2G2R2
             mov [edi + ebx + 0], eax
-            mov eax, [esp + 92]         // ..B7G7R7
-            mov ecx, [esp + 108]        // B3G3R3..
-            shld eax, ecx, 16           // G7R7B3G3
+            mov eax, [esp + 92] // ..B7G7R7
+            mov ecx, [esp + 108] // B3G3R3..
+            shld eax, ecx, 16 // G7R7B3G3
             mov [edi + ebx + 4], eax
-            mov eax, [esp + 88]         // ..B6G6R6
-            mov ecx, [esp + 124]        // B7G7R7..
-            shld eax, ecx, 8            // B6G6R6B7
+            mov eax, [esp + 88] // ..B6G6R6
+            mov ecx, [esp + 124] // B7G7R7..
+            shld eax, ecx, 8 // B6G6R6B7
             mov [edi + ebx + 8], eax
-            add edi, edx                // $edi = pbRGB += cbRGB
+            add edi, edx // $edi = pbRGB += cbRGB
 
-            // RGBX32 -> RGB24
-            mov eax, [esp + 140]        // ..B3G3R3
-            mov ecx, [esp + 168]        // B2G2R2..
-            shld eax, ecx, 24           // R3B2G2R2
+        // RGBX32 -> RGB24
+            mov eax, [esp + 140] // ..B3G3R3
+            mov ecx, [esp + 168] // B2G2R2..
+            shld eax, ecx, 24 // R3B2G2R2
             mov [edi + ebx + 0], eax
-            mov eax, [esp + 156]        // ..B7G7R7
-            mov ecx, [esp + 172]        // B3G3R3..
-            shld eax, ecx, 16           // G7R7B3G3
+            mov eax, [esp + 156] // ..B7G7R7
+            mov ecx, [esp + 172] // B3G3R3..
+            shld eax, ecx, 16 // G7R7B3G3
             mov [edi + ebx + 4], eax
-            mov eax, [esp + 152]        // ..B6G6R6
-            mov ecx, [esp + 188]        // B7G7R7..
-            shld eax, ecx, 8            // B6G6R6B7
+            mov eax, [esp + 152] // ..B6G6R6
+            mov ecx, [esp + 188] // B7G7R7..
+            shld eax, ecx, 8 // B6G6R6B7
             mov [edi + ebx + 8], eax
-            add edi, edx                // $edi = pbRGB += cbRGB
+            add edi, edx // $edi = pbRGB += cbRGB
 
-            mov eax, [esp + 132]        // ..B1G1R1
-            mov ecx, [esp + 160]        // B0G0R0..
-            shld eax, ecx, 24           // R1B0G0R0
+            mov eax, [esp + 132] // ..B1G1R1
+            mov ecx, [esp + 160] // B0G0R0..
+            shld eax, ecx, 24 // R1B0G0R0
             mov [edi + ebx + 0], eax
-            mov eax, [esp + 148]        // ..B5G5R5
-            mov ecx, [esp + 164]        // B1G1R1..
-            shld eax, ecx, 16           // G5R5B1G1
+            mov eax, [esp + 148] // ..B5G5R5
+            mov ecx, [esp + 164] // B1G1R1..
+            shld eax, ecx, 16 // G5R5B1G1
             mov [edi + ebx + 4], eax
-            mov eax, [esp + 144]        // ..B4G4R4
-            mov ecx, [esp + 180]        // B5G5R5..
-            shld eax, ecx, 8            // B4G4R4B5
+            mov eax, [esp + 144] // ..B4G4R4
+            mov ecx, [esp + 180] // B5G5R5..
+            shld eax, ecx, 8 // B4G4R4B5
             mov [edi + ebx + 8], eax
-            add edi, edx                // $edi = pbRGB += cbRGB
+            add edi, edx // $edi = pbRGB += cbRGB
 
-            // RGBX32 -> RGB24
-            mov eax, [esp + 196]        // ..B1G1R1
-            mov ecx, [esp + 224]        // B0G0R0..
-            shld eax, ecx, 24           // R1B0G0R0
+        // RGBX32 -> RGB24
+            mov eax, [esp + 196] // ..B1G1R1
+            mov ecx, [esp + 224] // B0G0R0..
+            shld eax, ecx, 24 // R1B0G0R0
             mov [edi + ebx + 0], eax
-            mov eax, [esp + 212]        // ..B5G5R5
-            mov ecx, [esp + 228]        // B1G1R1..
-            shld eax, ecx, 16           // G5R5B1G1
+            mov eax, [esp + 212] // ..B5G5R5
+            mov ecx, [esp + 228] // B1G1R1..
+            shld eax, ecx, 16 // G5R5B1G1
             mov [edi + ebx + 4], eax
-            mov eax, [esp + 208]        // ..B4G4R4
-            mov ecx, [esp + 244]        // B5G5R5..
-            shld eax, ecx, 8            // B4G4R4B5
+            mov eax, [esp + 208] // ..B4G4R4
+            mov ecx, [esp + 244] // B5G5R5..
+            shld eax, ecx, 8 // B4G4R4B5
             mov [edi + ebx + 8], eax
-            add edi, edx                // $edi = pbRGB += cbRGB
+            add edi, edx // $edi = pbRGB += cbRGB
 
-            mov eax, [esp + 204]        // ..B3G3R3
-            mov ecx, [esp + 232]        // B2G2R2..
-            shld eax, ecx, 24           // R3B2G2R2
+            mov eax, [esp + 204] // ..B3G3R3
+            mov ecx, [esp + 232] // B2G2R2..
+            shld eax, ecx, 24 // R3B2G2R2
             mov [edi + ebx + 0], eax
-            mov eax, [esp + 220]        // ..B7G7R7
-            mov ecx, [esp + 236]        // B3G3R3..
-            shld eax, ecx, 16           // G7R7B3G3
+            mov eax, [esp + 220] // ..B7G7R7
+            mov ecx, [esp + 236] // B3G3R3..
+            shld eax, ecx, 16 // G7R7B3G3
             mov [edi + ebx + 4], eax
-            mov eax, [esp + 216]        // ..B6G6R6
-            mov ecx, [esp + 252]        // B7G7R7..
-            shld eax, ecx, 8            // B6G6R6B7
+            mov eax, [esp + 216] // ..B6G6R6
+            mov ecx, [esp + 252] // B7G7R7..
+            shld eax, ecx, 8 // B6G6R6B7
             mov [edi + ebx + 8], eax
-            add edi, edx                // $edi = pbRGB += cbRGB
+            add edi, edx // $edi = pbRGB += cbRGB
 
-            // RGBX32 -> RGB24
-            mov eax, [esp + 268]         // ..B3G3R3
-            mov ecx, [esp + 296]        // B2G2R2..
-            shld eax, ecx, 24           // R3B2G2R2
+        // RGBX32 -> RGB24
+            mov eax, [esp + 268] // ..B3G3R3
+            mov ecx, [esp + 296] // B2G2R2..
+            shld eax, ecx, 24 // R3B2G2R2
             mov [edi + ebx + 0], eax
-            mov eax, [esp + 284]         // ..B7G7R7
-            mov ecx, [esp + 300]        // B3G3R3..
-            shld eax, ecx, 16           // G7R7B3G3
+            mov eax, [esp + 284] // ..B7G7R7
+            mov ecx, [esp + 300] // B3G3R3..
+            shld eax, ecx, 16 // G7R7B3G3
             mov [edi + ebx + 4], eax
-            mov eax, [esp + 280]         // ..B6G6R6
-            mov ecx, [esp + 316]        // B7G7R7..
-            shld eax, ecx, 8            // B6G6R6B7
+            mov eax, [esp + 280] // ..B6G6R6
+            mov ecx, [esp + 316] // B7G7R7..
+            shld eax, ecx, 8 // B6G6R6B7
             mov [edi + ebx + 8], eax
-            add edi, edx                // $edi = pbRGB += cbRGB
+            add edi, edx // $edi = pbRGB += cbRGB
 
-            mov eax, [esp + 260]         // ..B1G1R1
-            mov ecx, [esp + 288]         // B0G0R0..
-            shld eax, ecx, 24           // R1B0G0R0
+            mov eax, [esp + 260] // ..B1G1R1
+            mov ecx, [esp + 288] // B0G0R0..
+            shld eax, ecx, 24 // R1B0G0R0
             mov [edi + ebx + 0], eax
-            mov eax, [esp + 276]         // ..B5G5R5
-            mov ecx, [esp + 292]        // B1G1R1..
-            shld eax, ecx, 16           // G5R5B1G1
+            mov eax, [esp + 276] // ..B5G5R5
+            mov ecx, [esp + 292] // B1G1R1..
+            shld eax, ecx, 16 // G5R5B1G1
             mov [edi + ebx + 4], eax
-            mov eax, [esp + 272]         // ..B4G4R4
-            mov ecx, [esp + 308]        // B5G5R5..
-            shld eax, ecx, 8            // B4G4R4B5
+            mov eax, [esp + 272] // ..B4G4R4
+            mov ecx, [esp + 308] // B5G5R5..
+            shld eax, ecx, 8 // B4G4R4B5
             mov [edi + ebx + 8], eax
-            add edi, edx                // $edi = pbRGB += cbRGB
+            add edi, edx // $edi = pbRGB += cbRGB
 
         //================================
         add esi, 256 - 64
@@ -1062,7 +1056,9 @@ Int outputMBRow_RGB24_Lossy_3(CWMImageStrCodec* pSC)
 {
 #ifdef REENTRANT_MODE
     const size_t cHeight = min((pSC->m_Dparam->cROIBottomY + 1) - (pSC->cRow - 1) * 16, 16);
-    const size_t iFirstRow = ((pSC->cRow - 1) * 16 > pSC->m_Dparam->cROITopY ? 0 : (pSC->m_Dparam->cROITopY & 0xf));
+    const size_t iFirstRow = ((pSC->cRow - 1) * 16 > pSC->m_Dparam->cROITopY
+            ? 0
+            : (pSC->m_Dparam->cROITopY & 0xf));
 #endif
     const size_t cbRGB = pSC->WMIBI.cbStride;
     const U8* const pbRGB = (U8*)pSC->WMIBI.pv + cbRGB * (pSC->cRow - 1) * 16;
@@ -1085,10 +1081,11 @@ Int outputMBRow_RGB24_Lossy_3(CWMImageStrCodec* pSC)
 
     assert(pSC->m_Dparam->bDecodeFullFrame);
 
-    _mm_store_si128((__m128i *) Shift, pSC->m_param.bScaledArith ? g_const_d3 : g_const_d0);
-    storeRGB24_3(pbY + 64 * 0, pbU - pbY, pbRGB + cbRGB *  0, cbRGB, cmbColumn,
+    _mm_store_si128((__m128i*)Shift,
+        pSC->m_param.bScaledArith ? g_const_d3 : g_const_d0);
+    storeRGB24_3(pbY + 64 * 0, pbU - pbY, pbRGB + cbRGB * 0, cbRGB, cmbColumn,
         Shift);
-    storeRGB24_3(pbY + 64 * 2, pbU - pbY, pbRGB + cbRGB *  8, cbRGB, cmbColumn,
+    storeRGB24_3(pbY + 64 * 2, pbU - pbY, pbRGB + cbRGB * 8, cbRGB, cmbColumn,
         Shift);
 
 #ifdef REENTRANT_MODE
@@ -1100,7 +1097,8 @@ Int outputMBRow_RGB24_Lossy_3(CWMImageStrCodec* pSC)
 
 //================================================================
 #if defined(WMP_OPT_TRFM_DEC)
-FORCE_INLINE Void strDCT2x2up_OPT(PixelI *pa, PixelI *pb, PixelI *pc, PixelI *pd)
+FORCE_INLINE Void strDCT2x2up_OPT(PixelI* pa, PixelI* pb, PixelI* pc,
+    PixelI* pd)
 {
     PixelI a, b, c, d, C, t;
     a = *pa;
@@ -1122,7 +1120,7 @@ FORCE_INLINE Void strDCT2x2up_OPT(PixelI *pa, PixelI *pb, PixelI *pc, PixelI *pd
     *pd = d;
 }
 
-FORCE_INLINE Void invOdd_OPT(PixelI *pa, PixelI *pb, PixelI *pc, PixelI *pd)
+FORCE_INLINE Void invOdd_OPT(PixelI* pa, PixelI* pb, PixelI* pc, PixelI* pd)
 {
     PixelI a, b, c, d;
     a = *pa;
@@ -1136,7 +1134,7 @@ FORCE_INLINE Void invOdd_OPT(PixelI *pa, PixelI *pb, PixelI *pc, PixelI *pd)
     d -= (b) >> 1;
     c += (a + 1) >> 1;
 
-    /** rotate pi/8 **/
+/** rotate pi/8 **/
 #define IROTATE2(a, b) (a) -= (((b)*3 + 4) >> 3), (b) += (((a)*3 + 4) >> 3)
     IROTATE2(a, b);
     IROTATE2(c, d);
@@ -1153,7 +1151,8 @@ FORCE_INLINE Void invOdd_OPT(PixelI *pa, PixelI *pb, PixelI *pc, PixelI *pd)
     *pd = d;
 }
 
-FORCE_INLINE Void invOddOdd_OPT(PixelI* pa, PixelI* pb, PixelI* pc, PixelI* pd)
+FORCE_INLINE Void invOddOdd_OPT(PixelI* pa, PixelI* pb, PixelI* pc,
+    PixelI* pd)
 {
     PixelI a, b, c, d, t1, t2;
     a = *pa;
@@ -1277,10 +1276,11 @@ Void strIDCT4x4Stage1_OPT5(PixelI* p0, PixelI* p1)
 }
 
 //================================
-__declspec(naked) void __stdcall strPost4x4Stage1_alternate_ASM5(PixelI* p0, PixelI* p1)
+__declspec(naked) void __stdcall strPost4x4Stage1_alternate_ASM5(PixelI* p0,
+    PixelI* p1)
 {
-    UNREFERENCED_PARAMETER( p0 );
-    UNREFERENCED_PARAMETER( p1 );
+    UNREFERENCED_PARAMETER(p0);
+    UNREFERENCED_PARAMETER(p1);
     __asm {
         push ebp
         push ebx
@@ -1289,8 +1289,8 @@ __declspec(naked) void __stdcall strPost4x4Stage1_alternate_ASM5(PixelI* p0, Pix
 
         //================
         // pointer array
-        mov eax, [esp + 20]     // $esi = p0
-        mov edx, [esp + 24]     // $edi = p1
+        mov eax, [esp + 20] // $esi = p0
+        mov edx, [esp + 24] // $edi = p1
         mov ecx, 4 * 16
         mov ebx, 4 * 48
 
@@ -1362,15 +1362,15 @@ __declspec(naked) void __stdcall strPost4x4Stage1_alternate_ASM5(PixelI* p0, Pix
         mov ebp, (4 + 4) * -16
         push ebp
     }
-Loop0:        
+Loop0:
     __asm {
-        mov esi, [esp + (4 + 4) * 16 + 4 + ebp ]    // $esi = p0
+        mov esi, [esp + (4 + 4) * 16 + 4 + ebp ] // $esi = p0
         mov edi, [esp + (4 + 4) * 16 + 4 + ebp + 4] // $edi = p1
 
         //================
         movdqa xmm2, [esi + 4 * 12] // a = xmm2
         movdqa xmm1, [esi + 4 * 72] // b = xmm1
-        movdqa xmm6, [edi + 4 * 4]  // c = xmm6
+        movdqa xmm6, [edi + 4 * 4] // c = xmm6
         movdqa xmm7, [edi + 4 * 64] // d = xmm7
 
         //================
@@ -1378,13 +1378,13 @@ Loop0:
         paddd xmm2, xmm7
         psubd xmm1, xmm6
 
-        movdqa xmm0, xmm2           // a = xmm0
+        movdqa xmm0, xmm2 // a = xmm0
         psubd xmm2, xmm1
         psrad xmm2, 1
         movdqa xmm3, xmm2
 
-        psubd xmm2, xmm7            // c = xmm2
-        psubd xmm3, xmm6            // d = xmm3
+        psubd xmm2, xmm7 // c = xmm2
+        psubd xmm3, xmm6 // d = xmm3
         paddd xmm1, xmm2
         psubd xmm0, xmm3
 
@@ -1424,7 +1424,7 @@ Loop0:
         add ecx, ebx
         sub edx, eax
 
-        mov esi, [esp + (4 + 4) * 16 + 4 + ebp ]    // $esi = p0
+        mov esi, [esp + (4 + 4) * 16 + 4 + ebp ] // $esi = p0
         mov edi, [esp + (4 + 4) * 16 + 4 + ebp + 4] // $edi = p1
 
         movd xmm3, eax
@@ -1441,9 +1441,9 @@ Loop0:
         movdqa xmm6, g_const_d1
 
         pshufd xmm2, xmm2, 0xd8 //  7,  5,  6,  4
-        movdqa xmm4, xmm1       // 75, 74, 73, 72
-        punpckhqdq xmm1, xmm2   //  7,  5, 75, 74
-        punpcklqdq xmm4, xmm2   //  6,  4, 73, 72
+        movdqa xmm4, xmm1 // 75, 74, 73, 72
+        punpckhqdq xmm1, xmm2 //  7,  5, 75, 74
+        punpcklqdq xmm4, xmm2 //  6,  4, 73, 72
 
         paddd xmm5, xmm1
         psrad xmm5, 1
@@ -1453,39 +1453,39 @@ Loop0:
         psrad xmm6, 1
         paddd xmm1, xmm6
 
-        movdqa xmm2, xmm4       //  6,  4, 73, 72
-        punpckhqdq xmm4, xmm1   //  7,  5,  6,  4
-        punpcklqdq xmm2, xmm1   // 75, 74, 73, 72
+        movdqa xmm2, xmm4 //  6,  4, 73, 72
+        punpckhqdq xmm4, xmm1 //  7,  5,  6,  4
+        punpcklqdq xmm2, xmm1 // 75, 74, 73, 72
         pshufd xmm4, xmm4, 0xd8 //  7,  6,  5,  4
 
         //================
         // butterfly
         // a = xmm0, b = xmm2, c = xmm4, d = xmm3
         paddd xmm0, xmm3
-        movdqa xmm1, xmm0   // a = xmm1
+        movdqa xmm1, xmm0 // a = xmm1
         psrad xmm0, 1
-        psubd xmm0, xmm3    // d = xmm0
+        psubd xmm0, xmm3 // d = xmm0
 
-        movdqa xmm3, xmm0   // d = xmm3
+        movdqa xmm3, xmm0 // d = xmm3
         paddd xmm0, xmm0
         paddd xmm0, xmm3
         psrad xmm0, 3
         paddd xmm1, xmm0
 
-        movdqa xmm0, xmm1   // a = xmm0
+        movdqa xmm0, xmm1 // a = xmm0
         paddd xmm1, xmm1
         paddd xmm1, xmm0
         psrad xmm1, 4
         paddd xmm3, xmm1
 
-        movdqa xmm5, xmm0   // a
+        movdqa xmm5, xmm0 // a
         psrad xmm5, 7
-        paddd xmm3, xmm5    // d += (a >> 7)
+        paddd xmm3, xmm5 // d += (a >> 7)
         psrad xmm5, 3
-        psubd xmm3, xmm5    // d -= (a >> 10)
+        psubd xmm3, xmm5 // d -= (a >> 10)
 
         movdqa xmm5, [g_const_d4]
-        movdqa xmm1, xmm3   // d = xmm1
+        movdqa xmm1, xmm3 // d = xmm1
         psubd xmm2, xmm4
         paddd xmm5, xmm3
         paddd xmm3, xmm3
@@ -1493,14 +1493,14 @@ Loop0:
         psrad xmm3, 3
         paddd xmm0, xmm3
 
-        movdqa xmm3, xmm2   // b = xmm3
+        movdqa xmm3, xmm2 // b = xmm3
         psrad xmm2, 1
         psubd xmm1, xmm2
 
-        movdqa xmm2, xmm0   // a = xmm2
+        movdqa xmm2, xmm0 // a = xmm2
         psubd xmm0, xmm3
         psrad xmm0, 1
-        psubd xmm0, xmm4    // c = xmm0
+        psubd xmm0, xmm4 // c = xmm0
 
         paddd xmm3, xmm1
         psubd xmm2, xmm0
@@ -1525,7 +1525,7 @@ Loop0:
     }
 }
 
-Int invTransformMacroblock_YUV444_Center5(CWMImageStrCodec * pSC)
+Int invTransformMacroblock_YUV444_Center5(CWMImageStrCodec* pSC)
 {
     const OVERLAP olOverlap = pSC->WMISCP.olOverlap;
     int i = 0;
@@ -1541,8 +1541,7 @@ Int invTransformMacroblock_YUV444_Center5(CWMImageStrCodec * pSC)
     assert(pSC->m_Dparam->bDecodeFullWidth);
     assert(1 == pSC->m_Dparam->cThumbnailScale);
 
-    for (i = 0; i < 3; ++i)
-    {
+    for (i = 0; i < 3; ++i) {
         PixelI* const p0 = pSC->p0MBbuffer[i];
         PixelI* const p1 = pSC->p1MBbuffer[i];
 
@@ -1555,8 +1554,7 @@ Int invTransformMacroblock_YUV444_Center5(CWMImageStrCodec * pSC)
 
         //================================
         // second level inverse overlap
-        if (OL_TWO <= olOverlap)
-        {
+        if (OL_TWO <= olOverlap) {
             strPost4x4Stage2Split_alternate(p0, p1);
         }
 
@@ -1566,8 +1564,7 @@ Int invTransformMacroblock_YUV444_Center5(CWMImageStrCodec * pSC)
 
         //================================
         // first level inverse overlap
-        if (OL_ONE <= olOverlap)
-        {
+        if (OL_ONE <= olOverlap) {
             strPost4x4Stage1_alternate_ASM5(p0, p1);
         }
     }
@@ -1581,8 +1578,7 @@ Int invTransformMacroblock_YUV444_Center5(CWMImageStrCodec * pSC)
 void StrDecOpt(CWMImageStrCodec* pSC)
 {
 #if defined(WMP_OPT_SSE2)
-    if (IsProcessorFeaturePresent(PF_XMMI64_INSTRUCTIONS_AVAILABLE))
-    {
+    if (IsProcessorFeaturePresent(PF_XMMI64_INSTRUCTIONS_AVAILABLE)) {
         CWMImageInfo* pII = &pSC->WMII;
         // CWMIStrCodecParam* pSCP = &pSC->WMISCP;
 
@@ -1593,48 +1589,30 @@ void StrDecOpt(CWMImageStrCodec* pSC)
 
         g_const_d0x80 = _mm_set_epi32(0x80, 0x80, 0x80, 0x80);
         g_const_w0x80 = _mm_set_epi16(0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80);
-        g_const_b0x80 = _mm_set_epi8(0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80);
+        g_const_b0x80 = _mm_set_epi8(0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80,
+            0x80, 0x80, 0x80, 0x80, 0x80, 0x80);
 
         if (pSC->WMII.fPaddedUserBuffer &&
-            //pSC->m_Dparam->bDecodeFullFrame &&
+            // pSC->m_Dparam->bDecodeFullFrame &&
             //((pII->cWidth & 0xf) == 0) &&
             //(((int) pSC->WMIBI.pv & 0xf) == 0) &&
-            BD_8 == pII->bdBitDepth &&
-            CF_RGB == pII->cfColorFormat &&
-            24 == pII->cBitsPerUnit &&
-            pII->bRGB &&
-            O_NONE == pII->oOrientation &&
-            YUV_444 == pSC->m_param.cfColorFormat &&
-            pSC->p1MBbuffer[1] - pSC->p1MBbuffer[0] == pSC->p1MBbuffer[2] - pSC->p1MBbuffer[1] &&
-            pSC->m_Dparam->bDecodeFullFrame &&
-            1)
-        {
+            BD_8 == pII->bdBitDepth && CF_RGB == pII->cfColorFormat && 24 == pII->cBitsPerUnit && pII->bRGB && O_NONE == pII->oOrientation && YUV_444 == pSC->m_param.cfColorFormat && pSC->p1MBbuffer[1] - pSC->p1MBbuffer[0] == pSC->p1MBbuffer[2] - pSC->p1MBbuffer[1] && pSC->m_Dparam->bDecodeFullFrame && 1) {
 #if defined(WMP_OPT_CC_DEC)
-            if (pSC->m_param.bScaledArith || pSC->WMISCP.olOverlap != OL_NONE)
-            {
+            if (pSC->m_param.bScaledArith || pSC->WMISCP.olOverlap != OL_NONE) {
                 pSC->Load = outputMBRow_RGB24_Lossy_3;
-            }
-            else
-            {
+            } else {
                 pSC->Load = outputMBRow_RGB24_Lossless_1;
             }
 #endif // WMP_OPT_CC_DEC
         }
 
-        if (YUV_444 == pSC->m_param.cfColorFormat &&
-            pSC->p1MBbuffer[1] - pSC->p1MBbuffer[0] == pSC->p1MBbuffer[2] - pSC->p1MBbuffer[1] &&
-            pSC->m_Dparam->bDecodeFullWidth &&
-            pSC->m_param.cSubVersion == CODEC_SUBVERSION_NEWSCALING_SOFT_TILES &&
-            1 == pSC->m_Dparam->cThumbnailScale)
-        {
+        if (YUV_444 == pSC->m_param.cfColorFormat && pSC->p1MBbuffer[1] - pSC->p1MBbuffer[0] == pSC->p1MBbuffer[2] - pSC->p1MBbuffer[1] && pSC->m_Dparam->bDecodeFullWidth && pSC->m_param.cSubVersion == CODEC_SUBVERSION_NEWSCALING_SOFT_TILES && 1 == pSC->m_Dparam->cThumbnailScale) {
 #if defined(WMP_OPT_TRFM_DEC)
             pSC->TransformCenter = invTransformMacroblock_YUV444_Center5;
 #endif
         }
-
     }
 #else
-    UNREFERENCED_PARAMETER( pSC );
-#endif    
+    UNREFERENCED_PARAMETER(pSC);
+#endif
 }
-

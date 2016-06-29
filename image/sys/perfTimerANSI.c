@@ -2,16 +2,16 @@
 //
 // Copyright © Microsoft Corp.
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
-// 
+//
 // • Redistributions of source code must retain the above copyright notice,
 //   this list of conditions and the following disclaimer.
 // • Redistributions in binary form must reproduce the above copyright notice,
 //   this list of conditions and the following disclaimer in the documentation
 //   and/or other materials provided with the distribution.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 // AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -29,33 +29,30 @@
 //***************************************************************************
 // Includes
 //***************************************************************************
-#include <time.h>
-#include "strcodec.h"
 #include "perfTimer.h"
-
+#include "strcodec.h"
+#include <time.h>
 
 #ifndef DISABLE_PERF_MEASUREMENT
-
 
 //***************************************************************************
 // Private Functions
 //***************************************************************************
 
-Bool AccumulateTime(PERFTIMERSTATE *pState, PERFTIMERTIME *ptAccumulator)
+Bool AccumulateTime(PERFTIMERSTATE* pState, PERFTIMERTIME* ptAccumulator)
 {
-    Bool        fResult = FALSE;
-    clock_t     iStopTime;
-    clock_t     iIntervalTime;
+    Bool fResult = FALSE;
+    clock_t iStopTime;
+    clock_t iIntervalTime;
     iStopTime = clock();
 
     // Check clock result
-    if ((clock_t)-1 == iStopTime)
-    {
+    if ((clock_t)-1 == iStopTime) {
         TraceResult(WM_E_CLOCKFAILURE);
         goto exit;
     }
 
-    iIntervalTime = (iStopTime - (clock_t) pState->iPrevStartTime);
+    iIntervalTime = (iStopTime - (clock_t)pState->iPrevStartTime);
 
     // Check for zero-time interval
     if (0 == iIntervalTime)
@@ -69,29 +66,25 @@ exit:
     return fResult;
 }
 
-
 //***************************************************************************
 // Public Functions
 //***************************************************************************
 
-
-Bool PerfTimerNew(PERFTIMERSTATE **ppNewPerfTimer)
+Bool PerfTimerNew(PERFTIMERSTATE** ppNewPerfTimer)
 {
-    Bool            fResult = FALSE;
-    PERFTIMERSTATE *pState = NULL;
-    clock_t         ctResult;
+    Bool fResult = FALSE;
+    PERFTIMERSTATE* pState = NULL;
+    clock_t ctResult;
 
     // Check if this clock works
     ctResult = clock();
-    if ((clock_t)-1 == ctResult)
-    {
+    if ((clock_t)-1 == ctResult) {
         TraceResult(WM_E_CLOCKFAILURE);
         goto exit;
     }
 
     pState = malloc(sizeof(*pState));
-    if (NULL == pState)
-    {
+    if (NULL == pState) {
         TraceResult(E_OUTOFMEMORY);
         goto exit;
     }
@@ -109,29 +102,23 @@ exit:
     return fResult;
 } // PerfTimerNew
 
-
-
-void PerfTimerDelete(PERFTIMERSTATE *pState)
+void PerfTimerDelete(PERFTIMERSTATE* pState)
 {
     free(pState);
 } // PerfTimerDelete
 
-
-
-Bool PerfTimerStart(PERFTIMERSTATE *pState)
+Bool PerfTimerStart(PERFTIMERSTATE* pState)
 {
     Bool fResult = FALSE;
 
-    if (NULL == pState)
-    {
+    if (NULL == pState) {
         // Can happen because we typically ignore errors and use a single bool to
         // control all perf timing (some of which can fail to init)
         goto exit;
     }
 
     // Make sure we are in the right state
-    if (CS_STOPPED != pState->eState)
-    {
+    if (CS_STOPPED != pState->eState) {
         assert(FALSE);
         goto exit;
     }
@@ -139,8 +126,7 @@ Bool PerfTimerStart(PERFTIMERSTATE *pState)
     pState->iPrevStartTime = clock();
 
     // Check clock result
-    if ((clock_t)-1 == pState->iPrevStartTime)
-    {
+    if ((clock_t)-1 == pState->iPrevStartTime) {
         TraceResult(WM_E_CLOCKFAILURE);
         goto exit;
     }
@@ -152,22 +138,18 @@ exit:
     return fResult;
 } // PerfTimerStart
 
-
-
-Bool PerfTimerStop(PERFTIMERSTATE *pState)
+Bool PerfTimerStop(PERFTIMERSTATE* pState)
 {
-    Bool        fResult = FALSE;
+    Bool fResult = FALSE;
 
-    if (NULL == pState)
-    {
+    if (NULL == pState) {
         // Can happen because we typically ignore errors and use a single bool to
         // control all perf timing (some of which can fail to init)
         goto exit;
     }
 
     // Make sure we are in the right state
-    if (CS_RUNNING != pState->eState)
-    {
+    if (CS_RUNNING != pState->eState) {
         assert(FALSE);
         goto exit;
     }
@@ -180,30 +162,25 @@ exit:
     return fResult;
 } // PerfTimerStop
 
-
-
-Bool PerfTimerGetResults(PERFTIMERSTATE *pState, PERFTIMERRESULTS *pResults)
+Bool PerfTimerGetResults(PERFTIMERSTATE* pState, PERFTIMERRESULTS* pResults)
 {
-    Bool            fResult = FALSE;
-    PERFTIMERTIME   iElapsedTime;
+    Bool fResult = FALSE;
+    PERFTIMERTIME iElapsedTime;
 
-    if (NULL == pState)
-    {
+    if (NULL == pState) {
         // Can happen because we typically ignore errors and use a single bool to
         // control all perf timing (some of which can fail to init)
         goto exit;
     }
 
     // Make sure we are in the right state
-    if (CS_STOPPED != pState->eState && CS_RUNNING != pState->eState)
-    {
+    if (CS_STOPPED != pState->eState && CS_RUNNING != pState->eState) {
         assert(FALSE);
         goto exit;
     }
 
     iElapsedTime = pState->iElapsedTime;
-    if (CS_RUNNING == pState->eState)
-    {
+    if (CS_RUNNING == pState->eState) {
         // Must take a "checkpoint" time reading
         fResult = AccumulateTime(pState, &iElapsedTime);
         if (FALSE == fResult)
@@ -214,8 +191,7 @@ Bool PerfTimerGetResults(PERFTIMERSTATE *pState, PERFTIMERRESULTS *pResults)
     // Use floating point for ease of math. If your platform really blows
     // with floating point, replace this with appropriate integer calculation
     // based on your clock interval.
-    pResults->iElapsedTime = (PERFTIMERTIME)((float)iElapsedTime *
-        ((float)NANOSECONDS_PER_SECOND / (float)CLOCKS_PER_SEC));
+    pResults->iElapsedTime = (PERFTIMERTIME)((float)iElapsedTime * ((float)NANOSECONDS_PER_SECOND / (float)CLOCKS_PER_SEC));
     pResults->iTicksPerSecond = CLOCKS_PER_SEC;
     pResults->iZeroTimeIntervals = pState->iZeroTimeIntervals;
     fResult = TRUE;
@@ -224,40 +200,33 @@ exit:
     return fResult;
 } // PerfTimerGetResults
 
-
-
-Bool PerfTimerCopyStartTime(PERFTIMERSTATE *pDestPerfTimer,
-                            PERFTIMERSTATE *pSrcPerfTimer)
+Bool PerfTimerCopyStartTime(PERFTIMERSTATE* pDestPerfTimer,
+    PERFTIMERSTATE* pSrcPerfTimer)
 {
-    Bool    fResult = FALSE;
+    Bool fResult = FALSE;
 
-    if (NULL == pDestPerfTimer)
-    {
+    if (NULL == pDestPerfTimer) {
         TraceResult(E_INVALIDARG);
         goto exit;
     }
 
-    if (NULL == pSrcPerfTimer)
-    {
+    if (NULL == pSrcPerfTimer) {
         TraceResult(E_INVALIDARG);
         goto exit;
     }
 
     // Check that both timers are in proper state - both must be running
-    if (CS_RUNNING != pDestPerfTimer->eState)
-    {
+    if (CS_RUNNING != pDestPerfTimer->eState) {
         TraceResult(WM_E_INVALIDSTATE);
         goto exit;
     }
 
-    if (CS_RUNNING != pSrcPerfTimer->eState)
-    {
+    if (CS_RUNNING != pSrcPerfTimer->eState) {
         TraceResult(WM_E_INVALIDSTATE);
         goto exit;
     }
 
-    if (0 != pDestPerfTimer->iElapsedTime)
-    {
+    if (0 != pDestPerfTimer->iElapsedTime) {
         // If iElapsedTime is non-zero, caller won't get what he is expecting
         // when he calls PerfTimerGetResults
         TraceResult(WM_E_INVALIDSTATE);
