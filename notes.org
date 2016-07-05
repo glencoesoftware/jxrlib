@@ -18,7 +18,6 @@
 *** [[http://swig.org/Doc3.0/Introduction.html#Introduction][Introduction]]
 *** [[http://swig.org/Doc3.0/Java.html#Java][Using SWIG with Java]]
 ** Package
-*** com.microsoft.jxrlib
+*** ome.jxrlib
 ** Modules
-*** decode
-*** colorspace
+*** JXRGlue
