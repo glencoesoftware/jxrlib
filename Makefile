@@ -55,6 +55,14 @@ else
 ENDIANFLAG=
 endif
 
+ifndef JAVA_HOME
+JAVA_HOME=jrunscript -e 'java.lang.System.out.println(new java.io.File(java.lang.System.getProperty("java.home")).getParent());'
+endif
+
+ifndef JAVA_INCLUDE
+JAVA_INCLUDE=$(JAVA_HOME)include
+endif
+
 ifndef DIR_BUILD
 DIR_BUILD=$(CURDIR)/build
 endif
@@ -189,6 +197,15 @@ DECAPP=JxrDecApp
 $(DIR_BUILD)/$(DECAPP): $(DIR_SRC)/$(DIR_EXEC)/$(DECAPP).c $(LIBRARIES)
 	$(MK_DIR) $(@D)
 	$(CC) $< -o $@ $(CFLAGS) -I$(DIR_GLUE) -I$(DIR_TEST) $(LIBS)
+
+##--------------------------------
+##
+## Java Wrappers
+##
+
+jni:
+	@echo "JAVA_INCLUDE=$(JAVA_INCLUDE)"
+
 
 ##--------------------------------
 ##
