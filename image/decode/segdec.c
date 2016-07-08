@@ -26,8 +26,8 @@
 //
 //*@@@---@@@@******************************************************************
 
-#include "decode.h"
 #include "strcodec.h"
+#include "decode.h"
 
 #ifdef MEM_TRACE
 #define TRACE_MALLOC 1

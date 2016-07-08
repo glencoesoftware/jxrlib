@@ -26,9 +26,9 @@
 //
 //*@@@---@@@@******************************************************************
 
-#include "decode.h"
-#include "strcodec.h"
 #include "windowsmediaphoto.h"
+#include "strcodec.h"
+#include "decode.h"
 
 EXTERN_C Void freePredInfo(CWMImageStrCodec*);
 

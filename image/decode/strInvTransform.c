@@ -26,9 +26,9 @@
 //
 //*@@@---@@@@******************************************************************
 
-#include "decode.h"
 #include "strTransform.h"
 #include "strcodec.h"
+#include "decode.h"
 
 /** rotation by -pi/8 **/
 #define IROTATE1(a, b) \

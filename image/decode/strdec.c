@@ -25,10 +25,10 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 //*@@@---@@@@******************************************************************
-#include "decode.h"
-#include "perfTimer.h"
 #include "strTransform.h"
 #include "strcodec.h"
+#include "decode.h"
+#include "perfTimer.h"
 #include <math.h>
 
 #ifdef MEM_TRACE
