@@ -2,16 +2,16 @@
 ##//
 ##// Copyright � Microsoft Corp.
 ##// All rights reserved.
-##// 
+##//
 ##// Redistribution and use in source and binary forms, with or without
 ##// modification, are permitted provided that the following conditions are met:
-##// 
+##//
 ##// � Redistributions of source code must retain the above copyright notice,
 ##//   this list of conditions and the following disclaimer.
 ##// � Redistributions in binary form must reproduce the above copyright notice,
 ##//   this list of conditions and the following disclaimer in the documentation
 ##//   and/or other materials provided with the distribution.
-##// 
+##//
 ##// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 ##// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 ##// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -30,6 +30,7 @@
 build: all
 
 CC=cc
+CXX=clang++
 
 JXR_VERSION=1.1
 
@@ -39,6 +40,7 @@ DIR_DEC=image/decode
 DIR_ENC=image/encode
 
 DIR_GLUE=jxrgluelib
+DIR_CXX=cpp
 DIR_TEST=jxrtestlib
 DIR_EXEC=jxrencoderdecoder
 
@@ -78,9 +80,11 @@ endif
 CD=cd
 MK_DIR=mkdir -p
 CFLAGS=-I. -Icommon/include -I$(DIR_SYS) $(ENDIANFLAG) -D__ANSI__ -DDISABLE_PERF_MEASUREMENT -w $(PICFLAG) -O
+CXXFLAGS=-I. -Icommon/include -I$(DIR_SYS) -I$(DIR_GLUE) -Wno-self-assign-field -O
 
 STATIC_LIBRARIES=$(DIR_BUILD)/libjxrglue.a $(DIR_BUILD)/libjpegxr.a
 SHARED_LIBRARIES=$(DIR_BUILD)/libjxrglue.so $(DIR_BUILD)/libjpegxr.so
+CXX_LIBRARIES=$(DIR_BUILD)/libjxr++.so
 
 ifneq ($(SHARED),)
 LIBRARIES=$(SHARED_LIBRARIES)
@@ -97,7 +101,7 @@ LIBS=-L$(DIR_BUILD) $(shell echo $(LIBRARIES) | sed -E 's%$(DIR_BUILD)/lib([^ ]*
 
 SRC_SYS=adapthuff.c image.c strcodec.c strPredQuant.c strTransform.c perfTimerANSI.c
 OBJ_SYS=$(patsubst %.c, $(DIR_BUILD)/$(DIR_SYS)/%.o, $(SRC_SYS))
- 
+
 $(DIR_BUILD)/$(DIR_SYS)/%.o: $(DIR_SRC)/$(DIR_SYS)/%.c
 	$(MK_DIR) $(@D)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -153,6 +157,18 @@ $(DIR_BUILD)/$(DIR_GLUE)/%.o: $(DIR_SRC)/$(DIR_GLUE)/%.c
 
 ##--------------------------------
 ##
+## C++ files
+##
+
+SRC_CXX=$(wildcard $(DIR_SRC)/$(DIR_CXX)/lib/*.cpp)
+OBJ_CXX=$(patsubst %.cpp, %.o, $(SRC_CXX))
+
+$(DIR_BUILD)/$(DIR_CXX)/%.o: $(DIR_SRC)/$(DIR_CXX)/lib/%.cpp
+	$(MK_DIR) $(@D)
+	$(CXX) $(CXXFLAGS) -I$(DIR_CXX)/lib/ -c $< -o $@
+
+##--------------------------------
+##
 ## Test files
 ##
 
@@ -179,6 +195,27 @@ $(DIR_BUILD)/libjxrglue.so: $(OBJ_GLUE) $(OBJ_TEST)
 
 ##--------------------------------
 ##
+## C++ Wrapper library
+##
+
+$(DIR_BUILD)/libjxr++.so: $(OBJ_CXX) | $(LIBRARIES)
+	$(MK_DIR) $(@D)
+	$(CXX) -shared $? $(LIBS) -o $@
+
+
+##--------------------------------
+##
+## Java Wrapper library
+##
+
+swig:
+
+jni:
+	@echo "JAVA_INCLUDE=$(JAVA_INCLUDE)"
+
+
+##--------------------------------
+##
 ## Enc app files
 ##
 ENCAPP=JxrEncApp
@@ -200,21 +237,23 @@ $(DIR_BUILD)/$(DECAPP): $(DIR_SRC)/$(DIR_EXEC)/$(DECAPP).c $(LIBRARIES)
 
 ##--------------------------------
 ##
-## Java Wrappers
+## C++ Decompression app
 ##
 
-jni:
-	@echo "JAVA_INCLUDE=$(JAVA_INCLUDE)"
+CXXDECAPP=jxrdecode
 
+$(DIR_BUILD)/$(CXXDECAPP): $(DIR_SRC)/$(DIR_CXX)/$(CXXDECAPP).cpp $(OBJ_CXX) $(LIBRARIES)
+	$(MK_DIR) $(@D)
+	$(CXX) $<  $(OBJ_CXX) -o $@ -I$(DIR_CXX)/lib $(CXXFLAGS) $(LIBS)
 
 ##--------------------------------
 ##
 ## JPEG XR library
 ##
-all: $(DIR_BUILD)/$(ENCAPP) $(DIR_BUILD)/$(DECAPP) $(LIBRARIES)
+all: $(DIR_BUILD)/$(ENCAPP) $(DIR_BUILD)/$(DECAPP) $(DIR_BUILD)/$(CXXDECAPP) $(LIBRARIES)
 
 clean:
-	rm -rf $(DIR_BUILD)/*App $(DIR_BUILD)/*.o $(DIR_BUILD)/libj*.a $(DIR_BUILD)/libj*.so $(DIR_BUILD)/libjxr.pc
+	rm -rf $(DIR_BUILD)/*App $(DIR_BUILD)/*.o $(DIR_BUILD)/lib/*.o $(DIR_BUILD)/libj*.a $(DIR_BUILD)/libj*.so $(DIR_BUILD)/libjxr.pc $(DIR_BUILD)/$(CXXDECAPP)
 
 $(DIR_BUILD)/libjxr.pc: $(DIR_SRC)/libjxr.pc.in
 	@python -c 'import os; d = { "DIR_INSTALL": "$(DIR_INSTALL)", "JXR_VERSION": "$(JXR_VERSION)", "JXR_ENDIAN": "$(ENDIANFLAG)" }; fin = open("$<", "r"); fout = open("$@", "w+"); fout.writelines( [ l % d for l in fin.readlines()])'
