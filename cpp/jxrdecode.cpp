@@ -28,6 +28,7 @@
 #include "FormatConverter.hpp"
 #include "FormatError.hpp"
 #include "ImageDecoder.hpp"
+#include "ImageEncoder.hpp"
 #include "Stream.hpp"
 
 
@@ -54,6 +55,8 @@ int main(int argc, char* argv[]) {
         std::cout << "Created format converter for extension: " << extension << std::endl;
         Stream outputStream = factory.createStreamFromFilename(outputFile);
         std::cout << "Created output stream for file: " << outputFile << std::endl;
+        ImageEncoder encoder(outputStream, "." + extension);
+        std::cout << "Created image encoder!" << std::endl;
     }
 
     std::cout << "Hello, world..." << std::endl;
