@@ -88,7 +88,7 @@ else
 LIBRARIES=$(STATIC_LIBRARIES)
 endif
 
-LIBS=-L$(DIR_BUILD) $(shell echo $(LIBRARIES) | sed -e 's%$(DIR_BUILD)/lib\([^ ]*\)\.\(a\|so\)%-l\1%g') -lm
+LIBS=-L$(DIR_BUILD) $(shell echo $(LIBRARIES) | sed -E 's%$(DIR_BUILD)/lib([^ ]*)\.(a|so)%-l\1%g') -lm
 
 ##--------------------------------
 ##
