@@ -28,6 +28,7 @@
 #include "FormatConverter.hpp"
 #include "FormatError.hpp"
 #include "ImageDecoder.hpp"
+#include "Stream.hpp"
 
 
 using namespace jxrlib;
@@ -51,13 +52,16 @@ int main(int argc, char* argv[]) {
         FormatConverter converter = codecFactory.createFormatConverter(decoder,
                                                                        extension);
         std::cout << "Created format converter for extension: " << extension << std::endl;
+        Stream outputStream = factory.createStreamFromFilename(outputFile);
+        std::cout << "Created output stream for file: " << outputFile << std::endl;
     }
 
     std::cout << "Hello, world..." << std::endl;
     return 0;
   }
   catch (const FormatError &e) {
-    std::cout << "*** ERROR: Unsupported format in JPEG XR ***";
+    std::cout << "*** ERROR: Unsupported format in JPEG XR ***" << std::endl
+              << e.what() << std::endl;
     return WMP_errUnsupportedFormat;
   }
 }

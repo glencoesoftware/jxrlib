@@ -18,24 +18,18 @@
  * #%L
  */
 
-#ifndef _Factory
-#define _Factory
+#ifndef _Stream
+#define _Stream
 
-#include <string>
-
-#include "JXRGlue.h"
-#include "Stream.hpp"
+#include "windowsmediaphoto.h"
 
 namespace jxrlib {
 
-  class Factory {
-    PKFactory *pFactory;
-    ERR err;
-  public:
-    Factory();
-    Stream createStreamFromFilename(std::string filename);
+  struct Stream {
+    struct WMPStream *pEncodeStream;
+    Stream() : pEncodeStream(NULL) {}
   };
 
 } // namespace jxrlib
 
-#endif // _Factory
+#endif // _Stream

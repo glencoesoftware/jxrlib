@@ -25,13 +25,22 @@
 
 namespace jxrlib {
 
-  Factory::Factory() {
-    ERR err = WMP_errSuccess;
-    pFactory = NULL;
+  Factory::Factory() : pFactory(NULL), err(WMP_errSuccess) {
     Call(PKCreateFactory(&pFactory, PK_SDK_VERSION));
     return;
   Cleanup:
     throw FormatError("ERROR: Unable to instantiate Factory.");
+  }
+
+  Stream Factory::createStreamFromFilename(std::string filename) {
+    Stream fileStream;
+    Call(pFactory->CreateStreamFromFilename(&fileStream.pEncodeStream,
+                                            filename.c_str(),
+                                            "wb"));
+    return fileStream;
+  Cleanup:
+    std::string msg = "ERROR: Unable to create stream for file: " + filename;
+    throw FormatError(msg);
   }
 
 } // namespace jxrlib
