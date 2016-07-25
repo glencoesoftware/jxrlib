@@ -30,7 +30,7 @@ namespace jxrlib {
     ERR err;
     friend class CodecFactory;
   public:
-    FormatConverter() : pConverter(NULL) {};
+    FormatConverter() : pConverter(NULL), err(WMP_errSuccess) {};
   };
 
 } // namespace jxrlib

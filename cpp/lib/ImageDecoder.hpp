@@ -31,7 +31,7 @@ namespace jxrlib {
     PKPixelInfo pixelInfo;
     friend class CodecFactory;
   public:
-    ImageDecoder() : pDecoder(NULL) {};
+    ImageDecoder() : pDecoder(NULL), err(WMP_errSuccess) {};
     void initialize();
     uint32_t getFrameCount();
   };
