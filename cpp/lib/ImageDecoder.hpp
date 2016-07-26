@@ -22,6 +22,7 @@
 #define _ImageDecode
 
 #include "JXRGlue.h"
+#include "Resolution.hpp"
 
 namespace jxrlib {
 
@@ -37,6 +38,12 @@ namespace jxrlib {
 
     uint32_t getFrameCount();
     void selectFrame(uint32_t frameNum);
+
+    GUID getGUIDPixFormat();
+    bool getBlackWhite();
+    uint32_t getWidth();
+    uint32_t getHeight();
+    Resolution getResolution();
   };
 
 } // namespace jxrlib

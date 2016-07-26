@@ -112,6 +112,20 @@ namespace jxrlib {
     throw FormatError(errMsg);
   }
 
+  GUID ImageDecoder::getGUIDPixFormat() { printf("Stream: %p\n", pDecoder->pStream); return pDecoder->guidPixFormat; }
+  bool ImageDecoder::getBlackWhite() { return pDecoder->WMP.wmiSCP.bBlackWhite; }
+  uint32_t ImageDecoder::getWidth() { return pDecoder->WMP.wmiI.cROIWidth; }
+  uint32_t ImageDecoder::getHeight() { return pDecoder->WMP.wmiI.cROIHeight; }
+
+  Resolution ImageDecoder::getResolution() {
+    float rX = 0.0, rY = 0.0;
+    Resolution res;
+    Call(pDecoder->GetResolution(pDecoder, &rX, &rY));
+    res.X = rX;
+    res.Y = rY;
+    return res;
+  Cleanup:
+    throw FormatError("ERROR: Could not get decoder resolution");
   }
 
 } // namespace jxrlib
