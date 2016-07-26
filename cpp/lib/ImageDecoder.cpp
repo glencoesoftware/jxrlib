@@ -19,10 +19,13 @@
  */
 
 #include "ImageDecoder.hpp"
-#include "FormatError.hpp"
+
+#include <sstream>
+#include <string>
 
 #include "windowsmediaphoto.h"
 #include "guiddef.h"
+#include "FormatError.hpp"
 #include "JXRGlue.h"
 
 namespace jxrlib {
@@ -99,12 +102,16 @@ namespace jxrlib {
     throw FormatError("ERROR: Unable to get frame count.");
   }
 
-  void selectFrame(uint32_t frameNum) {
+  void ImageDecoder::selectFrame(uint32_t frameNum) {
     Call(pDecoder->SelectFrame(pDecoder, frameNum));
     return;
   Cleanup:
-    std::string msg = "ERROR: Unable to select frame " + frameNum;
-    throw FormatError(msg);
+    std::stringstream msg;
+    msg << "ERROR: Unable to select frame " << frameNum;
+    std::string errMsg = msg.str();
+    throw FormatError(errMsg);
+  }
+
   }
 
 } // namespace jxrlib
