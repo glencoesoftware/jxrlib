@@ -57,6 +57,9 @@ int main(int argc, char* argv[]) {
         std::cout << "Created output stream for file: " << outputFile << std::endl;
         ImageEncoder encoder(outputStream, "." + extension);
         std::cout << "Created image encoder!" << std::endl;
+        encoder.initializeWithDecoder(decoder);
+        std::cout << "Encoder initialized..." << std::endl;
+        encoder.writeSource(converter);
 
         if (i + 1 == frameCount) {
           break;
