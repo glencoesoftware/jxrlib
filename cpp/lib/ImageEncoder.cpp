@@ -35,4 +35,9 @@ namespace jxrlib {
   Cleanup:
     throw FormatError("ERROR: Unable to initialize encoder.");
   }
+
+  ImageEncoder::~ImageEncoder() {
+    pEncoder->Release(&pEncoder);
+  }
+
 } // namespace jxrlib

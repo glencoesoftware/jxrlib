@@ -27,6 +27,10 @@
 
 namespace jxrlib {
 
+  ImageDecoder::~ImageDecoder() {
+    pDecoder->Release(&pDecoder);
+  }
+
   void ImageDecoder::initialize() {
     // set default color format
     pixelInfo.pGUIDPixFmt = &pDecoder->guidPixFormat;
