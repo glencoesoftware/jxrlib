@@ -56,4 +56,16 @@ namespace jxrlib {
   Cleanup:
     throw FormatError("ERROR: Could not initialize encoder with settings from decoder");
   }
+
+  void ImageEncoder::writeSource(FormatConverter& converter) {
+    PKRect rect = { 0, 0, 0, 0};
+    rect.Width = pEncoder->uWidth;
+    rect.Height = pEncoder->uHeight;
+    pEncoder->WriteSource = PKImageEncode_Transcode;
+    Call(pEncoder->WriteSource(pEncoder, converter.pConverter, &rect));
+    return;
+  Cleanup:
+    throw FormatError("ERROR: Could not write source");
+  }
+
 } // namespace jxrlib

@@ -24,6 +24,7 @@
 #include <string>
 
 #include "windowsmediaphoto.h"
+#include "FormatConverter.hpp"
 #include "JXRGlue.h"
 #include "Stream.hpp"
 #include "ImageDecoder.hpp"
@@ -38,6 +39,7 @@ namespace jxrlib {
     ~ImageEncoder();
 
     void initializeWithDecoder(ImageDecoder& decoder);
+    void writeSource(FormatConverter& converter);
   };
 
 } // namespace jxrlib
