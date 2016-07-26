@@ -21,7 +21,9 @@
 #include "ImageEncoder.hpp"
 
 #include "FormatError.hpp"
+#include "ImageDecoder.hpp"
 #include "JXRTest.h"
+#include "Resolution.hpp"
 
 namespace jxrlib {
 
@@ -41,5 +43,17 @@ namespace jxrlib {
   }
 
   void ImageEncoder::initializeWithDecoder(ImageDecoder& decoder) {
+    Resolution decoderRes;
+    // Set pixel properties
+    Call(pEncoder->SetPixelFormat(pEncoder, decoder.getGUIDPixFormat()));
+    pEncoder->WMP.wmiSCP.bBlackWhite = decoder.getBlackWhite();
+
+    // Set size
+    Call(pEncoder->SetSize(pEncoder, decoder.getWidth(), decoder.getHeight()));
+    decoderRes = decoder.getResolution();
+    Call(pEncoder->SetResolution(pEncoder, decoderRes.X, decoderRes.Y));
+    return;
+  Cleanup:
+    throw FormatError("ERROR: Could not initialize encoder with settings from decoder");
   }
 } // namespace jxrlib
