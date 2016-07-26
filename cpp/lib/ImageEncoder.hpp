@@ -36,7 +36,8 @@ namespace jxrlib {
   public:
     ImageEncoder(Stream encodeStream, std::string extension);
     ~ImageEncoder();
-    void initializeWithDecoder(ImageDecoder decoder);
+
+    void initializeWithDecoder(ImageDecoder& decoder);
   };
 
 } // namespace jxrlib

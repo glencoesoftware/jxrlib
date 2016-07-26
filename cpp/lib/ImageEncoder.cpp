@@ -40,4 +40,6 @@ namespace jxrlib {
     pEncoder->Release(&pEncoder);
   }
 
+  void ImageEncoder::initializeWithDecoder(ImageDecoder& decoder) {
+  }
 } // namespace jxrlib

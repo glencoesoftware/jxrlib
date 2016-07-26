@@ -47,7 +47,7 @@ namespace jxrlib {
     throw FormatError(msg);
   }
 
-  FormatConverter CodecFactory::createFormatConverter(ImageDecoder imageDecoder,
+  FormatConverter CodecFactory::createFormatConverter(ImageDecoder &imageDecoder,
                                         std::string extension) {
     FormatConverter converter;
     int extLength = extension.length();
