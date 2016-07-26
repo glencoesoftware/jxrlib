@@ -26,6 +26,7 @@
 #include "windowsmediaphoto.h"
 #include "JXRGlue.h"
 #include "Stream.hpp"
+#include "ImageDecoder.hpp"
 
 namespace jxrlib {
 
@@ -33,7 +34,8 @@ namespace jxrlib {
     PKImageEncode *pEncoder;
     ERR err;
   public:
-   ImageEncoder(Stream encodeStream, std::string extension);
+    ImageEncoder(Stream encodeStream, std::string extension);
+    void initializeWithDecoder(ImageDecoder decoder);
   };
 
 } // namespace jxrlib

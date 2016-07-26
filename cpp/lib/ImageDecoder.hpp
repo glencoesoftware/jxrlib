@@ -33,7 +33,9 @@ namespace jxrlib {
   public:
     ImageDecoder() : pDecoder(NULL), err(WMP_errSuccess) {};
     void initialize();
+
     uint32_t getFrameCount();
+    void selectFrame(uint32_t frameNum);
   };
 
 } // namespace jxrlib
