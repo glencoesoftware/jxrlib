@@ -57,9 +57,14 @@ int main(int argc, char* argv[]) {
         std::cout << "Created output stream for file: " << outputFile << std::endl;
         ImageEncoder encoder(outputStream, "." + extension);
         std::cout << "Created image encoder!" << std::endl;
+
+        if (i + 1 == frameCount) {
+          break;
+        }
+
+        decoder.selectFrame(i + 1);
     }
 
-    std::cout << "Hello, world..." << std::endl;
     return 0;
   }
   catch (const FormatError &e) {
