@@ -167,7 +167,7 @@ $(DIR_BUILD)/$(DIR_GLUE)/%.o: $(DIR_SRC)/$(DIR_GLUE)/%.c
 ##
 
 SRC_CXX=$(wildcard $(DIR_SRC)/$(DIR_CXX)/lib/*.cpp)
-OBJ_CXX=$(patsubst %.cpp, %.o, $(SRC_CXX))
+OBJ_CXX=$(patsubst %.cpp, $(DIR_BUILD)/$(DIR_CXX)/%.o, $(SRC_CXX))
 
 $(DIR_BUILD)/$(DIR_CXX)/%.o: $(DIR_SRC)/$(DIR_CXX)/lib/%.cpp
 	@echo "Building C++ files"
