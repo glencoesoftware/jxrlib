@@ -30,7 +30,6 @@
 build: all
 
 CC=cc
-CXX=clang++
 
 JXR_VERSION=1.1
 
@@ -82,9 +81,20 @@ MK_DIR=mkdir -p
 CFLAGS=-I. -Icommon/include -I$(DIR_SYS) $(ENDIANFLAG) -D__ANSI__ -DDISABLE_PERF_MEASUREMENT -w $(PICFLAG)
 CXXFLAGS=-I. -Icommon/include -I$(DIR_SYS) -I$(DIR_GLUE) -I$(DIR_TEST) -Wno-self-assign-field
 
+ifeq ($(strip $(shell uname)), Darwin)
+  CC = clang
+	CXX = clang++
+	LIBSUFFIX = dylib
+  PLATFORM = macosx
+else
+	CXX = g++
+	LIBSUFFIX = so
+  PLATFORM = linux
+endif
+
 STATIC_LIBRARIES=$(DIR_BUILD)/libjxrglue.a $(DIR_BUILD)/libjpegxr.a
-SHARED_LIBRARIES=$(DIR_BUILD)/libjxrglue.so $(DIR_BUILD)/libjpegxr.so
-CXX_LIBRARIES=$(DIR_BUILD)/libjxr++.so
+SHARED_LIBRARIES=$(DIR_BUILD)/libjxrglue.$(LIBSUFFIX) $(DIR_BUILD)/libjpegxr.$(LIBSUFFIX)
+CXX_LIBRARIES=$(DIR_BUILD)/libjxr++.$(LIBSUFFIX)
 
 ifneq ($(SHARED),)
 LIBRARIES=$(SHARED_LIBRARIES)
@@ -92,7 +102,7 @@ else
 LIBRARIES=$(STATIC_LIBRARIES)
 endif
 
-LIBS=-L$(DIR_BUILD) $(shell echo $(LIBRARIES) | sed -E 's%$(DIR_BUILD)/lib([^ ]*)\.(a|so)%-l\1%g') -lm
+LIBS=-L$(DIR_BUILD) $(shell echo $(LIBRARIES) | sed -E 's%$(DIR_BUILD)/lib([^ ]*)\.(a|$(LIBSUFFIX))%-l\1%g') -lm
 CXXLIBS=-L$(DIR_BUILD) -ljxr++
 
 ##--------------------------------
@@ -144,7 +154,7 @@ $(DIR_BUILD)/libjpegxr.a: $(OBJ_ENC) $(OBJ_DEC) $(OBJ_SYS)
 	ar rvu $@ $(OBJ_ENC) $(OBJ_DEC) $(OBJ_SYS)
 	ranlib $@
 
-$(DIR_BUILD)/libjpegxr.so: $(OBJ_ENC) $(OBJ_DEC) $(OBJ_SYS)
+$(DIR_BUILD)/libjpegxr.$(LIBSUFFIX): $(OBJ_ENC) $(OBJ_DEC) $(OBJ_SYS)
 	@echo "Building JPEG XR shared lib"
 	$(MK_DIR) $(@D)
 	$(CC) -shared $? -o $@
@@ -199,7 +209,7 @@ $(DIR_BUILD)/libjxrglue.a: $(OBJ_GLUE) $(OBJ_TEST)
 	ar rvu $@ $(OBJ_GLUE) $(OBJ_TEST)
 	ranlib $@
 
-$(DIR_BUILD)/libjxrglue.so: $(OBJ_GLUE) $(OBJ_TEST)
+$(DIR_BUILD)/libjxrglue.$(LIBSUFFIX): $(OBJ_GLUE) $(OBJ_TEST)
 	@echo "Building glue shared lib"
 	$(MK_DIR) $(@D)
 	$(CC) -shared $? -o $@
@@ -209,7 +219,7 @@ $(DIR_BUILD)/libjxrglue.so: $(OBJ_GLUE) $(OBJ_TEST)
 ## C++ Wrapper library
 ##
 
-$(DIR_BUILD)/libjxr++.so: $(OBJ_CXX) | $(LIBRARIES)
+$(DIR_BUILD)/libjxr++.$(LIBSUFFIX): $(OBJ_CXX) | $(LIBRARIES)
 	@echo "Building C++ wrapper lib"
 	$(MK_DIR) $(@D)
 	$(CXX) -shared $? $(LIBS) -o $@
@@ -268,7 +278,7 @@ $(DIR_BUILD)/$(CXXDECAPP): $(DIR_SRC)/$(DIR_CXX)/$(CXXDECAPP).cpp $(LIBRARIES) $
 all: $(DIR_BUILD)/$(ENCAPP) $(DIR_BUILD)/$(DECAPP) $(DIR_BUILD)/$(CXXDECAPP) $(LIBRARIES) $(CXX_LIBRARIES)
 
 clean:
-	rm -rf $(DIR_BUILD)/*App $(DIR_BUILD)/**/*.o $(DIR_BUILD)/libj*.a $(DIR_BUILD)/libj*.so $(DIR_BUILD)/libjxr.pc $(DIR_BUILD)/$(CXXDECAPP)
+	rm -rf $(DIR_BUILD)/*App $(DIR_BUILD)/**/*.o $(DIR_BUILD)/libj*.a $(DIR_BUILD)/libj*.$(LIBSUFFIX) $(DIR_BUILD)/libjxr.pc $(DIR_BUILD)/$(CXXDECAPP)
 
 $(DIR_BUILD)/libjxr.pc: $(DIR_SRC)/libjxr.pc.in
 	@python -c 'import os; d = { "DIR_INSTALL": "$(DIR_INSTALL)", "JXR_VERSION": "$(JXR_VERSION)", "JXR_ENDIAN": "$(ENDIANFLAG)" }; fin = open("$<", "r"); fout = open("$@", "w+"); fout.writelines( [ l % d for l in fin.readlines()])'
