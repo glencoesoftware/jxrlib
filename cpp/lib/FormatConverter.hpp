@@ -29,6 +29,7 @@ namespace jxrlib {
     PKFormatConverter *pConverter;
     ERR err;
     friend class CodecFactory;
+    friend class ImageEncoder;
   public:
     FormatConverter() : pConverter(NULL), err(WMP_errSuccess) {};
   };
