@@ -112,7 +112,7 @@ namespace jxrlib {
     throw FormatError(errMsg);
   }
 
-  GUID ImageDecoder::getGUIDPixFormat() { printf("Stream: %p\n", pDecoder->pStream); return pDecoder->guidPixFormat; }
+  GUID ImageDecoder::getGUIDPixFormat() { return pDecoder->guidPixFormat; }
   bool ImageDecoder::getBlackWhite() { return pDecoder->WMP.wmiSCP.bBlackWhite; }
   uint32_t ImageDecoder::getWidth() { return pDecoder->WMP.wmiI.cROIWidth; }
   uint32_t ImageDecoder::getHeight() { return pDecoder->WMP.wmiI.cROIHeight; }
