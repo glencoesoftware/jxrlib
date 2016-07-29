@@ -49,23 +49,16 @@ int main(int argc, char* argv[]) {
     std::string outputFile = argv[2];
     std::string extension = outputFile.substr(outputFile.find_last_of(".") + 1);
 
-    for(int i = 0 ; ; ++i) {
-        FormatConverter converter = codecFactory.createFormatConverter(decoder,
-                                                                       extension);
+    for (int i = 0 ; i < frameCount ; ++i) {
+        decoder.selectFrame(i);
+        FormatConverter converter = codecFactory.createFormatConverter(decoder, extension);
         std::cout << "Created format converter for extension: " << extension << std::endl;
         Stream outputStream = factory.createStreamFromFilename(outputFile);
         std::cout << "Created output stream for file: " << outputFile << std::endl;
         ImageEncoder encoder(outputStream, "." + extension);
-        std::cout << "Created image encoder!" << std::endl;
+        std::cout << "Created image encoder" << std::endl;
         encoder.initializeWithDecoder(decoder);
-        std::cout << "Encoder initialized..." << std::endl;
         encoder.writeSource(converter);
-
-        if (i + 1 == frameCount) {
-          break;
-        }
-
-        decoder.selectFrame(i + 1);
     }
 
     return 0;
