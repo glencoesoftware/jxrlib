@@ -30,10 +30,6 @@
 
 namespace jxrlib {
 
-  ImageDecoder::~ImageDecoder() {
-    pDecoder->Release(&pDecoder);
-  }
-
   void ImageDecoder::initialize() {
     // set default color format
     pixelInfo.pGUIDPixFmt = &pDecoder->guidPixFormat;
@@ -126,6 +122,10 @@ namespace jxrlib {
     return res;
   Cleanup:
     throw FormatError("ERROR: Could not get decoder resolution");
+  }
+
+  void ImageDecoder::close() {
+    pDecoder->Release(&pDecoder);
   }
 
 } // namespace jxrlib

@@ -33,7 +33,6 @@ namespace jxrlib {
     friend class CodecFactory;
   public:
     ImageDecoder() : pDecoder(NULL), err(WMP_errSuccess) {};
-    ~ImageDecoder();
     void initialize();
 
     uint32_t getFrameCount();
@@ -44,6 +43,8 @@ namespace jxrlib {
     uint32_t getWidth();
     uint32_t getHeight();
     Resolution getResolution();
+
+    void close();
   };
 
 } // namespace jxrlib

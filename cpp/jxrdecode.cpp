@@ -59,8 +59,10 @@ int main(int argc, char* argv[]) {
         std::cout << "Created image encoder" << std::endl;
         encoder.initializeWithDecoder(decoder);
         encoder.writeSource(converter);
+        encoder.close();
     }
 
+    decoder.close();
     return 0;
   }
   catch (const FormatError &e) {

@@ -38,10 +38,6 @@ namespace jxrlib {
     throw FormatError("ERROR: Unable to initialize encoder.");
   }
 
-  ImageEncoder::~ImageEncoder() {
-    pEncoder->Release(&pEncoder);
-  }
-
   void ImageEncoder::initializeWithDecoder(ImageDecoder& decoder) {
     Resolution decoderRes;
     // Set pixel properties
@@ -66,6 +62,10 @@ namespace jxrlib {
     return;
   Cleanup:
     throw FormatError("ERROR: Could not write source");
+  }
+
+  void ImageEncoder::close() {
+    pEncoder->Release(&pEncoder);
   }
 
 } // namespace jxrlib
