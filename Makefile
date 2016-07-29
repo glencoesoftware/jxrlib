@@ -93,6 +93,7 @@ LIBRARIES=$(STATIC_LIBRARIES)
 endif
 
 LIBS=-L$(DIR_BUILD) $(shell echo $(LIBRARIES) | sed -E 's%$(DIR_BUILD)/lib([^ ]*)\.(a|so)%-l\1%g') -lm
+CXXLIBS=-L$(DIR_BUILD) -ljxr++
 
 ##--------------------------------
 ##
@@ -167,7 +168,7 @@ $(DIR_BUILD)/$(DIR_GLUE)/%.o: $(DIR_SRC)/$(DIR_GLUE)/%.c
 ##
 
 SRC_CXX=$(wildcard $(DIR_SRC)/$(DIR_CXX)/lib/*.cpp)
-OBJ_CXX=$(patsubst %.cpp, $(DIR_BUILD)/$(DIR_CXX)/%.o, $(SRC_CXX))
+OBJ_CXX=$(patsubst $(DIR_SRC)/$(DIR_CXX)/lib/%.cpp, $(DIR_BUILD)/$(DIR_CXX)/%.o, $(SRC_CXX))
 
 $(DIR_BUILD)/$(DIR_CXX)/%.o: $(DIR_SRC)/$(DIR_CXX)/lib/%.cpp
 	@echo "Building C++ files"
@@ -255,19 +256,19 @@ $(DIR_BUILD)/$(DECAPP): $(DIR_SRC)/$(DIR_EXEC)/$(DECAPP).c $(LIBRARIES)
 
 CXXDECAPP=jxrdecode
 
-$(DIR_BUILD)/$(CXXDECAPP): $(DIR_SRC)/$(DIR_CXX)/$(CXXDECAPP).cpp $(OBJ_CXX) $(LIBRARIES)
+$(DIR_BUILD)/$(CXXDECAPP): $(DIR_SRC)/$(DIR_CXX)/$(CXXDECAPP).cpp $(LIBRARIES) $(CXX_LIBRARIES)
 	echo "Building C++ jxrdecode"
 	$(MK_DIR) $(@D)
-	$(CXX) $<  $(OBJ_CXX) -o $@ -I$(DIR_CXX)/lib $(CXXFLAGS) $(LIBS)
+	$(CXX) $<  $(OBJ_CXX) -o $@ -I$(DIR_CXX)/lib $(CXXFLAGS) $(LIBS) $(CXXLIBS)
 
 ##--------------------------------
 ##
 ## JPEG XR library
 ##
-all: $(DIR_BUILD)/$(ENCAPP) $(DIR_BUILD)/$(DECAPP) $(DIR_BUILD)/$(CXXDECAPP) $(LIBRARIES)
+all: $(DIR_BUILD)/$(ENCAPP) $(DIR_BUILD)/$(DECAPP) $(DIR_BUILD)/$(CXXDECAPP) $(LIBRARIES) $(CXX_LIBRARIES)
 
 clean:
-	rm -rf $(DIR_BUILD)/*App $(DIR_BUILD)/*.o $(DIR_BUILD)/lib/*.o $(DIR_BUILD)/libj*.a $(DIR_BUILD)/libj*.so $(DIR_BUILD)/libjxr.pc $(DIR_BUILD)/$(CXXDECAPP)
+	rm -rf $(DIR_BUILD)/*App $(DIR_BUILD)/**/*.o $(DIR_BUILD)/libj*.a $(DIR_BUILD)/libj*.so $(DIR_BUILD)/libjxr.pc $(DIR_BUILD)/$(CXXDECAPP)
 
 $(DIR_BUILD)/libjxr.pc: $(DIR_SRC)/libjxr.pc.in
 	@python -c 'import os; d = { "DIR_INSTALL": "$(DIR_INSTALL)", "JXR_VERSION": "$(JXR_VERSION)", "JXR_ENDIAN": "$(ENDIANFLAG)" }; fin = open("$<", "r"); fout = open("$@", "w+"); fout.writelines( [ l % d for l in fin.readlines()])'
