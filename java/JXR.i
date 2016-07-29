@@ -46,7 +46,7 @@ namespace jxrlib {
 
   class FormatError {
   public:
-    FormatError(std::string &what_arg) : what_arg(what_arg) {}
+    FormatError(std::string what_arg) : what_arg(what_arg) {}
     std::string what();
   };
 
