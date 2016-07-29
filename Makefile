@@ -103,6 +103,7 @@ SRC_SYS=adapthuff.c image.c strcodec.c strPredQuant.c strTransform.c perfTimerAN
 OBJ_SYS=$(patsubst %.c, $(DIR_BUILD)/$(DIR_SYS)/%.o, $(SRC_SYS))
 
 $(DIR_BUILD)/$(DIR_SYS)/%.o: $(DIR_SRC)/$(DIR_SYS)/%.c
+	@echo "Building C common files"
 	$(MK_DIR) $(@D)
 	$(CC) $(CFLAGS) -c $< -o $@
 
@@ -114,6 +115,7 @@ $(DIR_BUILD)/$(DIR_SYS)/%.o: $(DIR_SRC)/$(DIR_SYS)/%.c
 SRC_DEC=decode.c postprocess.c segdec.c strdec.c strInvTransform.c strPredQuantDec.c JXRTranscode.c
 OBJ_DEC=$(patsubst %.c, $(DIR_BUILD)/$(DIR_DEC)/%.o, $(SRC_DEC))
 $(DIR_BUILD)/$(DIR_DEC)/%.o: $(DIR_SRC)/$(DIR_DEC)/%.c
+	@echo "Building C decode files"
 	$(MK_DIR) $(@D)
 	$(CC) $(CFLAGS) -c $< -o $@
 
@@ -126,6 +128,7 @@ SRC_ENC=encode.c segenc.c strenc.c strFwdTransform.c strPredQuantEnc.c
 OBJ_ENC=$(patsubst %.c, $(DIR_BUILD)/$(DIR_ENC)/%.o, $(SRC_ENC))
 
 $(DIR_BUILD)/$(DIR_ENC)/%.o: $(DIR_SRC)/$(DIR_ENC)/%.c
+	@echo "Building C encode files"
 	$(MK_DIR) $(@D)
 	$(CC) $(CFLAGS) -c $< -o $@
 
@@ -135,11 +138,13 @@ $(DIR_BUILD)/$(DIR_ENC)/%.o: $(DIR_SRC)/$(DIR_ENC)/%.c
 ##
 
 $(DIR_BUILD)/libjpegxr.a: $(OBJ_ENC) $(OBJ_DEC) $(OBJ_SYS)
+	@echo "Building JPEG XR static lib"
 	$(MK_DIR) $(@D)
 	ar rvu $@ $(OBJ_ENC) $(OBJ_DEC) $(OBJ_SYS)
 	ranlib $@
 
 $(DIR_BUILD)/libjpegxr.so: $(OBJ_ENC) $(OBJ_DEC) $(OBJ_SYS)
+	@echo "Building JPEG XR shared lib"
 	$(MK_DIR) $(@D)
 	$(CC) -shared $? -o $@
 
@@ -152,6 +157,7 @@ SRC_GLUE=JXRGlue.c JXRMeta.c JXRGluePFC.c JXRGlueJxr.c
 OBJ_GLUE=$(patsubst %.c, $(DIR_BUILD)/$(DIR_GLUE)/%.o, $(SRC_GLUE))
 
 $(DIR_BUILD)/$(DIR_GLUE)/%.o: $(DIR_SRC)/$(DIR_GLUE)/%.c
+	@echo "Building C glue files"
 	$(MK_DIR) $(@D)
 	$(CC) $(CFLAGS) -I$(DIR_GLUE) -c $< -o $@
 
@@ -164,6 +170,7 @@ SRC_CXX=$(wildcard $(DIR_SRC)/$(DIR_CXX)/lib/*.cpp)
 OBJ_CXX=$(patsubst %.cpp, %.o, $(SRC_CXX))
 
 $(DIR_BUILD)/$(DIR_CXX)/%.o: $(DIR_SRC)/$(DIR_CXX)/lib/%.cpp
+	@echo "Building C++ files"
 	$(MK_DIR) $(@D)
 	$(CXX) $(CXXFLAGS) -I$(DIR_CXX)/lib/ -c $< -o $@
 
@@ -176,6 +183,7 @@ SRC_TEST=JXRTest.c JXRTestBmp.c JXRTestHdr.c JXRTestPnm.c JXRTestTif.c JXRTestYU
 OBJ_TEST=$(patsubst %.c, $(DIR_BUILD)/$(DIR_TEST)/%.o, $(SRC_TEST))
 
 $(DIR_BUILD)/$(DIR_TEST)/%.o: $(DIR_SRC)/$(DIR_TEST)/%.c
+	@echo "Building C test files"
 	$(MK_DIR) $(@D)
 	$(CC) $(CFLAGS) -I$(DIR_GLUE) -I$(DIR_TEST) -c $< -o $@
 
@@ -185,11 +193,13 @@ $(DIR_BUILD)/$(DIR_TEST)/%.o: $(DIR_SRC)/$(DIR_TEST)/%.c
 ##
 
 $(DIR_BUILD)/libjxrglue.a: $(OBJ_GLUE) $(OBJ_TEST)
+	@echo "Building glue static lib"
 	$(MK_DIR) $(@D)
 	ar rvu $@ $(OBJ_GLUE) $(OBJ_TEST)
 	ranlib $@
 
 $(DIR_BUILD)/libjxrglue.so: $(OBJ_GLUE) $(OBJ_TEST)
+	@echo "Building glue shared lib"
 	$(MK_DIR) $(@D)
 	$(CC) -shared $? -o $@
 
@@ -199,6 +209,7 @@ $(DIR_BUILD)/libjxrglue.so: $(OBJ_GLUE) $(OBJ_TEST)
 ##
 
 $(DIR_BUILD)/libjxr++.so: $(OBJ_CXX) | $(LIBRARIES)
+	@echo "Building C++ wrapper lib"
 	$(MK_DIR) $(@D)
 	$(CXX) -shared $? $(LIBS) -o $@
 
@@ -221,6 +232,7 @@ jni:
 ENCAPP=JxrEncApp
 
 $(DIR_BUILD)/$(ENCAPP): $(DIR_SRC)/$(DIR_EXEC)/$(ENCAPP).c $(LIBRARIES)
+	@echo "Building JxrEncApp"
 	$(MK_DIR) $(@D)
 	$(CC) $< -o $@ $(CFLAGS) -I$(DIR_GLUE) -I$(DIR_TEST) $(LIBS)
 
@@ -232,6 +244,7 @@ $(DIR_BUILD)/$(ENCAPP): $(DIR_SRC)/$(DIR_EXEC)/$(ENCAPP).c $(LIBRARIES)
 DECAPP=JxrDecApp
 
 $(DIR_BUILD)/$(DECAPP): $(DIR_SRC)/$(DIR_EXEC)/$(DECAPP).c $(LIBRARIES)
+	@echo "Building JxrDecApp"
 	$(MK_DIR) $(@D)
 	$(CC) $< -o $@ $(CFLAGS) -I$(DIR_GLUE) -I$(DIR_TEST) $(LIBS)
 
@@ -243,6 +256,7 @@ $(DIR_BUILD)/$(DECAPP): $(DIR_SRC)/$(DIR_EXEC)/$(DECAPP).c $(LIBRARIES)
 CXXDECAPP=jxrdecode
 
 $(DIR_BUILD)/$(CXXDECAPP): $(DIR_SRC)/$(DIR_CXX)/$(CXXDECAPP).cpp $(OBJ_CXX) $(LIBRARIES)
+	echo "Building C++ jxrdecode"
 	$(MK_DIR) $(@D)
 	$(CXX) $<  $(OBJ_CXX) -o $@ -I$(DIR_CXX)/lib $(CXXFLAGS) $(LIBS)
 
