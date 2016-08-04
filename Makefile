@@ -248,9 +248,9 @@ $(DIR_BUILD)/$(JAVA_PKG)/%.class: $(DIR_JAVA)/src/$(JAVA_PKG)/%.java
 	@echo "Building Java classfiles"
 	javac -d $(DIR_BUILD) -cp $(DIR_JAVA)/src $<
 
-$(DIR_BUILD)/$(JAR): $(OBJ_JAVA)
-	@echo "Packaging JAR: $(OBJ_JAVA)"
-	jar cf $@ $(OBJ_JAVA)
+$(DIR_BUILD)/$(JAR): $(OBJ_JAVA) $(DIR_BUILD)/libjxrjava.$(LIBSUFFIX)
+	@echo "Packaging JAR"
+	jar cf $@ -C $(DIR_BUILD) $(JAVA_PKG)
 
 
 ##--------------------------------
@@ -295,7 +295,7 @@ $(DIR_BUILD)/$(CXXDECAPP): $(DIR_SRC)/$(DIR_CXX)/$(CXXDECAPP).cpp $(LIBRARIES) $
 all: $(DIR_BUILD)/$(ENCAPP) $(DIR_BUILD)/$(DECAPP) $(DIR_BUILD)/$(CXXDECAPP) $(DIR_BUILD)/$(JAR) $(LIBRARIES) $(CXX_LIBRARIES)
 
 clean:
-	rm -rf $(DIR_BUILD)/*App $(DIR_BUILD)/**/*.o $(DIR_BUILD)/libj*.a $(DIR_BUILD)/libj*.$(LIBSUFFIX) $(DIR_BUILD)/libjxr.pc $(DIR_BUILD)/$(CXXDECAPP)
+	rm -rf $(DIR_BUILD)/*App $(DIR_BUILD)/**/*.o $(DIR_BUILD)/**/*.class $(DIR_BUILD)/libj*.a $(DIR_BUILD)/libj*.$(LIBSUFFIX) $(DIR_BUILD)/libjxr.pc $(DIR_BUILD)/$(CXXDECAPP) $(DIR_BUILD)/$(JAR)
 
 $(DIR_BUILD)/libjxr.pc: $(DIR_SRC)/libjxr.pc.in
 	@python -c 'import os; d = { "DIR_INSTALL": "$(DIR_INSTALL)", "JXR_VERSION": "$(JXR_VERSION)", "JXR_ENDIAN": "$(ENDIANFLAG)" }; fin = open("$<", "r"); fout = open("$@", "w+"); fout.writelines( [ l % d for l in fin.readlines()])'
