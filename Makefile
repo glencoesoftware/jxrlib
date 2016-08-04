@@ -83,7 +83,7 @@ endif
 CD=cd
 MK_DIR=mkdir -p
 CFLAGS=-I. -Icommon/include -I$(DIR_SYS) $(ENDIANFLAG) -D__ANSI__ -DDISABLE_PERF_MEASUREMENT -w $(PICFLAG)
-CXXFLAGS=-I. -Icommon/include -I$(DIR_SYS) -I$(DIR_GLUE) -I$(DIR_TEST) -Wno-self-assign-field
+CXXFLAGS=-I. -Icommon/include -I$(DIR_SYS) -I$(DIR_GLUE) -I$(DIR_TEST) -Wno-self-assign-field -fPIC
 
 ifeq ($(strip $(shell uname)), Darwin)
   CC = clang
