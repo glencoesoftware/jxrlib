@@ -1062,9 +1062,7 @@ SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_CodecFactory_1createFormatConver
   if (!arg3_pstr) return 0;
   (&arg3)->assign(arg3_pstr);
   jenv->ReleaseStringUTFChars(jarg3, arg3_pstr); 
-  {
-    
-  }
+  result = (arg1)->createFormatConverter(*arg2,arg3);
   *(jxrlib::FormatConverter **)&jresult = new jxrlib::FormatConverter((const jxrlib::FormatConverter &)result); 
   return jresult;
 }
@@ -1181,7 +1179,7 @@ SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_new_1FormatError(JNIEnv *jenv, j
 }
 
 
-SWIGEXPORT jstring JNICALL Java_ome_jxrlib_JXRJNI_FormatError_1what(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jstring JNICALL Java_ome_jxrlib_JXRJNI_FormatError_1getMessage(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jstring jresult = 0 ;
   jxrlib::FormatError *arg1 = (jxrlib::FormatError *) 0 ;
   std::string result;
@@ -1213,9 +1211,7 @@ SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_ImageDecoder_1initialize(JNIEnv *
   (void)jcls;
   (void)jarg1_;
   arg1 = *(jxrlib::ImageDecoder **)&jarg1; 
-  {
-    
-  }
+  (arg1)->initialize();
 }
 
 
@@ -1228,9 +1224,7 @@ SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_ImageDecoder_1getFrameCount(JNIE
   (void)jcls;
   (void)jarg1_;
   arg1 = *(jxrlib::ImageDecoder **)&jarg1; 
-  {
-    
-  }
+  result = (unsigned int)(arg1)->getFrameCount();
   jresult = (jlong)result; 
   return jresult;
 }
@@ -1318,9 +1312,7 @@ SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_ImageDecoder_1getResolution(JNIE
   (void)jcls;
   (void)jarg1_;
   arg1 = *(jxrlib::ImageDecoder **)&jarg1; 
-  {
-    
-  }
+  result = (arg1)->getResolution();
   *(jxrlib::Resolution **)&jresult = new jxrlib::Resolution((const jxrlib::Resolution &)result); 
   return jresult;
 }
@@ -1403,9 +1395,7 @@ SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_ImageEncoder_1initializeWithDecod
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "jxrlib::ImageDecoder & reference is null");
     return ;
   } 
-  {
-    
-  }
+  (arg1)->initializeWithDecoder(*arg2);
 }
 
 
@@ -1423,9 +1413,7 @@ SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_ImageEncoder_1writeSource(JNIEnv 
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "jxrlib::FormatConverter & reference is null");
     return ;
   } 
-  {
-    
-  }
+  (arg1)->writeSource(*arg2);
 }
 
 

@@ -39,7 +39,7 @@ public class CodecFactory {
     return new ImageDecoder(JXRJNI.CodecFactory_decoderFromFile(swigCPtr, this, inputFile), true);
   }
 
-  public FormatConverter createFormatConverter(ImageDecoder imageDecoder, String extension) throws ome.jxrlib.FormatError {
+  public FormatConverter createFormatConverter(ImageDecoder imageDecoder, String extension) {
     return new FormatConverter(JXRJNI.CodecFactory_createFormatConverter(swigCPtr, this, ImageDecoder.getCPtr(imageDecoder), imageDecoder, extension), true);
   }
 

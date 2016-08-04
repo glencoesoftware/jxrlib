@@ -39,8 +39,8 @@ public class FormatError extends java.lang.Exception {
     this(JXRJNI.new_FormatError(what_arg), true);
   }
 
-  public String what() {
-    return JXRJNI.FormatError_what(swigCPtr, this);
+  public String getMessage() {
+    return JXRJNI.FormatError_getMessage(swigCPtr, this);
   }
 
 }

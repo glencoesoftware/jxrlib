@@ -39,11 +39,11 @@ public class ImageEncoder {
     this(JXRJNI.new_ImageEncoder(Stream.getCPtr(encodeStream), encodeStream, extension), true);
   }
 
-  public void initializeWithDecoder(ImageDecoder decoder) throws ome.jxrlib.FormatError {
+  public void initializeWithDecoder(ImageDecoder decoder) {
     JXRJNI.ImageEncoder_initializeWithDecoder(swigCPtr, this, ImageDecoder.getCPtr(decoder), decoder);
   }
 
-  public void writeSource(FormatConverter converter) throws ome.jxrlib.FormatError {
+  public void writeSource(FormatConverter converter) {
     JXRJNI.ImageEncoder_writeSource(swigCPtr, this, FormatConverter.getCPtr(converter), converter);
   }
 

@@ -14,13 +14,7 @@
 %}
 
 %typemap(javabase) jxrlib::FormatError "java.lang.Exception";
-%rename(getMessage) jxrlib::FormatError::getMessage;
-%javaexception("ome.jxrlib.FormatError") jxrlib::CodecFactory::createFormatConverter {}
-%javaexception("ome.jxrlib.FormatError") jxrlib::ImageDecoder::initialize {}
-%javaexception("ome.jxrlib.FormatError") jxrlib::ImageDecoder::getFrameCount {}
-%javaexception("ome.jxrlib.FormatError") jxrlib::ImageDecoder::getResolution {}
-%javaexception("ome.jxrlib.FormatError") jxrlib::ImageEncoder::initializeWithDecoder {}
-%javaexception("ome.jxrlib.FormatError") jxrlib::ImageEncoder::writeSource {}
+%rename(getMessage) jxrlib::FormatError::what();
 
 typedef struct {
   unsigned long  Data1;
