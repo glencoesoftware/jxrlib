@@ -6,6 +6,7 @@
  * the SWIG interface file instead.
  * ----------------------------------------------------------------------------- */
 
+package ome.jxrlib;
 
 public class JXRJNI {
   public final static native void GUID_Data1_set(long jarg1, GUID jarg1_, long jarg2);

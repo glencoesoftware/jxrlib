@@ -868,7 +868,7 @@ static jdoubleArray SWIG_JavaArrayOutDouble (JNIEnv *jenv, double *result, jsize
 extern "C" {
 #endif
 
-SWIGEXPORT void JNICALL Java_JXRJNI_GUID_1Data1_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_GUID_1Data1_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
   GUID *arg1 = (GUID *) 0 ;
   unsigned long arg2 ;
   
@@ -881,7 +881,7 @@ SWIGEXPORT void JNICALL Java_JXRJNI_GUID_1Data1_1set(JNIEnv *jenv, jclass jcls, 
 }
 
 
-SWIGEXPORT jlong JNICALL Java_JXRJNI_GUID_1Data1_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_GUID_1Data1_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
   GUID *arg1 = (GUID *) 0 ;
   unsigned long result;
@@ -896,7 +896,7 @@ SWIGEXPORT jlong JNICALL Java_JXRJNI_GUID_1Data1_1get(JNIEnv *jenv, jclass jcls,
 }
 
 
-SWIGEXPORT void JNICALL Java_JXRJNI_GUID_1Data2_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_GUID_1Data2_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
   GUID *arg1 = (GUID *) 0 ;
   unsigned short arg2 ;
   
@@ -909,7 +909,7 @@ SWIGEXPORT void JNICALL Java_JXRJNI_GUID_1Data2_1set(JNIEnv *jenv, jclass jcls, 
 }
 
 
-SWIGEXPORT jint JNICALL Java_JXRJNI_GUID_1Data2_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jint JNICALL Java_ome_jxrlib_JXRJNI_GUID_1Data2_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jint jresult = 0 ;
   GUID *arg1 = (GUID *) 0 ;
   unsigned short result;
@@ -924,7 +924,7 @@ SWIGEXPORT jint JNICALL Java_JXRJNI_GUID_1Data2_1get(JNIEnv *jenv, jclass jcls, 
 }
 
 
-SWIGEXPORT void JNICALL Java_JXRJNI_GUID_1Data3_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_GUID_1Data3_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
   GUID *arg1 = (GUID *) 0 ;
   unsigned short arg2 ;
   
@@ -937,7 +937,7 @@ SWIGEXPORT void JNICALL Java_JXRJNI_GUID_1Data3_1set(JNIEnv *jenv, jclass jcls, 
 }
 
 
-SWIGEXPORT jint JNICALL Java_JXRJNI_GUID_1Data3_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jint JNICALL Java_ome_jxrlib_JXRJNI_GUID_1Data3_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jint jresult = 0 ;
   GUID *arg1 = (GUID *) 0 ;
   unsigned short result;
@@ -952,7 +952,7 @@ SWIGEXPORT jint JNICALL Java_JXRJNI_GUID_1Data3_1get(JNIEnv *jenv, jclass jcls, 
 }
 
 
-SWIGEXPORT void JNICALL Java_JXRJNI_GUID_1Data4_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jshortArray jarg2) {
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_GUID_1Data4_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jshortArray jarg2) {
   GUID *arg1 = (GUID *) 0 ;
   unsigned char *arg2 ;
   jshort *jarr2 ;
@@ -976,7 +976,7 @@ SWIGEXPORT void JNICALL Java_JXRJNI_GUID_1Data4_1set(JNIEnv *jenv, jclass jcls, 
 }
 
 
-SWIGEXPORT jshortArray JNICALL Java_JXRJNI_GUID_1Data4_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jshortArray JNICALL Java_ome_jxrlib_JXRJNI_GUID_1Data4_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jshortArray jresult = 0 ;
   GUID *arg1 = (GUID *) 0 ;
   unsigned char *result = 0 ;
@@ -991,7 +991,7 @@ SWIGEXPORT jshortArray JNICALL Java_JXRJNI_GUID_1Data4_1get(JNIEnv *jenv, jclass
 }
 
 
-SWIGEXPORT jlong JNICALL Java_JXRJNI_new_1GUID(JNIEnv *jenv, jclass jcls) {
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_new_1GUID(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   GUID *result = 0 ;
   
@@ -1003,7 +1003,7 @@ SWIGEXPORT jlong JNICALL Java_JXRJNI_new_1GUID(JNIEnv *jenv, jclass jcls) {
 }
 
 
-SWIGEXPORT void JNICALL Java_JXRJNI_delete_1GUID(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_delete_1GUID(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   GUID *arg1 = (GUID *) 0 ;
   
   (void)jenv;
@@ -1013,7 +1013,7 @@ SWIGEXPORT void JNICALL Java_JXRJNI_delete_1GUID(JNIEnv *jenv, jclass jcls, jlon
 }
 
 
-SWIGEXPORT jlong JNICALL Java_JXRJNI_CodecFactory_1decoderFromFile(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_CodecFactory_1decoderFromFile(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
   jlong jresult = 0 ;
   jxrlib::CodecFactory *arg1 = (jxrlib::CodecFactory *) 0 ;
   std::string arg2 ;
@@ -1037,7 +1037,7 @@ SWIGEXPORT jlong JNICALL Java_JXRJNI_CodecFactory_1decoderFromFile(JNIEnv *jenv,
 }
 
 
-SWIGEXPORT jlong JNICALL Java_JXRJNI_CodecFactory_1createFormatConverter(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jstring jarg3) {
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_CodecFactory_1createFormatConverter(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jstring jarg3) {
   jlong jresult = 0 ;
   jxrlib::CodecFactory *arg1 = (jxrlib::CodecFactory *) 0 ;
   jxrlib::ImageDecoder *arg2 = 0 ;
@@ -1070,7 +1070,7 @@ SWIGEXPORT jlong JNICALL Java_JXRJNI_CodecFactory_1createFormatConverter(JNIEnv 
 }
 
 
-SWIGEXPORT jlong JNICALL Java_JXRJNI_new_1CodecFactory(JNIEnv *jenv, jclass jcls) {
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_new_1CodecFactory(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   jxrlib::CodecFactory *result = 0 ;
   
@@ -1082,7 +1082,7 @@ SWIGEXPORT jlong JNICALL Java_JXRJNI_new_1CodecFactory(JNIEnv *jenv, jclass jcls
 }
 
 
-SWIGEXPORT void JNICALL Java_JXRJNI_delete_1CodecFactory(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_delete_1CodecFactory(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   jxrlib::CodecFactory *arg1 = (jxrlib::CodecFactory *) 0 ;
   
   (void)jenv;
@@ -1092,7 +1092,7 @@ SWIGEXPORT void JNICALL Java_JXRJNI_delete_1CodecFactory(JNIEnv *jenv, jclass jc
 }
 
 
-SWIGEXPORT jlong JNICALL Java_JXRJNI_Factory_1createStreamFromFilename(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_Factory_1createStreamFromFilename(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
   jlong jresult = 0 ;
   jxrlib::Factory *arg1 = (jxrlib::Factory *) 0 ;
   std::string arg2 ;
@@ -1116,7 +1116,7 @@ SWIGEXPORT jlong JNICALL Java_JXRJNI_Factory_1createStreamFromFilename(JNIEnv *j
 }
 
 
-SWIGEXPORT jlong JNICALL Java_JXRJNI_new_1Factory(JNIEnv *jenv, jclass jcls) {
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_new_1Factory(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   jxrlib::Factory *result = 0 ;
   
@@ -1128,7 +1128,7 @@ SWIGEXPORT jlong JNICALL Java_JXRJNI_new_1Factory(JNIEnv *jenv, jclass jcls) {
 }
 
 
-SWIGEXPORT void JNICALL Java_JXRJNI_delete_1Factory(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_delete_1Factory(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   jxrlib::Factory *arg1 = (jxrlib::Factory *) 0 ;
   
   (void)jenv;
@@ -1138,7 +1138,7 @@ SWIGEXPORT void JNICALL Java_JXRJNI_delete_1Factory(JNIEnv *jenv, jclass jcls, j
 }
 
 
-SWIGEXPORT jlong JNICALL Java_JXRJNI_new_1FormatConverter(JNIEnv *jenv, jclass jcls) {
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_new_1FormatConverter(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   jxrlib::FormatConverter *result = 0 ;
   
@@ -1150,7 +1150,7 @@ SWIGEXPORT jlong JNICALL Java_JXRJNI_new_1FormatConverter(JNIEnv *jenv, jclass j
 }
 
 
-SWIGEXPORT void JNICALL Java_JXRJNI_delete_1FormatConverter(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_delete_1FormatConverter(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   jxrlib::FormatConverter *arg1 = (jxrlib::FormatConverter *) 0 ;
   
   (void)jenv;
@@ -1160,7 +1160,7 @@ SWIGEXPORT void JNICALL Java_JXRJNI_delete_1FormatConverter(JNIEnv *jenv, jclass
 }
 
 
-SWIGEXPORT jlong JNICALL Java_JXRJNI_new_1FormatError(JNIEnv *jenv, jclass jcls, jstring jarg1) {
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_new_1FormatError(JNIEnv *jenv, jclass jcls, jstring jarg1) {
   jlong jresult = 0 ;
   std::string arg1 ;
   jxrlib::FormatError *result = 0 ;
@@ -1181,7 +1181,7 @@ SWIGEXPORT jlong JNICALL Java_JXRJNI_new_1FormatError(JNIEnv *jenv, jclass jcls,
 }
 
 
-SWIGEXPORT jstring JNICALL Java_JXRJNI_FormatError_1what(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jstring JNICALL Java_ome_jxrlib_JXRJNI_FormatError_1what(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jstring jresult = 0 ;
   jxrlib::FormatError *arg1 = (jxrlib::FormatError *) 0 ;
   std::string result;
@@ -1196,7 +1196,7 @@ SWIGEXPORT jstring JNICALL Java_JXRJNI_FormatError_1what(JNIEnv *jenv, jclass jc
 }
 
 
-SWIGEXPORT void JNICALL Java_JXRJNI_delete_1FormatError(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_delete_1FormatError(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   jxrlib::FormatError *arg1 = (jxrlib::FormatError *) 0 ;
   
   (void)jenv;
@@ -1206,7 +1206,7 @@ SWIGEXPORT void JNICALL Java_JXRJNI_delete_1FormatError(JNIEnv *jenv, jclass jcl
 }
 
 
-SWIGEXPORT void JNICALL Java_JXRJNI_ImageDecoder_1initialize(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_ImageDecoder_1initialize(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jxrlib::ImageDecoder *arg1 = (jxrlib::ImageDecoder *) 0 ;
   
   (void)jenv;
@@ -1219,7 +1219,7 @@ SWIGEXPORT void JNICALL Java_JXRJNI_ImageDecoder_1initialize(JNIEnv *jenv, jclas
 }
 
 
-SWIGEXPORT jlong JNICALL Java_JXRJNI_ImageDecoder_1getFrameCount(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_ImageDecoder_1getFrameCount(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
   jxrlib::ImageDecoder *arg1 = (jxrlib::ImageDecoder *) 0 ;
   unsigned int result;
@@ -1236,7 +1236,7 @@ SWIGEXPORT jlong JNICALL Java_JXRJNI_ImageDecoder_1getFrameCount(JNIEnv *jenv, j
 }
 
 
-SWIGEXPORT void JNICALL Java_JXRJNI_ImageDecoder_1selectFrame(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_ImageDecoder_1selectFrame(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
   jxrlib::ImageDecoder *arg1 = (jxrlib::ImageDecoder *) 0 ;
   unsigned int arg2 ;
   
@@ -1249,7 +1249,7 @@ SWIGEXPORT void JNICALL Java_JXRJNI_ImageDecoder_1selectFrame(JNIEnv *jenv, jcla
 }
 
 
-SWIGEXPORT jlong JNICALL Java_JXRJNI_ImageDecoder_1getGUIDPixFormat(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_ImageDecoder_1getGUIDPixFormat(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
   jxrlib::ImageDecoder *arg1 = (jxrlib::ImageDecoder *) 0 ;
   GUID result;
@@ -1264,7 +1264,7 @@ SWIGEXPORT jlong JNICALL Java_JXRJNI_ImageDecoder_1getGUIDPixFormat(JNIEnv *jenv
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_JXRJNI_ImageDecoder_1getBlackWhite(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jboolean JNICALL Java_ome_jxrlib_JXRJNI_ImageDecoder_1getBlackWhite(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jboolean jresult = 0 ;
   jxrlib::ImageDecoder *arg1 = (jxrlib::ImageDecoder *) 0 ;
   bool result;
@@ -1279,7 +1279,7 @@ SWIGEXPORT jboolean JNICALL Java_JXRJNI_ImageDecoder_1getBlackWhite(JNIEnv *jenv
 }
 
 
-SWIGEXPORT jlong JNICALL Java_JXRJNI_ImageDecoder_1getWidth(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_ImageDecoder_1getWidth(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
   jxrlib::ImageDecoder *arg1 = (jxrlib::ImageDecoder *) 0 ;
   unsigned int result;
@@ -1294,7 +1294,7 @@ SWIGEXPORT jlong JNICALL Java_JXRJNI_ImageDecoder_1getWidth(JNIEnv *jenv, jclass
 }
 
 
-SWIGEXPORT jlong JNICALL Java_JXRJNI_ImageDecoder_1getHeight(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_ImageDecoder_1getHeight(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
   jxrlib::ImageDecoder *arg1 = (jxrlib::ImageDecoder *) 0 ;
   unsigned int result;
@@ -1309,7 +1309,7 @@ SWIGEXPORT jlong JNICALL Java_JXRJNI_ImageDecoder_1getHeight(JNIEnv *jenv, jclas
 }
 
 
-SWIGEXPORT jlong JNICALL Java_JXRJNI_ImageDecoder_1getResolution(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_ImageDecoder_1getResolution(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
   jxrlib::ImageDecoder *arg1 = (jxrlib::ImageDecoder *) 0 ;
   jxrlib::Resolution result;
@@ -1326,7 +1326,7 @@ SWIGEXPORT jlong JNICALL Java_JXRJNI_ImageDecoder_1getResolution(JNIEnv *jenv, j
 }
 
 
-SWIGEXPORT void JNICALL Java_JXRJNI_ImageDecoder_1close(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_ImageDecoder_1close(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jxrlib::ImageDecoder *arg1 = (jxrlib::ImageDecoder *) 0 ;
   
   (void)jenv;
@@ -1337,7 +1337,7 @@ SWIGEXPORT void JNICALL Java_JXRJNI_ImageDecoder_1close(JNIEnv *jenv, jclass jcl
 }
 
 
-SWIGEXPORT jlong JNICALL Java_JXRJNI_new_1ImageDecoder(JNIEnv *jenv, jclass jcls) {
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_new_1ImageDecoder(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   jxrlib::ImageDecoder *result = 0 ;
   
@@ -1349,7 +1349,7 @@ SWIGEXPORT jlong JNICALL Java_JXRJNI_new_1ImageDecoder(JNIEnv *jenv, jclass jcls
 }
 
 
-SWIGEXPORT void JNICALL Java_JXRJNI_delete_1ImageDecoder(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_delete_1ImageDecoder(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   jxrlib::ImageDecoder *arg1 = (jxrlib::ImageDecoder *) 0 ;
   
   (void)jenv;
@@ -1359,7 +1359,7 @@ SWIGEXPORT void JNICALL Java_JXRJNI_delete_1ImageDecoder(JNIEnv *jenv, jclass jc
 }
 
 
-SWIGEXPORT jlong JNICALL Java_JXRJNI_new_1ImageEncoder(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_new_1ImageEncoder(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
   jlong jresult = 0 ;
   jxrlib::Stream arg1 ;
   std::string arg2 ;
@@ -1389,7 +1389,7 @@ SWIGEXPORT jlong JNICALL Java_JXRJNI_new_1ImageEncoder(JNIEnv *jenv, jclass jcls
 }
 
 
-SWIGEXPORT void JNICALL Java_JXRJNI_ImageEncoder_1initializeWithDecoder(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_ImageEncoder_1initializeWithDecoder(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
   jxrlib::ImageEncoder *arg1 = (jxrlib::ImageEncoder *) 0 ;
   jxrlib::ImageDecoder *arg2 = 0 ;
   
@@ -1409,7 +1409,7 @@ SWIGEXPORT void JNICALL Java_JXRJNI_ImageEncoder_1initializeWithDecoder(JNIEnv *
 }
 
 
-SWIGEXPORT void JNICALL Java_JXRJNI_ImageEncoder_1writeSource(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_ImageEncoder_1writeSource(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_) {
   jxrlib::ImageEncoder *arg1 = (jxrlib::ImageEncoder *) 0 ;
   jxrlib::FormatConverter *arg2 = 0 ;
   
@@ -1429,7 +1429,7 @@ SWIGEXPORT void JNICALL Java_JXRJNI_ImageEncoder_1writeSource(JNIEnv *jenv, jcla
 }
 
 
-SWIGEXPORT void JNICALL Java_JXRJNI_ImageEncoder_1close(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_ImageEncoder_1close(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jxrlib::ImageEncoder *arg1 = (jxrlib::ImageEncoder *) 0 ;
   
   (void)jenv;
@@ -1440,7 +1440,7 @@ SWIGEXPORT void JNICALL Java_JXRJNI_ImageEncoder_1close(JNIEnv *jenv, jclass jcl
 }
 
 
-SWIGEXPORT void JNICALL Java_JXRJNI_delete_1ImageEncoder(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_delete_1ImageEncoder(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   jxrlib::ImageEncoder *arg1 = (jxrlib::ImageEncoder *) 0 ;
   
   (void)jenv;
@@ -1450,7 +1450,7 @@ SWIGEXPORT void JNICALL Java_JXRJNI_delete_1ImageEncoder(JNIEnv *jenv, jclass jc
 }
 
 
-SWIGEXPORT jlong JNICALL Java_JXRJNI_new_1Resolution(JNIEnv *jenv, jclass jcls) {
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_new_1Resolution(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   jxrlib::Resolution *result = 0 ;
   
@@ -1462,7 +1462,7 @@ SWIGEXPORT jlong JNICALL Java_JXRJNI_new_1Resolution(JNIEnv *jenv, jclass jcls) 
 }
 
 
-SWIGEXPORT void JNICALL Java_JXRJNI_delete_1Resolution(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_delete_1Resolution(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   jxrlib::Resolution *arg1 = (jxrlib::Resolution *) 0 ;
   
   (void)jenv;
@@ -1472,7 +1472,7 @@ SWIGEXPORT void JNICALL Java_JXRJNI_delete_1Resolution(JNIEnv *jenv, jclass jcls
 }
 
 
-SWIGEXPORT jlong JNICALL Java_JXRJNI_new_1Stream(JNIEnv *jenv, jclass jcls) {
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_new_1Stream(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   jxrlib::Stream *result = 0 ;
   
@@ -1484,7 +1484,7 @@ SWIGEXPORT jlong JNICALL Java_JXRJNI_new_1Stream(JNIEnv *jenv, jclass jcls) {
 }
 
 
-SWIGEXPORT void JNICALL Java_JXRJNI_delete_1Stream(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_delete_1Stream(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   jxrlib::Stream *arg1 = (jxrlib::Stream *) 0 ;
   
   (void)jenv;
