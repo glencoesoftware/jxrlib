@@ -92,6 +92,7 @@ ifeq ($(strip $(shell uname)), Darwin)
   PLATFORM = darwin
 else
 	CXX = g++
+	CXXFLAGS=-std=c++11 $(CXXFLAGS)
 	LIBSUFFIX = so
   PLATFORM = linux
 endif
