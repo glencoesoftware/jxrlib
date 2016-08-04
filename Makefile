@@ -85,7 +85,7 @@ ifeq ($(strip $(shell uname)), Darwin)
   CC = clang
 	CXX = clang++
 	LIBSUFFIX = dylib
-  PLATFORM = macosx
+  PLATFORM = darwin
 else
 	CXX = g++
 	LIBSUFFIX = so
