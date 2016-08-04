@@ -21,7 +21,7 @@ package ome.jxrlib;
 public class Decode {
 
     static {
-        System.loadLibrary("jxr");
+        System.loadLibrary("jxrjava");
     }
 
     public static void main(String args[]) {
