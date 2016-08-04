@@ -238,6 +238,7 @@ SRC_JAVA=$(wildcard $(DIR_SRC)/$(DIR_JAVA)/src/$(JAVA_PKG)/*.java)
 OBJ_JAVA=$(patsubst $(DIR_SRC)/$(DIR_JAVA)/src/$(JAVA_PKG)/%.java, $(DIR_BUILD)/$(JAVA_PKG)/%.class, $(SRC_JAVA))
 
 swig:
+	swig -java -c++ -package ome.jxrlib -outdir java/src/ome/jxrlib java/JXR.i
 
 $(DIR_BUILD)/libjxrjava.$(LIBSUFFIX): $(LIBRARIES) $(CXX_LIBRARIES)
 	@echo "Building JNI"
