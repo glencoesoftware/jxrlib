@@ -13,12 +13,14 @@
   #include "Stream.hpp"
 %}
 
-%typemap(javabase) FormatError "java.lang.Exception";
-%typemap(javacode) FormatError %{
-  public String getMessage() {
-    return what();
-  }
-%}
+%typemap(javabase) jxrlib::FormatError "java.lang.Exception";
+%rename(getMessage) jxrlib::FormatError::getMessage;
+%javaexception("ome.jxrlib.FormatError") jxrlib::CodecFactory::createFormatConverter {}
+%javaexception("ome.jxrlib.FormatError") jxrlib::ImageDecoder::initialize {}
+%javaexception("ome.jxrlib.FormatError") jxrlib::ImageDecoder::getFrameCount {}
+%javaexception("ome.jxrlib.FormatError") jxrlib::ImageDecoder::getResolution {}
+%javaexception("ome.jxrlib.FormatError") jxrlib::ImageEncoder::initializeWithDecoder {}
+%javaexception("ome.jxrlib.FormatError") jxrlib::ImageEncoder::writeSource {}
 
 typedef unsigned int uint32_t;
 

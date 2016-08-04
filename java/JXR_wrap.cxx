@@ -1062,7 +1062,9 @@ SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_CodecFactory_1createFormatConver
   if (!arg3_pstr) return 0;
   (&arg3)->assign(arg3_pstr);
   jenv->ReleaseStringUTFChars(jarg3, arg3_pstr); 
-  result = (arg1)->createFormatConverter(*arg2,arg3);
+  {
+    
+  }
   *(jxrlib::FormatConverter **)&jresult = new jxrlib::FormatConverter((const jxrlib::FormatConverter &)result); 
   return jresult;
 }

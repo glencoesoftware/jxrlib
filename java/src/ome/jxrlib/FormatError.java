@@ -8,7 +8,7 @@
 
 package ome.jxrlib;
 
-public class FormatError {
+public class FormatError extends java.lang.Exception {
   private transient long swigCPtr;
   protected transient boolean swigCMemOwn;
 

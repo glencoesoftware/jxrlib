@@ -54,7 +54,7 @@ public class Decode {
                 decoder.close();
             }
         catch (FormatError e) {
-            System.out.println("*** ERROR: Unsupported format in JPEG XR ***\n" + e.getMsg());
+            System.out.println("*** ERROR: Unsupported format in JPEG XR ***\n" + e.getMessage());
         }
     }
 

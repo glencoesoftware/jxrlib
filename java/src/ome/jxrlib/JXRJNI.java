@@ -20,7 +20,7 @@ public class JXRJNI {
   public final static native long new_GUID();
   public final static native void delete_GUID(long jarg1);
   public final static native long CodecFactory_decoderFromFile(long jarg1, CodecFactory jarg1_, String jarg2);
-  public final static native long CodecFactory_createFormatConverter(long jarg1, CodecFactory jarg1_, long jarg2, ImageDecoder jarg2_, String jarg3);
+  public final static native long CodecFactory_createFormatConverter(long jarg1, CodecFactory jarg1_, long jarg2, ImageDecoder jarg2_, String jarg3) throws ome.jxrlib.FormatError;
   public final static native long new_CodecFactory();
   public final static native void delete_CodecFactory(long jarg1);
   public final static native long Factory_createStreamFromFilename(long jarg1, Factory jarg1_, String jarg2);
