@@ -22,8 +22,6 @@
 %javaexception("ome.jxrlib.FormatError") jxrlib::ImageEncoder::initializeWithDecoder {}
 %javaexception("ome.jxrlib.FormatError") jxrlib::ImageEncoder::writeSource {}
 
-typedef unsigned int uint32_t;
-
 typedef struct {
   unsigned long  Data1;
   unsigned short Data2;
@@ -55,12 +53,12 @@ namespace jxrlib {
   class ImageDecoder {
   public:
     void initialize();
-    uint32_t getFrameCount();
-    void selectFrame(uint32_t frameNum);
+    unsigned int getFrameCount();
+    void selectFrame(unsigned int frameNum);
     GUID getGUIDPixFormat();
     bool getBlackWhite();
-    uint32_t getWidth();
-    uint32_t getHeight();
+    unsigned int getWidth();
+    unsigned int getHeight();
     jxrlib::Resolution getResolution();
     void close();
   };

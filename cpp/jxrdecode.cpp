@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
     ImageDecoder decoder = codecFactory.decoderFromFile(inputFile);
     std::cout << "Opened decoder for file: " << inputFile << std::endl;
 
-    uint32_t frameCount = decoder.getFrameCount();
+    unsigned int frameCount = decoder.getFrameCount();
     std::cout << "Found " << frameCount << " frames" << std::endl;
 
     std::string outputFile = argv[2];

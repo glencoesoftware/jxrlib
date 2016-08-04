@@ -6,7 +6,6 @@
  * the SWIG interface file instead.
  * ----------------------------------------------------------------------------- */
 
-package ome.jxrlib;
 
 public class Factory {
   private transient long swigCPtr;

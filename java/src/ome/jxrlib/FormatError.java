@@ -6,7 +6,6 @@
  * the SWIG interface file instead.
  * ----------------------------------------------------------------------------- */
 
-package ome.jxrlib;
 
 public class FormatError extends java.lang.Exception {
   private transient long swigCPtr;

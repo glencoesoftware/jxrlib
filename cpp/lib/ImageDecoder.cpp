@@ -90,7 +90,7 @@ namespace jxrlib {
     throw FormatError("ERROR: Unable to initialize decoder.");
   }
 
-  uint32_t ImageDecoder::getFrameCount() {
+  unsigned int ImageDecoder::getFrameCount() {
     U32 cFrame;
     Call(pDecoder->GetFrameCount(pDecoder, &cFrame));
     return cFrame;
@@ -98,7 +98,7 @@ namespace jxrlib {
     throw FormatError("ERROR: Unable to get frame count.");
   }
 
-  void ImageDecoder::selectFrame(uint32_t frameNum) {
+  void ImageDecoder::selectFrame(unsigned int frameNum) {
     Call(pDecoder->SelectFrame(pDecoder, frameNum));
     return;
   Cleanup:
@@ -110,8 +110,8 @@ namespace jxrlib {
 
   GUID ImageDecoder::getGUIDPixFormat() { return pDecoder->guidPixFormat; }
   bool ImageDecoder::getBlackWhite() { return pDecoder->WMP.wmiSCP.bBlackWhite; }
-  uint32_t ImageDecoder::getWidth() { return pDecoder->WMP.wmiI.cROIWidth; }
-  uint32_t ImageDecoder::getHeight() { return pDecoder->WMP.wmiI.cROIHeight; }
+  unsigned int ImageDecoder::getWidth() { return pDecoder->WMP.wmiI.cROIWidth; }
+  unsigned int ImageDecoder::getHeight() { return pDecoder->WMP.wmiI.cROIHeight; }
 
   Resolution ImageDecoder::getResolution() {
     float rX = 0.0, rY = 0.0;

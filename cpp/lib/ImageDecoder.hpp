@@ -35,13 +35,13 @@ namespace jxrlib {
     ImageDecoder() : pDecoder(NULL), err(WMP_errSuccess) {};
     void initialize();
 
-    uint32_t getFrameCount();
-    void selectFrame(uint32_t frameNum);
+    unsigned int getFrameCount();
+    void selectFrame(unsigned int frameNum);
 
     GUID getGUIDPixFormat();
     bool getBlackWhite();
-    uint32_t getWidth();
-    uint32_t getHeight();
+    unsigned int getWidth();
+    unsigned int getHeight();
     Resolution getResolution();
 
     void close();

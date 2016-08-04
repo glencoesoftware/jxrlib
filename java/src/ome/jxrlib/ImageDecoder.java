@@ -6,7 +6,6 @@
  * the SWIG interface file instead.
  * ----------------------------------------------------------------------------- */
 
-package ome.jxrlib;
 
 public class ImageDecoder {
   private transient long swigCPtr;
@@ -35,11 +34,11 @@ public class ImageDecoder {
     }
   }
 
-  public void initialize() {
+  public void initialize() throws ome.jxrlib.FormatError {
     JXRJNI.ImageDecoder_initialize(swigCPtr, this);
   }
 
-  public long getFrameCount() {
+  public long getFrameCount() throws ome.jxrlib.FormatError {
     return JXRJNI.ImageDecoder_getFrameCount(swigCPtr, this);
   }
 
@@ -63,7 +62,7 @@ public class ImageDecoder {
     return JXRJNI.ImageDecoder_getHeight(swigCPtr, this);
   }
 
-  public Resolution getResolution() {
+  public Resolution getResolution() throws ome.jxrlib.FormatError {
     return new Resolution(JXRJNI.ImageDecoder_getResolution(swigCPtr, this), true);
   }
 
