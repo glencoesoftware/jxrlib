@@ -40,8 +40,12 @@ DIR_ENC=image/encode
 
 DIR_GLUE=jxrgluelib
 DIR_CXX=cpp
+DIR_JAVA=java
 DIR_TEST=jxrtestlib
 DIR_EXEC=jxrencoderdecoder
+
+JAVA_PKG=ome/jxrlib
+JAR=jxrlib.jar
 
 ## Are we building shared?
 ifneq ($(SHARED),)
@@ -230,10 +234,23 @@ $(DIR_BUILD)/libjxr++.$(LIBSUFFIX): $(OBJ_CXX) | $(LIBRARIES)
 ## Java Wrapper library
 ##
 
+SRC_JAVA=$(wildcard $(DIR_SRC)/$(DIR_JAVA)/src/$(JAVA_PKG)/*.java)
+OBJ_JAVA=$(patsubst $(DIR_SRC)/$(DIR_JAVA)/src/$(JAVA_PKG)/%.java, $(DIR_BUILD)/$(JAVA_PKG)/%.class, $(SRC_JAVA))
+
 swig:
 
-jni:
+$(DIR_BUILD)/libjxrjava.$(LIBSUFFIX): $(LIBRARIES) $(CXX_LIBRARIES)
+	@echo "Building JNI"
 	@echo "JAVA_INCLUDE=$(JAVA_INCLUDE)"
+	$(CXX) -o $(DIR_BUILD)/libjxrjava.$(LIBSUFFIX) -shared -I$(JAVA_INCLUDE) -I$(JAVA_INCLUDE)/$(PLATFORM) -I$(DIR_CXX)/lib $(CXXFLAGS) $(LIBS) $(CXXLIBS) $(DIR_JAVA)/JXR_wrap.cxx
+
+$(DIR_BUILD)/$(JAVA_PKG)/%.class: $(DIR_JAVA)/src/$(JAVA_PKG)/%.java
+	@echo "Building Java classfiles"
+	javac -d $(DIR_BUILD) -cp $(DIR_JAVA)/src $<
+
+$(DIR_BUILD)/$(JAR): $(OBJ_JAVA)
+	@echo "Packaging JAR: $(OBJ_JAVA)"
+	jar cf $@ $(OBJ_JAVA)
 
 
 ##--------------------------------
