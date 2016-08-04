@@ -226,7 +226,7 @@ $(DIR_BUILD)/libjxrglue.$(LIBSUFFIX): $(OBJ_GLUE) $(OBJ_TEST)
 $(DIR_BUILD)/libjxr++.$(LIBSUFFIX): $(OBJ_CXX) | $(LIBRARIES)
 	@echo "Building C++ wrapper lib"
 	$(MK_DIR) $(@D)
-	$(CXX) -shared $? $(LIBS) -o $@
+	$(CXX) -shared $? -fPIC $(LIBS) -o $@
 
 
 ##--------------------------------
