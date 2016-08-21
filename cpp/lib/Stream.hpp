@@ -26,8 +26,8 @@
 namespace jxrlib {
 
   struct Stream {
-    struct WMPStream *pEncodeStream;
-    Stream() : pEncodeStream(NULL) {}
+    struct WMPStream *pStream;
+    Stream() : pStream(NULL) {}
   };
 
 } // namespace jxrlib

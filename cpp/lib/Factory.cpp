@@ -34,7 +34,7 @@ namespace jxrlib {
 
   Stream Factory::createStreamFromFilename(std::string filename) {
     Stream fileStream;
-    Call(pFactory->CreateStreamFromFilename(&fileStream.pEncodeStream,
+    Call(pFactory->CreateStreamFromFilename(&fileStream.pStream,
                                             filename.c_str(),
                                             "wb"));
     return fileStream;

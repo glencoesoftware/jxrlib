@@ -32,7 +32,7 @@ namespace jxrlib {
     const PKIID *pIID = NULL;
     Call(GetTestEncodeIID(extension.c_str(), &pIID));
     Call(PKTestFactory_CreateCodec(pIID, (void **)&pEncoder));
-    Call(pEncoder->Initialize(pEncoder, encodeStream.pEncodeStream, NULL, 0));
+    Call(pEncoder->Initialize(pEncoder, encodeStream.pStream, NULL, 0));
     return;
   Cleanup:
     throw FormatError("ERROR: Unable to initialize encoder.");
