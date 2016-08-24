@@ -85,6 +85,11 @@ MK_DIR=mkdir -p
 CFLAGS=-I. -Icommon/include -I$(DIR_SYS) $(ENDIANFLAG) -D__ANSI__ -DDISABLE_PERF_MEASUREMENT -w -fPIC
 CXXFLAGS=-I. -Icommon/include -I$(DIR_SYS) -I$(DIR_GLUE) -I$(DIR_TEST) -Wno-self-assign-field -fPIC
 
+ifdef DEBUG
+CFLAGS:=$(CFLAGS) -g -O0
+CXXFLAGS:= $(CXXFLAGS) -g -O0
+endif
+
 ifeq ($(strip $(shell uname)), Darwin)
   CC = clang
 	CXX = clang++
