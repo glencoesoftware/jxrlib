@@ -128,4 +128,30 @@ namespace jxrlib {
     pDecoder->Release(&pDecoder);
   }
 
+  std::vector<unsigned char> ImageDecoder::getRawBytes() {
+    int width, height;
+    PKRect rc;
+    size_t buf_size;
+    unsigned char *image_buffer;
+    std::vector<unsigned char> ret;
+
+    Call(pDecoder->GetSize(pDecoder, &width, &height));
+    buf_size = width * height * 4;
+    image_buffer = (unsigned char *)malloc(buf_size);
+    ret.resize(buf_size);
+
+    rc.X = 0;
+    rc.Y = 0;
+    rc.Width = width;
+    rc.Height = height;
+
+    Call(pDecoder->Copy(pDecoder, &rc, image_buffer, width * 4));
+    ret.assign(image_buffer, image_buffer + buf_size);
+    free(image_buffer);
+
+    return ret;
+  Cleanup:
+    throw FormatError("ERROR: Could not get image bytes");
+  }
+
 } // namespace jxrlib

@@ -34,40 +34,85 @@
 
 using namespace jxrlib;
 
+static void print_bytes(std::vector<unsigned char>bytes) {
+  for (int i = 0 ; i < bytes.size() ; ){
+    printf("0x%.2x%.2x%.2x%.2x%c", bytes[i++], bytes[i++], bytes[i++], bytes[i++],
+           i % 40 == 0 ? '\n' : ' ');
+  }
+}
+
+void stream_data() {
+}
+
+void stream_file(std::string inputFile) {
+  Factory factory;
+  CodecFactory codecFactory;
+
+  ImageDecoder decoder = codecFactory.decoderFromFile(inputFile);
+  std::cerr << "Opened decoder for file: " << inputFile << std::endl;
+
+  unsigned int frameCount = decoder.getFrameCount();
+  std::cerr << "Found " << frameCount << " frames" << std::endl;
+
+  for(int i = 0 ; i < frameCount ; i++) {
+    decoder.selectFrame(i);
+    std::vector<unsigned char> bytes = decoder.getRawBytes();
+
+    std::cerr << bytes.size() << " Bytes:" << std::endl;
+    print_bytes(bytes);
+  }
+
+  decoder.close();
+}
+
+void convert_file(std::string inputFile, std::string outputFile) {
+  Factory factory;
+  CodecFactory codecFactory;
+
+  ImageDecoder decoder = codecFactory.decoderFromFile(inputFile);
+  std::cerr << "Opened decoder for file: " << inputFile << std::endl;
+
+  unsigned int frameCount = decoder.getFrameCount();
+  std::cerr << "Found " << frameCount << " frames" << std::endl;
+
+  std::string extension = outputFile.substr(outputFile.find_last_of(".") + 1);
+
+  for(int i = 0 ; i < frameCount ; ++i) {
+    decoder.selectFrame(i);
+    FormatConverter converter = codecFactory.createFormatConverter(decoder, extension);
+    std::cerr << "Created format converter for extension: " << extension << std::endl;
+    Stream outputStream = factory.createStreamFromFilename(outputFile);
+    std::cerr << "Created output stream for file: " << outputFile << std::endl;
+    ImageEncoder encoder(outputStream, "." + extension);
+    std::cerr << "Created image encoder" << std::endl;
+    encoder.initializeWithDecoder(decoder);
+    encoder.writeSource(converter);
+    encoder.close();
+  }
+
+  decoder.close();
+}
+
 int main(int argc, char* argv[]) {
   try {
-    Factory factory;
-    CodecFactory codecFactory;
-
-    std::string inputFile = argv[1];
-    ImageDecoder decoder = codecFactory.decoderFromFile(inputFile);
-    std::cout << "Opened decoder for file: " << inputFile << std::endl;
-
-    unsigned int frameCount = decoder.getFrameCount();
-    std::cout << "Found " << frameCount << " frames" << std::endl;
-
-    std::string outputFile = argv[2];
-    std::string extension = outputFile.substr(outputFile.find_last_of(".") + 1);
-
-    for (int i = 0 ; i < frameCount ; ++i) {
-        decoder.selectFrame(i);
-        FormatConverter converter = codecFactory.createFormatConverter(decoder, extension);
-        std::cout << "Created format converter for extension: " << extension << std::endl;
-        Stream outputStream = factory.createStreamFromFilename(outputFile);
-        std::cout << "Created output stream for file: " << outputFile << std::endl;
-        ImageEncoder encoder(outputStream, "." + extension);
-        std::cout << "Created image encoder" << std::endl;
-        encoder.initializeWithDecoder(decoder);
-        encoder.writeSource(converter);
-        encoder.close();
+    switch(argc) {
+    case 1 :
+      std::cerr << "Streaming data in/out..." << std::endl;
+      stream_data();
+      break;
+    case 2 :
+      std::cerr << "Streaming file " << argv[1] << " data out..." << std::endl;
+      stream_file(argv[1]);
+      break;
+    case 3 :
+      std::cerr << "Converting file " << argv[1] << " to " << argv[2] << "..." << std::endl;
+      convert_file(argv[1], argv[2]); break;
     }
-
-    decoder.close();
-    return 0;
   }
   catch (const FormatError &e) {
-    std::cout << "*** ERROR: Unsupported format in JPEG XR ***" << std::endl
+    std::cerr << "*** ERROR: Unsupported format in JPEG XR ***" << std::endl
               << e.what() << std::endl;
     return WMP_errUnsupportedFormat;
   }
+  return 0;
 }

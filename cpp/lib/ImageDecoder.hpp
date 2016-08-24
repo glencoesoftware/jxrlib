@@ -21,6 +21,8 @@
 #ifndef _ImageDecode
 #define _ImageDecode
 
+#include <vector>
+
 #include "JXRGlue.h"
 #include "Resolution.hpp"
 
@@ -43,6 +45,7 @@ namespace jxrlib {
     unsigned int getWidth();
     unsigned int getHeight();
     Resolution getResolution();
+    std::vector<unsigned char> getRawBytes();
 
     void close();
   };
