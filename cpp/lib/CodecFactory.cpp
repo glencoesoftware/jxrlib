@@ -26,6 +26,7 @@
 #include "JXRGlue.h"
 #include "windowsmediaphoto.h"
 #include "FormatError.hpp"
+#include "Stream.hpp"
 
 namespace jxrlib {
 
@@ -45,6 +46,19 @@ namespace jxrlib {
   Cleanup:
     std::string msg = "ERROR: Unable to create decoder from file: " + inputFile;
     throw FormatError(msg);
+  }
+
+  ImageDecoder CodecFactory::decoderFromBytes(std::vector<unsigned char> &bytes) {
+    ImageDecoder decoder;
+    Stream dataStream(bytes);
+    const PKIID *pIID = NULL;
+
+    Call(GetImageDecodeIID((const char *)".jxr", &pIID));
+    Call(PKCodecFactory_CreateCodec(pIID, (void**)&decoder.pDecoder));
+    decoder.initialize(dataStream);
+    return decoder;
+  Cleanup:
+    throw FormatError("ERROR: Unable to create decoder from bytes in memory");
   }
 
   FormatConverter CodecFactory::createFormatConverter(ImageDecoder &imageDecoder,

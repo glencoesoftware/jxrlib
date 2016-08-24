@@ -42,6 +42,35 @@ static void print_bytes(std::vector<unsigned char>bytes) {
 }
 
 void stream_data() {
+  Factory factory;
+  CodecFactory codecFactory;
+  std::vector<unsigned char> bytes;
+  std::vector<unsigned char> decoded_bytes;
+
+  std::cin.unsetf(std::ios_base::skipws);
+  for(unsigned char val ; std::cin >> val ; ){
+    printf("Read byte: %#.2x\n", val);
+    bytes.push_back(val);
+  }
+
+  print_bytes(bytes);
+  
+  ImageDecoder decoder = codecFactory.decoderFromBytes(bytes);
+  std::cerr << "Opened decoder with " << bytes.size() << " bytes" << std::endl;
+
+
+  unsigned int frameCount = decoder.getFrameCount();
+  std::cerr << "Found " << frameCount << " frames" << std::endl;
+
+  for(int i = 0 ; i < frameCount ; i++) {
+    decoder.selectFrame(i);
+    decoded_bytes = decoder.getRawBytes();
+
+    std::cerr << decoded_bytes.size() << " Bytes:" << std::endl;
+    print_bytes(decoded_bytes);
+  }
+
+  decoder.close();
 }
 
 void stream_file(std::string inputFile) {

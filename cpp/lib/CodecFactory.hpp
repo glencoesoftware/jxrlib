@@ -22,6 +22,7 @@
 #define _CodecFactory
 
 #include <string>
+#include <vector>
 
 #include "FormatConverter.hpp"
 #include "ImageDecoder.hpp"
@@ -37,6 +38,7 @@ namespace jxrlib {
     CodecFactory();
 
     ImageDecoder decoderFromFile(std::string inputFile);
+    ImageDecoder decoderFromBytes(std::vector<unsigned char> &data);
     FormatConverter createFormatConverter(ImageDecoder &imageDecoder,
                                           std::string extension);
   };
