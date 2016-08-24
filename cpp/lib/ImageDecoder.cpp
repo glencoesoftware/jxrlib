@@ -27,6 +27,7 @@
 #include "guiddef.h"
 #include "FormatError.hpp"
 #include "JXRGlue.h"
+#include "Stream.hpp"
 
 namespace jxrlib {
 
@@ -88,6 +89,15 @@ namespace jxrlib {
 
   Cleanup:
     throw FormatError("ERROR: Unable to initialize decoder.");
+  }
+
+  void ImageDecoder::initialize(Stream &data) {
+    Call(pDecoder->Initialize(pDecoder, data.pStream));
+    pDecoder->fStreamOwner = !0;
+    initialize();
+    return;
+  Cleanup:
+    throw FormatError("ERROR: Unable to initialize decoder with stream");
   }
 
   unsigned int ImageDecoder::getFrameCount() {

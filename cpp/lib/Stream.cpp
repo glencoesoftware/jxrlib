@@ -18,40 +18,21 @@
  * #%L
  */
 
-#ifndef _ImageDecode
-#define _ImageDecode
-
-#include <vector>
-
-#include "JXRGlue.h"
-#include "Resolution.hpp"
 #include "Stream.hpp"
+
+#include "FormatError.hpp"
 
 namespace jxrlib {
 
-  class ImageDecoder {
-    PKImageDecode *pDecoder;
-    ERR err;
-    PKPixelInfo pixelInfo;
-    friend class CodecFactory;
-  public:
-    ImageDecoder() : pDecoder(NULL), err(WMP_errSuccess) {};
-    void initialize();
-    void initialize(Stream &data);
-
-    unsigned int getFrameCount();
-    void selectFrame(unsigned int frameNum);
-
-    GUID getGUIDPixFormat();
-    bool getBlackWhite();
-    unsigned int getWidth();
-    unsigned int getHeight();
-    Resolution getResolution();
-    std::vector<unsigned char> getRawBytes();
-
-    void close();
-  };
+  Stream::Stream(std::vector<unsigned char> &bytes) : pStream(NULL), err(WMP_errSuccess) {
+    size_t len = bytes.size();
+    unsigned char *data = (unsigned char *)malloc(len);
+    memcpy(data, bytes.data(), len);
+    Call(CreateWS_Memory(&pStream, data, len));
+    return;
+  Cleanup:
+    throw FormatError("ERROR: Unable to initialize stream with bytes");
+  }
 
 } // namespace jxrlib
 
-#endif // _ImageDecode

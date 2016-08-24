@@ -21,13 +21,18 @@
 #ifndef _Stream
 #define _Stream
 
+#include <vector>
+
+#include "JXRGlue.h"
 #include "windowsmediaphoto.h"
 
 namespace jxrlib {
 
   struct Stream {
     struct WMPStream *pStream;
-    Stream() : pStream(NULL) {}
+    ERR err;
+    Stream() : pStream(NULL), err(WMP_errSuccess) {}
+    Stream(std::vector<unsigned char> &bytes);
   };
 
 } // namespace jxrlib
