@@ -20,6 +20,7 @@ public class JXRJNI {
   public final static native long new_GUID();
   public final static native void delete_GUID(long jarg1);
   public final static native long CodecFactory_decoderFromFile(long jarg1, CodecFactory jarg1_, String jarg2);
+  public final static native long CodecFactory_decoderFromBytes(long jarg1, CodecFactory jarg1_, long jarg2, long jarg3);
   public final static native long CodecFactory_createFormatConverter(long jarg1, CodecFactory jarg1_, long jarg2, ImageDecoder jarg2_, String jarg3);
   public final static native long new_CodecFactory();
   public final static native void delete_CodecFactory(long jarg1);
@@ -39,6 +40,7 @@ public class JXRJNI {
   public final static native long ImageDecoder_getWidth(long jarg1, ImageDecoder jarg1_);
   public final static native long ImageDecoder_getHeight(long jarg1, ImageDecoder jarg1_);
   public final static native long ImageDecoder_getResolution(long jarg1, ImageDecoder jarg1_);
+  public final static native long ImageDecoder_getRawBytes(long jarg1, ImageDecoder jarg1_);
   public final static native void ImageDecoder_close(long jarg1, ImageDecoder jarg1_);
   public final static native long new_ImageDecoder();
   public final static native void delete_ImageDecoder(long jarg1);

@@ -67,6 +67,10 @@ public class ImageDecoder {
     return new Resolution(JXRJNI.ImageDecoder_getResolution(swigCPtr, this), true);
   }
 
+  public SWIGTYPE_p_std__vectorT_unsigned_char_t getRawBytes() {
+    return new SWIGTYPE_p_std__vectorT_unsigned_char_t(JXRJNI.ImageDecoder_getRawBytes(swigCPtr, this), true);
+  }
+
   public void close() {
     JXRJNI.ImageDecoder_close(swigCPtr, this);
   }

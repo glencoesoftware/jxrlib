@@ -28,6 +28,7 @@ namespace jxrlib {
   class CodecFactory {
   public:
     jxrlib::ImageDecoder decoderFromFile(std::string inputFile);
+    jxrlib::ImageDecoder decoderFromBytes(std::vector<unsigned char> INPUT, size_t len);
     jxrlib::FormatConverter createFormatConverter(jxrlib::ImageDecoder& imageDecoder, std::string extension);
   };
 
@@ -54,6 +55,7 @@ namespace jxrlib {
     unsigned int getWidth();
     unsigned int getHeight();
     jxrlib::Resolution getResolution();
+    std::vector<unsigned char> getRawBytes();
     void close();
   };
 

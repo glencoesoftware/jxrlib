@@ -1037,6 +1037,31 @@ SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_CodecFactory_1decoderFromFile(JN
 }
 
 
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_CodecFactory_1decoderFromBytes(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jlong jarg3) {
+  jlong jresult = 0 ;
+  jxrlib::CodecFactory *arg1 = (jxrlib::CodecFactory *) 0 ;
+  std::vector< unsigned char > arg2 ;
+  size_t arg3 ;
+  std::vector< unsigned char > *argp2 ;
+  jxrlib::ImageDecoder result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(jxrlib::CodecFactory **)&jarg1; 
+  argp2 = *(std::vector< unsigned char > **)&jarg2; 
+  if (!argp2) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Attempt to dereference null std::vector< unsigned char >");
+    return 0;
+  }
+  arg2 = *argp2; 
+  arg3 = (size_t)jarg3; 
+  result = (arg1)->decoderFromBytes(arg2,arg3);
+  *(jxrlib::ImageDecoder **)&jresult = new jxrlib::ImageDecoder((const jxrlib::ImageDecoder &)result); 
+  return jresult;
+}
+
+
 SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_CodecFactory_1createFormatConverter(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jstring jarg3) {
   jlong jresult = 0 ;
   jxrlib::CodecFactory *arg1 = (jxrlib::CodecFactory *) 0 ;
@@ -1314,6 +1339,21 @@ SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_ImageDecoder_1getResolution(JNIE
   arg1 = *(jxrlib::ImageDecoder **)&jarg1; 
   result = (arg1)->getResolution();
   *(jxrlib::Resolution **)&jresult = new jxrlib::Resolution((const jxrlib::Resolution &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_ImageDecoder_1getRawBytes(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  jxrlib::ImageDecoder *arg1 = (jxrlib::ImageDecoder *) 0 ;
+  std::vector< unsigned char > result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(jxrlib::ImageDecoder **)&jarg1; 
+  result = (arg1)->getRawBytes();
+  *(std::vector< unsigned char > **)&jresult = new std::vector< unsigned char >((const std::vector< unsigned char > &)result); 
   return jresult;
 }
 
