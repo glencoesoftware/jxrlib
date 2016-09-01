@@ -32,7 +32,7 @@ namespace jxrlib {
     struct WMPStream *pStream;
     ERR err;
     Stream() : pStream(NULL), err(WMP_errSuccess) {}
-    Stream(std::vector<unsigned char> &bytes);
+    Stream(unsigned char *bytes, size_t len);
   };
 
 } // namespace jxrlib

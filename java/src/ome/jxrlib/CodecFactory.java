@@ -39,8 +39,8 @@ public class CodecFactory {
     return new ImageDecoder(JXRJNI.CodecFactory_decoderFromFile(swigCPtr, this, inputFile), true);
   }
 
-  public ImageDecoder decoderFromBytes(SWIGTYPE_p_std__vectorT_unsigned_char_t INPUT, long len) {
-    return new ImageDecoder(JXRJNI.CodecFactory_decoderFromBytes(swigCPtr, this, SWIGTYPE_p_std__vectorT_unsigned_char_t.getCPtr(INPUT), len), true);
+  public ImageDecoder decoderFromBytes(short[] bytes, long len) {
+    return new ImageDecoder(JXRJNI.CodecFactory_decoderFromBytes(swigCPtr, this, bytes, len), true);
   }
 
   public FormatConverter createFormatConverter(ImageDecoder imageDecoder, String extension) {

@@ -230,6 +230,13 @@ static void SWIGUNUSED SWIG_JavaThrowException(JNIEnv *jenv, SWIG_JavaExceptionC
 #define SWIG_contract_assert(nullreturn, expr, msg) if (!(expr)) {SWIG_JavaThrowException(jenv, SWIG_JavaIllegalArgumentException, msg); return nullreturn; } else
 
 
+#include <stdexcept>
+
+
+#include <vector>
+#include <stdexcept>
+
+
 #include <string>
 
 
@@ -863,10 +870,192 @@ static jdoubleArray SWIG_JavaArrayOutDouble (JNIEnv *jenv, double *result, jsize
   #include "Resolution.hpp"
   #include "Stream.hpp"
 
+SWIGINTERN std::vector< unsigned char >::const_reference std_vector_Sl_unsigned_SS_char_Sg__get(std::vector< unsigned char > *self,int i){
+                int size = int(self->size());
+                if (i>=0 && i<size)
+                    return (*self)[i];
+                else
+                    throw std::out_of_range("vector index out of range");
+            }
+SWIGINTERN void std_vector_Sl_unsigned_SS_char_Sg__set(std::vector< unsigned char > *self,int i,std::vector< unsigned char >::value_type const &val){
+                int size = int(self->size());
+                if (i>=0 && i<size)
+                    (*self)[i] = val;
+                else
+                    throw std::out_of_range("vector index out of range");
+            }
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_new_1ImageData_1_1SWIG_10(JNIEnv *jenv, jclass jcls) {
+  jlong jresult = 0 ;
+  std::vector< unsigned char > *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (std::vector< unsigned char > *)new std::vector< unsigned char >();
+  *(std::vector< unsigned char > **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_new_1ImageData_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  jlong jresult = 0 ;
+  std::vector< unsigned char >::size_type arg1 ;
+  std::vector< unsigned char > *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = (std::vector< unsigned char >::size_type)jarg1; 
+  result = (std::vector< unsigned char > *)new std::vector< unsigned char >(arg1);
+  *(std::vector< unsigned char > **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_ImageData_1size(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  std::vector< unsigned char > *arg1 = (std::vector< unsigned char > *) 0 ;
+  std::vector< unsigned char >::size_type result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< unsigned char > **)&jarg1; 
+  result = ((std::vector< unsigned char > const *)arg1)->size();
+  jresult = (jlong)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_ImageData_1capacity(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  std::vector< unsigned char > *arg1 = (std::vector< unsigned char > *) 0 ;
+  std::vector< unsigned char >::size_type result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< unsigned char > **)&jarg1; 
+  result = ((std::vector< unsigned char > const *)arg1)->capacity();
+  jresult = (jlong)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_ImageData_1reserve(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
+  std::vector< unsigned char > *arg1 = (std::vector< unsigned char > *) 0 ;
+  std::vector< unsigned char >::size_type arg2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< unsigned char > **)&jarg1; 
+  arg2 = (std::vector< unsigned char >::size_type)jarg2; 
+  (arg1)->reserve(arg2);
+}
+
+
+SWIGEXPORT jboolean JNICALL Java_ome_jxrlib_JXRJNI_ImageData_1isEmpty(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jboolean jresult = 0 ;
+  std::vector< unsigned char > *arg1 = (std::vector< unsigned char > *) 0 ;
+  bool result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< unsigned char > **)&jarg1; 
+  result = (bool)((std::vector< unsigned char > const *)arg1)->empty();
+  jresult = (jboolean)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_ImageData_1clear(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  std::vector< unsigned char > *arg1 = (std::vector< unsigned char > *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< unsigned char > **)&jarg1; 
+  (arg1)->clear();
+}
+
+
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_ImageData_1add(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jshort jarg2) {
+  std::vector< unsigned char > *arg1 = (std::vector< unsigned char > *) 0 ;
+  std::vector< unsigned char >::value_type *arg2 = 0 ;
+  std::vector< unsigned char >::value_type temp2 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< unsigned char > **)&jarg1; 
+  temp2 = (std::vector< unsigned char >::value_type)jarg2; 
+  arg2 = &temp2; 
+  (arg1)->push_back((std::vector< unsigned char >::value_type const &)*arg2);
+}
+
+
+SWIGEXPORT jshort JNICALL Java_ome_jxrlib_JXRJNI_ImageData_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  jshort jresult = 0 ;
+  std::vector< unsigned char > *arg1 = (std::vector< unsigned char > *) 0 ;
+  int arg2 ;
+  std::vector< unsigned char >::value_type *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< unsigned char > **)&jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< unsigned char >::value_type *) &std_vector_Sl_unsigned_SS_char_Sg__get(arg1,arg2);
+  }
+  catch(std::out_of_range &_e) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, (&_e)->what());
+    return 0;
+  }
+  
+  jresult = (jshort)*result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_ImageData_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jshort jarg3) {
+  std::vector< unsigned char > *arg1 = (std::vector< unsigned char > *) 0 ;
+  int arg2 ;
+  std::vector< unsigned char >::value_type *arg3 = 0 ;
+  std::vector< unsigned char >::value_type temp3 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(std::vector< unsigned char > **)&jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (std::vector< unsigned char >::value_type)jarg3; 
+  arg3 = &temp3; 
+  try {
+    std_vector_Sl_unsigned_SS_char_Sg__set(arg1,arg2,(unsigned char const &)*arg3);
+  }
+  catch(std::out_of_range &_e) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaIndexOutOfBoundsException, (&_e)->what());
+    return ;
+  }
+  
+}
+
+
+SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_delete_1ImageData(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  std::vector< unsigned char > *arg1 = (std::vector< unsigned char > *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(std::vector< unsigned char > **)&jarg1; 
+  delete arg1;
+}
+
 
 SWIGEXPORT void JNICALL Java_ome_jxrlib_JXRJNI_GUID_1Data1_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
   GUID *arg1 = (GUID *) 0 ;
@@ -1037,27 +1226,24 @@ SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_CodecFactory_1decoderFromFile(JN
 }
 
 
-SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_CodecFactory_1decoderFromBytes(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jlong jarg3) {
+SWIGEXPORT jlong JNICALL Java_ome_jxrlib_JXRJNI_CodecFactory_1decoderFromBytes(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jshortArray jarg2, jlong jarg3) {
   jlong jresult = 0 ;
   jxrlib::CodecFactory *arg1 = (jxrlib::CodecFactory *) 0 ;
-  std::vector< unsigned char > arg2 ;
+  unsigned char *arg2 ;
   size_t arg3 ;
-  std::vector< unsigned char > *argp2 ;
+  jshort *jarr2 ;
   jxrlib::ImageDecoder result;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
   arg1 = *(jxrlib::CodecFactory **)&jarg1; 
-  argp2 = *(std::vector< unsigned char > **)&jarg2; 
-  if (!argp2) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Attempt to dereference null std::vector< unsigned char >");
-    return 0;
-  }
-  arg2 = *argp2; 
+  if (!SWIG_JavaArrayInUchar(jenv, &jarr2, (unsigned char **)&arg2, jarg2)) return 0; 
   arg3 = (size_t)jarg3; 
   result = (arg1)->decoderFromBytes(arg2,arg3);
   *(jxrlib::ImageDecoder **)&jresult = new jxrlib::ImageDecoder((const jxrlib::ImageDecoder &)result); 
+  SWIG_JavaArrayArgoutUchar(jenv, jarr2, (unsigned char *)arg2, jarg2); 
+  delete [] arg2; 
   return jresult;
 }
 

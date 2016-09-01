@@ -1,5 +1,6 @@
 %module JXR
 %include typemaps.i
+%include std_vector.i
 %include std_string.i
 %include arrays_java.i
 %{
@@ -16,6 +17,10 @@
 %typemap(javabase) jxrlib::FormatError "java.lang.Exception";
 %rename(getMessage) jxrlib::FormatError::what();
 
+namespace std {
+  %template(ImageData) vector<unsigned char>;
+}
+
 typedef struct {
   unsigned long  Data1;
   unsigned short Data2;
@@ -28,7 +33,7 @@ namespace jxrlib {
   class CodecFactory {
   public:
     jxrlib::ImageDecoder decoderFromFile(std::string inputFile);
-    jxrlib::ImageDecoder decoderFromBytes(std::vector<unsigned char> INPUT, size_t len);
+    jxrlib::ImageDecoder decoderFromBytes(unsigned char bytes[], size_t len);
     jxrlib::FormatConverter createFormatConverter(jxrlib::ImageDecoder& imageDecoder, std::string extension);
   };
 

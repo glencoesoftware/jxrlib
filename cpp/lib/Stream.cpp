@@ -24,11 +24,8 @@
 
 namespace jxrlib {
 
-  Stream::Stream(std::vector<unsigned char> &bytes) : pStream(NULL), err(WMP_errSuccess) {
-    size_t len = bytes.size();
-    unsigned char *data = (unsigned char *)malloc(len);
-    memcpy(data, bytes.data(), len);
-    Call(CreateWS_Memory(&pStream, data, len));
+  Stream::Stream(unsigned char *bytes, size_t len) : pStream(NULL), err(WMP_errSuccess) {
+    Call(CreateWS_Memory(&pStream, bytes, len));
     return;
   Cleanup:
     throw FormatError("ERROR: Unable to initialize stream with bytes");
