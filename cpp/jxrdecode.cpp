@@ -49,12 +49,13 @@ void stream_data() {
 
   std::cin.unsetf(std::ios_base::skipws);
   for(unsigned char val ; std::cin >> val ; ){
-    printf("Read byte: %#.2x\n", val);
     bytes.push_back(val);
   }
 
+  std::cerr << "Read bytes:" << std::endl;
   print_bytes(bytes);
-  
+  std::cerr << std::endl;
+
   ImageDecoder decoder = codecFactory.decoderFromBytes(bytes.data(), bytes.size());
   std::cerr << "Opened decoder with " << bytes.size() << " bytes" << std::endl;
 
