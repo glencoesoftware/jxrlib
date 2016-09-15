@@ -39,12 +39,14 @@ extern "C" {
 #define PK_SDK_VERSION 0x0101
 
 #define sizeof2(array) (sizeof(array)/sizeof(*(array)))
+#ifndef __cplusplus // C++ has std lib functions for max and min
 #ifndef max
 #define max(a,b) ((a) > (b) ? (a) : (b))
 #endif
 #ifndef min
 #define min(b,a) ((a) < (b) ? (a) : (b))
 #endif
+#endif // __cplusplus
 #ifdef __ANSI__
 #define STRCPY_SAFE(pszDest, cbDest, pszSrc)    (strncpy((pszDest), (pszSrc), (cbDest)) == (pszDest) ? 0 : 1)
 #else
