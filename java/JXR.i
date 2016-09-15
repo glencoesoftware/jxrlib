@@ -17,6 +17,12 @@
 %typemap(javabase) jxrlib::FormatError "java.lang.Exception";
 %rename(getMessage) jxrlib::FormatError::what();
 
+%typemap(javacode) jxrlib::CodecFactory %{
+  public ImageDecoder decoderFromBytes(short bytes[]) {
+    return decoderFromBytes(bytes, bytes.length);
+  }
+%}
+
 namespace std {
   %template(ImageData) vector<unsigned char>;
 }

@@ -56,7 +56,7 @@ void stream_data() {
   print_bytes(bytes);
   std::cerr << std::endl;
 
-  ImageDecoder decoder = codecFactory.decoderFromBytes(bytes.data(), bytes.size());
+  ImageDecoder decoder = codecFactory.decoderFromBytes(bytes);
   std::cerr << "Opened decoder with " << bytes.size() << " bytes" << std::endl;
 
 
