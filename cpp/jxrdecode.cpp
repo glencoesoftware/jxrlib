@@ -18,6 +18,7 @@
  * #%L
  */
 
+#include <cstdio>
 #include <iostream>
 #include <string>
 
@@ -34,10 +35,10 @@
 
 using namespace jxrlib;
 
-static void print_bytes(std::vector<unsigned char>bytes) {
+static void print_bytes(std::vector<unsigned char>bytes, std::FILE *out = stderr) {
   for (int i = 0 ; i < bytes.size() ; ){
-    printf("0x%.2x%.2x%.2x%.2x%c", bytes[i++], bytes[i++], bytes[i++], bytes[i++],
-           i % 40 == 0 ? '\n' : ' ');
+    fprintf(out, "0x%.2x%.2x%.2x%.2x%c", bytes[i++], bytes[i++], bytes[i++], bytes[i++],
+            i % 40 == 0 ? '\n' : ' ');
   }
 }
 
@@ -68,7 +69,7 @@ void stream_data() {
     decoded_bytes = decoder.getRawBytes();
 
     std::cerr << decoded_bytes.size() << " Bytes:" << std::endl;
-    print_bytes(decoded_bytes);
+    print_bytes(decoded_bytes, stdout);
   }
 
   decoder.close();
