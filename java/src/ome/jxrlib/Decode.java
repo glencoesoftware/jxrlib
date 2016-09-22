@@ -88,8 +88,11 @@ public class Decode {
     }
 
     public static void printBytes(byte imageBytes[]) {
-        // TODO: Better output formatting...
-        System.err.println("Decoded bytes:\n\n" + imageBytes + "\n\n");
+        for (int i = 0 ; i < imageBytes.length ; i += 4) {
+            System.err.print(String.format("0x%02x%02x%02x%02x%s",
+                                           imageBytes[i], imageBytes[i + 1], imageBytes[i + 2], imageBytes[i + 3],
+                                           (i + 4) % 40 == 0 ? "\n" : " "));
+        }
     }
 
     public static void main(String args[]) {
@@ -109,6 +112,7 @@ public class Decode {
                 decode = new Decode(bytes);
                 System.err.println("Opened decoder for bytes...");
                 byte[] imageBytes = decode.toBytes();
+                System.err.println("Decoded bytes:");
                 printBytes(imageBytes);
             } catch (IOException e) {
                 System.err.println("Problem parsing input data! " + e.getMessage());
@@ -120,6 +124,7 @@ public class Decode {
             System.err.println("Opened decoder for file: " + inputFile);
             if (args.length == 1) {
                 byte[] imageBytes = decode.toBytes();
+                System.err.println("Decoded bytes:");
                 printBytes(imageBytes);
             } else if (args.length == 2) {
                 decode.toFile(new File(args[1]));
