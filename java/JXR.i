@@ -18,13 +18,14 @@
 %rename(getMessage) jxrlib::FormatError::what();
 
 %typemap(javacode) jxrlib::CodecFactory %{
-  public ImageDecoder decoderFromBytes(short bytes[]) {
-    return decoderFromBytes(bytes, bytes.length);
+  public ImageDecoder decoderFromBytes(byte bytes[]) {
+    return decoderFromBytes(new String(bytes), bytes.length);
+  }
   }
 %}
 
 namespace std {
-  %template(ImageData) vector<unsigned char>;
+  %template(ImageData) vector<char>;
 }
 
 typedef struct {
@@ -39,7 +40,7 @@ namespace jxrlib {
   class CodecFactory {
   public:
     jxrlib::ImageDecoder decoderFromFile(std::string inputFile);
-    jxrlib::ImageDecoder decoderFromBytes(unsigned char bytes[], size_t len);
+    jxrlib::ImageDecoder decoderFromBytes(char bytes[], size_t len);
     jxrlib::FormatConverter createFormatConverter(jxrlib::ImageDecoder& imageDecoder, std::string extension);
   };
 
@@ -66,7 +67,7 @@ namespace jxrlib {
     unsigned int getWidth();
     unsigned int getHeight();
     jxrlib::Resolution getResolution();
-    std::vector<unsigned char> getRawBytes();
+    std::vector<char> getRawBytes();
     void close();
   };
 

@@ -63,15 +63,15 @@ public class ImageData {
     JXRJNI.ImageData_clear(swigCPtr, this);
   }
 
-  public void add(short x) {
+  public void add(char x) {
     JXRJNI.ImageData_add(swigCPtr, this, x);
   }
 
-  public short get(int i) {
+  public char get(int i) {
     return JXRJNI.ImageData_get(swigCPtr, this, i);
   }
 
-  public void set(int i, short val) {
+  public void set(int i, char val) {
     JXRJNI.ImageData_set(swigCPtr, this, i, val);
   }
 

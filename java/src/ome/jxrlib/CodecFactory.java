@@ -35,15 +35,15 @@ public class CodecFactory {
     }
   }
 
-  public ImageDecoder decoderFromBytes(short bytes[]) {
-    return decoderFromBytes(bytes, bytes.length);
+  public ImageDecoder decoderFromBytes(byte bytes[]) {
+    return decoderFromBytes(new String(bytes), bytes.length);
   }
 
   public ImageDecoder decoderFromFile(String inputFile) {
     return new ImageDecoder(JXRJNI.CodecFactory_decoderFromFile(swigCPtr, this, inputFile), true);
   }
 
-  public ImageDecoder decoderFromBytes(short[] bytes, long len) {
+  public ImageDecoder decoderFromBytes(String bytes, long len) {
     return new ImageDecoder(JXRJNI.CodecFactory_decoderFromBytes(swigCPtr, this, bytes, len), true);
   }
 

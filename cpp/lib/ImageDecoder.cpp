@@ -138,12 +138,12 @@ namespace jxrlib {
     pDecoder->Release(&pDecoder);
   }
 
-  std::vector<unsigned char> ImageDecoder::getRawBytes() {
+  std::vector<char> ImageDecoder::getRawBytes() {
     int width, height;
     PKRect rc;
     size_t buf_size;
     unsigned char *image_buffer;
-    std::vector<unsigned char> ret;
+    std::vector<char> ret;
 
     Call(pDecoder->GetSize(pDecoder, &width, &height));
     buf_size = width * height * 4;

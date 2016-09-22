@@ -16,9 +16,9 @@ public class JXRJNI {
   public final static native void ImageData_reserve(long jarg1, ImageData jarg1_, long jarg2);
   public final static native boolean ImageData_isEmpty(long jarg1, ImageData jarg1_);
   public final static native void ImageData_clear(long jarg1, ImageData jarg1_);
-  public final static native void ImageData_add(long jarg1, ImageData jarg1_, short jarg2);
-  public final static native short ImageData_get(long jarg1, ImageData jarg1_, int jarg2);
-  public final static native void ImageData_set(long jarg1, ImageData jarg1_, int jarg2, short jarg3);
+  public final static native void ImageData_add(long jarg1, ImageData jarg1_, char jarg2);
+  public final static native char ImageData_get(long jarg1, ImageData jarg1_, int jarg2);
+  public final static native void ImageData_set(long jarg1, ImageData jarg1_, int jarg2, char jarg3);
   public final static native void delete_ImageData(long jarg1);
   public final static native void GUID_Data1_set(long jarg1, GUID jarg1_, long jarg2);
   public final static native long GUID_Data1_get(long jarg1, GUID jarg1_);
@@ -31,7 +31,7 @@ public class JXRJNI {
   public final static native long new_GUID();
   public final static native void delete_GUID(long jarg1);
   public final static native long CodecFactory_decoderFromFile(long jarg1, CodecFactory jarg1_, String jarg2);
-  public final static native long CodecFactory_decoderFromBytes(long jarg1, CodecFactory jarg1_, short[] jarg2, long jarg3);
+  public final static native long CodecFactory_decoderFromBytes(long jarg1, CodecFactory jarg1_, String jarg2, long jarg3);
   public final static native long CodecFactory_createFormatConverter(long jarg1, CodecFactory jarg1_, long jarg2, ImageDecoder jarg2_, String jarg3);
   public final static native long new_CodecFactory();
   public final static native void delete_CodecFactory(long jarg1);

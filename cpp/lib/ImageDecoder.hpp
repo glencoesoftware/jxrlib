@@ -47,7 +47,7 @@ namespace jxrlib {
     unsigned int getWidth();
     unsigned int getHeight();
     Resolution getResolution();
-    std::vector<unsigned char> getRawBytes();
+    std::vector<char> getRawBytes();
 
     void close();
   };

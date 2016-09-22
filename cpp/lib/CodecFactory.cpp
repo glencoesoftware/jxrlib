@@ -49,12 +49,12 @@ namespace jxrlib {
   }
 
   ImageDecoder CodecFactory::decoderFromBytes(std::vector<unsigned char> data) {
-    return decoderFromBytes(data.data(), data.size());
+    return decoderFromBytes((char *)data.data(), data.size());
   }
 
-  ImageDecoder CodecFactory::decoderFromBytes(unsigned char bytes[], size_t len) {
+  ImageDecoder CodecFactory::decoderFromBytes(char bytes[], size_t len) {
     ImageDecoder decoder;
-    Stream dataStream(bytes, len);
+    Stream dataStream((unsigned char *)bytes, len);
     const PKIID *pIID = NULL;
 
     Call(GetImageDecodeIID((const char *)".jxr", &pIID));

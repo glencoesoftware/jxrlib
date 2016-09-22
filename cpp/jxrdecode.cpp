@@ -35,6 +35,13 @@
 
 using namespace jxrlib;
 
+static void print_bytes(std::vector<char>bytes, std::FILE *out = stderr) {
+  for (int i = 0 ; i < bytes.size() ; ){
+    fprintf(out, "0x%.2x%.2x%.2x%.2x%c", bytes[i++], bytes[i++], bytes[i++], bytes[i++],
+            i % 40 == 0 ? '\n' : ' ');
+  }
+}
+
 static void print_bytes(std::vector<unsigned char>bytes, std::FILE *out = stderr) {
   for (int i = 0 ; i < bytes.size() ; ){
     fprintf(out, "0x%.2x%.2x%.2x%.2x%c", bytes[i++], bytes[i++], bytes[i++], bytes[i++],
@@ -46,7 +53,7 @@ void stream_data() {
   Factory factory;
   CodecFactory codecFactory;
   std::vector<unsigned char> bytes;
-  std::vector<unsigned char> decoded_bytes;
+  std::vector<char> decoded_bytes;
 
   std::cin.unsetf(std::ios_base::skipws);
   for(unsigned char val ; std::cin >> val ; ){
@@ -87,7 +94,7 @@ void stream_file(std::string inputFile) {
 
   for(int i = 0 ; i < frameCount ; i++) {
     decoder.selectFrame(i);
-    std::vector<unsigned char> bytes = decoder.getRawBytes();
+    std::vector<char> bytes = decoder.getRawBytes();
 
     std::cerr << bytes.size() << " Bytes:" << std::endl;
     print_bytes(bytes);
