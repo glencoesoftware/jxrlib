@@ -21,6 +21,9 @@
   public ImageDecoder decoderFromBytes(byte bytes[]) {
     return decoderFromBytes(new String(bytes), bytes.length);
   }
+
+  public ImageDecoder decoderFromFile(java.io.File inputFile) {
+    return decoderFromFile(inputFile.getAbsolutePath());
   }
 %}
 

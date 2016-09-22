@@ -39,6 +39,10 @@ public class CodecFactory {
     return decoderFromBytes(new String(bytes), bytes.length);
   }
 
+  public ImageDecoder decoderFromFile(java.io.File inputFile) {
+    return decoderFromFile(inputFile.getAbsolutePath());
+  }
+
   public ImageDecoder decoderFromFile(String inputFile) {
     return new ImageDecoder(JXRJNI.CodecFactory_decoderFromFile(swigCPtr, this, inputFile), true);
   }
