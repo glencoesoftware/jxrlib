@@ -8,7 +8,7 @@
 
 package ome.jxrlib;
 
-public class ImageDecoder {
+class ImageDecoder {
   private transient long swigCPtr;
   protected transient boolean swigCMemOwn;
 

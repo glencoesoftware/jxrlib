@@ -14,18 +14,8 @@
   #include "Stream.hpp"
 %}
 
-%typemap(javabase) jxrlib::FormatError "java.lang.Exception";
-%rename(getMessage) jxrlib::FormatError::what();
-
-%typemap(javacode) jxrlib::CodecFactory %{
-  public ImageDecoder decoderFromBytes(byte bytes[]) {
-    return decoderFromBytes(new String(bytes), bytes.length);
-  }
-
-  public ImageDecoder decoderFromFile(java.io.File inputFile) {
-    return decoderFromFile(inputFile.getAbsolutePath());
-  }
-%}
+%pragma(java) moduleclassmodifiers="class"
+%pragma(java) jniclassclassmodifiers="class"
 
 namespace std {
   %template(ImageData) vector<char>;
@@ -40,6 +30,16 @@ typedef struct {
 
 namespace jxrlib {
 
+  %typemap(javaclassmodifiers) CodecFactory "class"
+  %typemap(javacode) CodecFactory %{
+  public ImageDecoder decoderFromBytes(byte bytes[]) {
+    return decoderFromBytes(new String(bytes), bytes.length);
+  }
+
+  public ImageDecoder decoderFromFile(java.io.File inputFile) {
+    return decoderFromFile(inputFile.getAbsolutePath());
+  }
+  %}
   class CodecFactory {
   public:
     jxrlib::ImageDecoder decoderFromFile(std::string inputFile);
@@ -47,19 +47,25 @@ namespace jxrlib {
     jxrlib::FormatConverter createFormatConverter(jxrlib::ImageDecoder& imageDecoder, std::string extension);
   };
 
+  %typemap(javaclassmodifiers) Factory "class"
   class Factory {
   public:
     jxrlib::Stream createStreamFromFilename(std::string filename);
   };
 
+  %typemap(javaclassmodifiers) FormatConverter "class"
   class FormatConverter {};
 
+  %typemap(javaclassmodifiers) FormatError "class"
+  %typemap(javabase) FormatError "java.lang.Exception";
+  %rename(getMessage) FormatError::what();
   class FormatError {
   public:
     FormatError(std::string what_arg) : what_arg(what_arg) {}
     std::string what();
   };
 
+  %typemap(javaclassmodifiers) ImageDecoder "class"
   class ImageDecoder {
   public:
     void initialize();
@@ -74,6 +80,7 @@ namespace jxrlib {
     void close();
   };
 
+  %typemap(javaclassmodifiers) ImageEncoder "class"
   class ImageEncoder {
   public:
     ImageEncoder(jxrlib::Stream encodeStream, std::string extension);
@@ -82,8 +89,10 @@ namespace jxrlib {
     void close();
   };
 
+  %typemap(javaclassmodifiers) Resolution "class"
   struct Resolution {};
 
+  %typemap(javaclassmodifiers) Stream "class"
   struct Stream {};
 
 }

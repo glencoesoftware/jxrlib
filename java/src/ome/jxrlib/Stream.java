@@ -8,7 +8,7 @@
 
 package ome.jxrlib;
 
-public class Stream {
+class Stream {
   private transient long swigCPtr;
   protected transient boolean swigCMemOwn;
 

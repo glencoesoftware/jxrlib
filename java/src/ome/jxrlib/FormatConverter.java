@@ -8,7 +8,7 @@
 
 package ome.jxrlib;
 
-public class FormatConverter {
+class FormatConverter {
   private transient long swigCPtr;
   protected transient boolean swigCMemOwn;
 

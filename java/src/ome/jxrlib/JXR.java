@@ -8,5 +8,5 @@
 
 package ome.jxrlib;
 
-public class JXR {
+class JXR {
 }

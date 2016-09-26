@@ -8,7 +8,7 @@
 
 package ome.jxrlib;
 
-public class Factory {
+class Factory {
   private transient long swigCPtr;
   protected transient boolean swigCMemOwn;
 

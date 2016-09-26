@@ -8,7 +8,7 @@
 
 package ome.jxrlib;
 
-public class CodecFactory {
+class CodecFactory {
   private transient long swigCPtr;
   protected transient boolean swigCMemOwn;
 
@@ -42,7 +42,7 @@ public class CodecFactory {
   public ImageDecoder decoderFromFile(java.io.File inputFile) {
     return decoderFromFile(inputFile.getAbsolutePath());
   }
-
+  
   public ImageDecoder decoderFromFile(String inputFile) {
     return new ImageDecoder(JXRJNI.CodecFactory_decoderFromFile(swigCPtr, this, inputFile), true);
   }

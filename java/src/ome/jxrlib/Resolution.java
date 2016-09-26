@@ -8,7 +8,7 @@
 
 package ome.jxrlib;
 
-public class Resolution {
+class Resolution {
   private transient long swigCPtr;
   protected transient boolean swigCMemOwn;
 

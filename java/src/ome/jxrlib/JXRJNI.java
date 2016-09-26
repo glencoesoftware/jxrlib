@@ -8,7 +8,7 @@
 
 package ome.jxrlib;
 
-public class JXRJNI {
+class JXRJNI {
   public final static native long new_ImageData__SWIG_0();
   public final static native long new_ImageData__SWIG_1(long jarg1);
   public final static native long ImageData_size(long jarg1, ImageData jarg1_);
