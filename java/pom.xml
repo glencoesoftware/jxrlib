@@ -8,11 +8,11 @@
   <groupId>ome</groupId>
   <artifactId>jxrlib</artifactId>
   <version>0.1.0-SNAPSHOT</version>
-  <packaging>pom</packaging>
+  <packaging>jar</packaging>
 
   <name>JXRLib Java Bindings</name>
   <description>Java bindings and pre-built binaries for jxrlib.</description>
-  <url>http://libjpeg-turbo.virtualgl.org/</url>
+  <url>https://jxrlib.codeplex.com/</url>
   <inceptionYear>2016</inceptionYear>
 
   <licenses>
@@ -21,25 +21,6 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-
-  <properties>
-    <project.build.outputDirectory>${basedir}../build/</project.build.outputDirectory>
-  </properties>
-  
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>3.0.2</version>
-        <configuration>
-          <archive>
-            <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
-          </archive>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 
   <repositories>
     <repository>
