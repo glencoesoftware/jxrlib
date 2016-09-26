@@ -45,7 +45,6 @@ DIR_TEST=jxrtestlib
 DIR_EXEC=jxrencoderdecoder
 
 JAVA_PKG=ome/jxrlib
-JAR=jxrlib.jar
 
 ## Are we building shared?
 ifneq ($(SHARED),)
@@ -289,7 +288,7 @@ $(DIR_BUILD)/$(CXXDECAPP): $(DIR_SRC)/$(DIR_CXX)/$(CXXDECAPP).cpp $(LIBRARIES) $
 ##
 ## JPEG XR library
 ##
-all: $(DIR_BUILD)/$(ENCAPP) $(DIR_BUILD)/$(DECAPP) $(DIR_BUILD)/$(CXXDECAPP) $(DIR_BUILD)/$(JAR) $(LIBRARIES) $(CXX_LIBRARIES)
+all: $(DIR_BUILD)/$(ENCAPP) $(DIR_BUILD)/$(DECAPP) $(DIR_BUILD)/$(CXXDECAPP) $(LIBRARIES) $(CXX_LIBRARIES)
 
 clean:
 	rm -rf $(DIR_BUILD)/*App $(DIR_BUILD)/**/*.o $(DIR_BUILD)/**/*.class $(DIR_BUILD)/libj*.a $(DIR_BUILD)/libj*.$(LIBSUFFIX) $(DIR_BUILD)/libjxr.pc $(DIR_BUILD)/$(CXXDECAPP) $(DIR_BUILD)/$(JAR)
