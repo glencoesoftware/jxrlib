@@ -250,15 +250,6 @@ $(DIR_BUILD)/libjxrjava.$(LIBSUFFIX): $(LIBRARIES) $(CXX_LIBRARIES)
 	@echo "JAVA_INCLUDE=$(JAVA_INCLUDE)"
 	$(CXX) -o $(DIR_BUILD)/libjxrjava.$(LIBSUFFIX) -shared -I$(JAVA_INCLUDE) -I$(JAVA_INCLUDE)/$(PLATFORM) -I$(DIR_CXX)/lib $(CXXFLAGS) $(LIBS) $(CXXLIBS) $(DIR_JAVA)/JXR_wrap.cxx
 
-$(DIR_BUILD)/$(JAVA_PKG)/%.class: $(DIR_JAVA)/src/$(JAVA_PKG)/%.java
-	@echo "Building Java classfiles"
-	javac -d $(DIR_BUILD) -cp $(DIR_JAVA)/src $<
-
-$(DIR_BUILD)/$(JAR): $(OBJ_JAVA) $(DIR_BUILD)/libjxrjava.$(LIBSUFFIX)
-	@echo "Packaging JAR"
-	jar cf $@ -C $(DIR_BUILD) $(JAVA_PKG)
-
-
 ##--------------------------------
 ##
 ## Enc app files
