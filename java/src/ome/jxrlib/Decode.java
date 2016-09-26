@@ -19,11 +19,12 @@
 package ome.jxrlib;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
 
-public class Decode {
+public class Decode implements Closeable {
 
     static {
         System.loadLibrary("jxrjava");
@@ -49,12 +50,6 @@ public class Decode {
         this.data = data;
         decoder = codecFactory.decoderFromBytes(data);
         frameCount = decoder.getFrameCount();
-    }
-
-    protected void finalize() throws Throwable {
-        if (decoder != null) {
-            decoder.close();
-        }
     }
 
     public byte[] toBytes() {
@@ -92,6 +87,12 @@ public class Decode {
             System.err.print(String.format("0x%02x%02x%02x%02x%s",
                                            imageBytes[i], imageBytes[i + 1], imageBytes[i + 2], imageBytes[i + 3],
                                            (i + 4) % 40 == 0 ? "\n" : " "));
+        }
+    }
+
+    public void close() {
+        if (decoder != null) {
+            decoder.close();
         }
     }
 
