@@ -102,12 +102,15 @@ endif
 
 STATIC_LIBRARIES=$(DIR_BUILD)/libjxrglue.a $(DIR_BUILD)/libjpegxr.a
 SHARED_LIBRARIES=$(DIR_BUILD)/libjxrglue.$(LIBSUFFIX) $(DIR_BUILD)/libjpegxr.$(LIBSUFFIX)
-CXX_LIBRARIES=$(DIR_BUILD)/libjxr++.$(LIBSUFFIX)
+CXX_STATIC_LIBRARIES=$(DIR_BUILD)/libjxr++.a
+CXX_SHARED_LIBRARIES=$(DIR_BUILD)/libjxr++.$(LIBSUFFIX)
 
 ifneq ($(SHARED),)
 LIBRARIES=$(SHARED_LIBRARIES)
+CXX_LIBRARIES=$(CXX_SHARED_LIBRARIES)
 else
 LIBRARIES=$(STATIC_LIBRARIES)
+CXX_LIBRARIES=$(CXX_STATIC_LIBRARIES)
 endif
 
 LIBS=-L$(DIR_BUILD) $(shell echo $(LIBRARIES) | sed -E 's%$(DIR_BUILD)/lib([^ ]*)\.(a|$(LIBSUFFIX))%-l\1%g') -lm
@@ -226,6 +229,13 @@ $(DIR_BUILD)/libjxrglue.$(LIBSUFFIX): $(OBJ_GLUE) $(OBJ_TEST)
 ##
 ## C++ Wrapper library
 ##
+
+$(DIR_BUILD)/libjxr++.a: $(OBJ_CXX) | $(LIBRARIES)
+	@echo "Building C++ static wrapper lib"
+	$(MK_DIR) $(@D)
+	ar rvu $@ $(OBJ_CXX) $(LIBRARIES)
+	ranlib $@
+
 
 $(DIR_BUILD)/libjxr++.$(LIBSUFFIX): $(OBJ_CXX) | $(LIBRARIES)
 	@echo "Building C++ wrapper lib"
