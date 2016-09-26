@@ -29,44 +29,17 @@
     </repository>
   </repositories>
 
-  <profiles>
-    <profile>
-      <id>latest-build</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-
-      <distributionManagement>
-        <repository>
-          <id>ome.staging</id>
-          <name>OME Staging Repository</name>
-          <url>http://artifacts.openmicroscopy.org/artifactory/ome.staging</url>
-        </repository>
-        <snapshotRepository>
-          <id>ome.snapshots</id>
-          <name>OME Snapshots Repository</name>
-          <url>http://artifacts.openmicroscopy.org/artifactory/ome.snapshots</url>
-        </snapshotRepository>
-      </distributionManagement>
-
-      <repositories>
-        <repository>
-          <id>ome.snapshots</id>
-          <url>http://artifacts.openmicroscopy.org/artifactory/ome.snapshots</url>
-        </repository>
-      </repositories>
-    </profile>
-
-    <profile>
-      <id>merge-build</id>
-
-      <repositories>
-        <repository>
-          <id>ome.unstable</id>
-          <url>http://artifacts.openmicroscopy.org/artifactory/ome.unstable</url>
-        </repository>
-      </repositories>
-    </profile>
-  </profiles>
+  <distributionManagement>
+    <repository>
+      <id>ome.staging</id>
+      <name>OME Staging Repository</name>
+      <url>http://artifacts.openmicroscopy.org/artifactory/ome.staging</url>
+    </repository>
+    <snapshotRepository>
+      <id>ome.snapshots</id>
+      <name>OME Snapshots Repository</name>
+      <url>http://artifacts.openmicroscopy.org/artifactory/ome.snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
 
 </project>
