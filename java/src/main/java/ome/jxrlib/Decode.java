@@ -49,7 +49,7 @@ public class Decode implements Closeable {
     public Decode(byte data[]) {
         this.inputFile = null;
         this.data = data;
-        decoder = codecFactory.decoderFromBytes(data);
+        decoder = codecFactory.decoderFromBytes(data, data.length);
         frameCount = decoder.getFrameCount();
     }
 

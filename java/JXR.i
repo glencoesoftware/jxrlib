@@ -3,6 +3,8 @@
 %include std_vector.i
 %include std_string.i
 %include arrays_java.i
+%include various.i
+%apply char *BYTE { char bytes[] };
 %{
   #include "CodecFactory.hpp"
   #include "Factory.hpp"
@@ -32,14 +34,11 @@ namespace jxrlib {
 
   %typemap(javaclassmodifiers) CodecFactory "class"
   %typemap(javacode) CodecFactory %{
-  public ImageDecoder decoderFromBytes(byte bytes[]) {
-    return decoderFromBytes(new String(bytes), bytes.length);
-  }
-
   public ImageDecoder decoderFromFile(java.io.File inputFile) {
     return decoderFromFile(inputFile.getAbsolutePath());
   }
   %}
+
   class CodecFactory {
   public:
     jxrlib::ImageDecoder decoderFromFile(std::string inputFile);
