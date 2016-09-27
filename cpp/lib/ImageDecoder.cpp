@@ -147,6 +147,7 @@ namespace jxrlib {
   }
 
   std::vector<char> ImageDecoder::getRawBytes() {
+    ERR err = WMP_errSuccess;
     int width, height;
     PKRect rc;
     size_t buf_size;
@@ -169,7 +170,10 @@ namespace jxrlib {
 
     return ret;
   Cleanup:
-    throw FormatError("ERROR: Could not get image bytes");
+    std::stringstream msg;
+    msg << "ERROR: Could not get image bytes: " << err;
+    std::string errMsg = msg.str();
+    throw FormatError(errMsg);
   }
 
 } // namespace jxrlib
