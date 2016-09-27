@@ -22,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.Vector;
 
 public class Decode implements Closeable {
@@ -117,6 +118,29 @@ public class Decode implements Closeable {
                 printBytes(imageBytes);
             } catch (IOException e) {
                 System.err.println("Problem parsing input data! " + e.getMessage());
+            }
+        } else if (args[0].equals("--in-memory")) {
+          try {
+            System.err.println("input file = " + args[1]);
+            RandomAccessFile inputFile = new RandomAccessFile(args[1], "r");
+            byte[] inputBuffer = new byte[(int) inputFile.length()];
+            inputFile.readFully(inputBuffer);
+            inputFile.close();
+
+            decode = new Decode(inputBuffer);
+            System.err.println("Opened in-memory decoder for file: " + args[1]);
+            if (args.length == 2) {
+                byte[] imageBytes = decode.toBytes();
+                System.err.println("Decoded bytes:");
+                printBytes(imageBytes);
+            } else if (args.length == 3) {
+                decode.toFile(new File(args[2]));
+            } else {
+                System.err.println("INVALID DECODE COMMAND");
+            }
+            }
+            catch (IOException e) {
+              System.err.println(e.getMessage());
             }
         } else {
             File inputFile = new File(args[0]);
