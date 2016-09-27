@@ -77,7 +77,7 @@ namespace jxrlib {
     return decoderFromBytes((char *)data.data(), data.size());
   }
 
-  ImageDecoder CodecFactory::decoderFromBytes(char bytes[], size_t len) {
+  ImageDecoder CodecFactory::decoderFromBytes(char *bytes, size_t len) {
     ImageDecoder decoder;
     cerr << "CodecFactory::decoderFromBytes checksum: "
          << adler32((unsigned char *)bytes, len) << endl;
