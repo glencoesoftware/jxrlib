@@ -92,20 +92,28 @@ namespace jxrlib {
   }
 
   void ImageDecoder::initialize(Stream &data) {
+    ERR err = WMP_errSuccess;
     Call(pDecoder->Initialize(pDecoder, data.pStream));
     pDecoder->fStreamOwner = !0;
     initialize();
     return;
   Cleanup:
-    throw FormatError("ERROR: Unable to initialize decoder with stream");
+    std::stringstream msg;
+    msg << "ERROR: Unable to initialize decoder with stream: " << err;
+    std::string errMsg = msg.str();
+    throw FormatError(errMsg);
   }
 
   unsigned int ImageDecoder::getFrameCount() {
+    ERR err = WMP_errSuccess;
     U32 cFrame;
     Call(pDecoder->GetFrameCount(pDecoder, &cFrame));
     return cFrame;
   Cleanup:
-    throw FormatError("ERROR: Unable to get frame count.");
+    std::stringstream msg;
+    msg << "ERROR: Unable to get frame count: " << err;
+    std::string errMsg = msg.str();
+    throw FormatError(errMsg);
   }
 
   void ImageDecoder::selectFrame(unsigned int frameNum) {
