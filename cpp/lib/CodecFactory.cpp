@@ -20,6 +20,10 @@
 
 #include "CodecFactory.hpp"
 
+#include <stdint.h>
+
+#include <iostream>
+#include <fstream>
 #include <cstring>
 #include <memory>
 
@@ -29,6 +33,27 @@
 #include "Stream.hpp"
 
 namespace jxrlib {
+
+  /* XXX: Debugging to be removed. */
+  const int MOD_ADLER = 65521;
+
+  uint32_t adler32(unsigned char *data, size_t len)
+  {
+      uint32_t a = 1, b = 0;
+      size_t index;
+
+      /* Process each byte of the data in order */
+      for (index = 0; index < len; ++index)
+      {
+          a = (a + data[index]) % MOD_ADLER;
+          b = (b + a) % MOD_ADLER;
+      }
+
+      return (b << 16) | a;
+  }
+  /* XXX: Debugging to be removed. */
+
+  using namespace std;
 
   CodecFactory::CodecFactory() : err(WMP_errSuccess) {
     pCodecFactory = NULL;
@@ -54,6 +79,8 @@ namespace jxrlib {
 
   ImageDecoder CodecFactory::decoderFromBytes(char bytes[], size_t len) {
     ImageDecoder decoder;
+    cerr << "CodecFactory::decoderFromBytes checksum: "
+         << adler32((unsigned char *)bytes, len) << endl;
     Stream dataStream((unsigned char *)bytes, len);
     const PKIID *pIID = NULL;
 
