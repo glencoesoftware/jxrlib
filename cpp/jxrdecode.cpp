@@ -19,6 +19,8 @@
  */
 
 #include <cstdio>
+#include <cstring>
+#include <fstream>
 #include <iostream>
 #include <string>
 
@@ -65,6 +67,41 @@ void stream_data() {
   std::cerr << std::endl;
 
   ImageDecoder decoder = codecFactory.decoderFromBytes(bytes);
+  std::cerr << "Opened decoder with " << bytes.size() << " bytes" << std::endl;
+
+
+  unsigned int frameCount = decoder.getFrameCount();
+  std::cerr << "Found " << frameCount << " frames" << std::endl;
+
+  for(int i = 0 ; i < frameCount ; i++) {
+    decoder.selectFrame(i);
+    decoded_bytes = decoder.getRawBytes();
+
+    std::cerr << decoded_bytes.size() << " Bytes:" << std::endl;
+    print_bytes(decoded_bytes, stdout);
+  }
+
+  decoder.close();
+}
+
+void stream_file_bytes(std::string inputFile) {
+  std::ifstream input(inputFile.c_str(), std::ios::binary|std::ios::ate);
+  std::ifstream::pos_type endPos = input.tellg();
+  std::vector<char> bytes(endPos);
+
+  std::cerr << "Reading bytes from file: " << inputFile << std::endl;
+  input.seekg(0, std::ios::beg);
+  input.read(&bytes[0], endPos);
+
+  std::cerr << "Read bytes:" << std::endl;
+  print_bytes(bytes);
+  std::cerr << std::endl;
+
+  Factory factory;
+  CodecFactory codecFactory;
+  std::vector<char> decoded_bytes;
+
+  ImageDecoder decoder = codecFactory.decoderFromBytes(bytes.data(), bytes.size());
   std::cerr << "Opened decoder with " << bytes.size() << " bytes" << std::endl;
 
 
@@ -143,8 +180,13 @@ int main(int argc, char* argv[]) {
       stream_file(argv[1]);
       break;
     case 3 :
-      std::cerr << "Converting file " << argv[1] << " to " << argv[2] << "..." << std::endl;
-      convert_file(argv[1], argv[2]); break;
+      if (std::strncmp(argv[1], "--in-memory", 11) == 0) {
+        stream_file_bytes(argv[2]);
+      } else {
+        std::cerr << "Converting file " << argv[1] << " to " << argv[2] << "..." << std::endl;
+        convert_file(argv[1], argv[2]);
+      }
+      break;
     }
   }
   catch (const FormatError &e) {
