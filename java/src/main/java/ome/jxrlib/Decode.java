@@ -58,6 +58,7 @@ public class Decode implements Closeable {
         for (long i = 0 ; i < frameCount ; i++) {
             decoder.selectFrame(i);
             ImageData data = decoder.getRawBytes();
+            decodedBytes = new ByteArrayOutputStream((int)data.size());
             for (int j = 0 ; j < data.size() ; j++) {
                 decodedBytes.write(data.get(j));
             }
