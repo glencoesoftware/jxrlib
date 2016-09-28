@@ -25,10 +25,18 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Vector;
 
+import org.scijava.nativelib.NativeLoader;
+
 public class Decode implements Closeable {
 
     static {
-        System.loadLibrary("jxrjava");
+        try {
+            NativeLoader.loadLibrary("jxrjava");
+        } catch (IOException e) {
+            System.err.println("ERROR: Could not load native JPEG XR library (" +
+                               e.getMessage() +")");
+            System.exit(-1);
+        }
     }
 
     private static final Factory factory = new Factory();

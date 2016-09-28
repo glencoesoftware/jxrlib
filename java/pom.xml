@@ -28,6 +28,14 @@
       <url>http://artifacts.openmicroscopy.org/artifactory/ome.releases</url>
     </repository>
   </repositories>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.scijava</groupId>
+      <artifactId>native-lib-loader</artifactId>
+      <version>2.1.4</version>
+    </dependency>
+  </dependencies>
 
   <distributionManagement>
     <repository>
