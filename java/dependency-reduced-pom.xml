@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>ome</groupId>
+  <artifactId>jxrlib</artifactId>
+  <name>JXRLib Java Bindings</name>
+  <version>0.1.0-SNAPSHOT</version>
+  <description>Java bindings and pre-built binaries for jxrlib.</description>
+  <url>https://jxrlib.codeplex.com/</url>
+  <inceptionYear>2016</inceptionYear>
+  <licenses>
+    <license>
+      <name>Simplified BSD License</name>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>ome.jxrlib.Decode</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.4.3</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <repositories>
+    <repository>
+      <id>ome.releases</id>
+      <url>http://artifacts.openmicroscopy.org/artifactory/ome.releases</url>
+    </repository>
+  </repositories>
+  <distributionManagement>
+    <repository>
+      <id>ome.staging</id>
+      <name>OME Staging Repository</name>
+      <url>http://artifacts.openmicroscopy.org/artifactory/ome.staging</url>
+    </repository>
+    <snapshotRepository>
+      <id>ome.snapshots</id>
+      <name>OME Snapshots Repository</name>
+      <url>http://artifacts.openmicroscopy.org/artifactory/ome.snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
+</project>
+
