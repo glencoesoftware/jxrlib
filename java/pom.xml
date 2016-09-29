@@ -36,7 +36,23 @@
       <version>2.1.4</version>
     </dependency>
   </dependencies>
-
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>ome.jxrlib.Decode</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build> 
+  
   <distributionManagement>
     <repository>
       <id>ome.staging</id>
