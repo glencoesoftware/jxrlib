@@ -154,8 +154,9 @@ namespace jxrlib {
     unsigned char *image_buffer;
     std::vector<char> ret;
 
+    size_t bytesPerPixel = pDecoder->WMP.wmiI.cBitsPerUnit / 8;
     Call(pDecoder->GetSize(pDecoder, &width, &height));
-    buf_size = width * height * 4;
+    buf_size = width * height * bytesPerPixel;
     image_buffer = (unsigned char *)malloc(buf_size);
     ret.resize(buf_size);
 
@@ -164,7 +165,7 @@ namespace jxrlib {
     rc.Width = width;
     rc.Height = height;
 
-    Call(pDecoder->Copy(pDecoder, &rc, image_buffer, width * 4));
+    Call(pDecoder->Copy(pDecoder, &rc, image_buffer, width * bytesPerPixel));
     ret.assign(image_buffer, image_buffer + buf_size);
     free(image_buffer);
 
