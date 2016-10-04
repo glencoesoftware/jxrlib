@@ -40,7 +40,7 @@ DIR_ENC=image/encode
 
 DIR_GLUE=jxrgluelib
 DIR_CXX=cpp
-DIR_JAVA=java
+DIR_JAVA=java/target/swig
 DIR_TEST=jxrtestlib
 DIR_EXEC=jxrencoderdecoder
 
@@ -248,11 +248,11 @@ $(DIR_BUILD)/libjxr++.$(LIBSUFFIX): $(OBJ_CXX) | $(LIBRARIES)
 ## Java Wrapper library
 ##
 
-SRC_JAVA=$(wildcard $(DIR_SRC)/$(DIR_JAVA)/src/$(JAVA_PKG)/*.java)
-OBJ_JAVA=$(patsubst $(DIR_SRC)/$(DIR_JAVA)/src/$(JAVA_PKG)/%.java, $(DIR_BUILD)/$(JAVA_PKG)/%.class, $(SRC_JAVA))
+SRC_JAVA=$(wildcard $(DIR_SRC)/$(DIR_JAVA)/$(JAVA_PKG)/*.java)
 
 swig:
-	swig -java -c++ -package ome.jxrlib -outdir java/src/main/java/ome/jxrlib java/JXR.i
+	mkdir -p $(DIR_SRC)/$(DIR_JAVA)/$(JAVA_PKG)
+	swig -java -c++ -package ome.jxrlib -outdir $(DIR_SRC)/$(DIR_JAVA)/$(JAVA_PKG) java/JXR.i
 
 $(DIR_BUILD)/libjxrjava.$(LIBSUFFIX): $(LIBRARIES) $(CXX_LIBRARIES)
 	@echo "Building JNI"
