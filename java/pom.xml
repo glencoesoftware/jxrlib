@@ -113,6 +113,24 @@
               </resources>
             </configuration>
           </execution>
+          <execution>
+            <id>copy-windows_64-resources</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>
+                ${basedir}/target/native-resources/META-INF/lib/windows_64
+              </outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${basedir}/../jxrencoderdecoder/x64/Debug</directory>
+                  <include>*.dll</include>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
