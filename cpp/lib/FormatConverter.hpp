@@ -17,9 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  * #%L
  */
-
-#ifndef _FormatConverter
-#define _FormatConverter
+#pragma once
 
 #include "JXRGlue.h"
 
@@ -35,5 +33,3 @@ namespace jxrlib {
   };
 
 } // namespace jxrlib
-
-#endif // _FormatConverter

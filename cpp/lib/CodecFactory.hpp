@@ -17,9 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  * #%L
  */
-
-#ifndef _CodecFactory
-#define _CodecFactory
+#pragma once
 
 #include <string>
 #include <vector>
@@ -45,5 +43,3 @@ namespace jxrlib {
   };
 
 } // namespace jxrlib
-
-#endif // _CodecFactory

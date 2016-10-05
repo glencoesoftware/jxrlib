@@ -17,9 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  * #%L
  */
-
-#ifndef _ImageEncoder
-#define _ImageEncoder
+#pragma once
 
 #include <string>
 
@@ -44,5 +42,3 @@ namespace jxrlib {
   };
 
 } // namespace jxrlib
-
-#endif // _ImageEncoder

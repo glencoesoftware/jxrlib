@@ -17,9 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  * #%L
  */
-
-#ifndef _FormatError
-#define _FormatError
+#pragma once
 
 #include <stdexcept>
 
@@ -34,5 +32,3 @@ namespace jxrlib {
 };
 
 } // namespace jxrlib
-
-#endif // _FormatError
