@@ -2,16 +2,16 @@
 //
 // Copyright © Microsoft Corp.
 // All rights reserved.
-//
+// 
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
-//
+// 
 // • Redistributions of source code must retain the above copyright notice,
 //   this list of conditions and the following disclaimer.
 // • Redistributions in binary form must reproduce the above copyright notice,
 //   this list of conditions and the following disclaimer in the documentation
 //   and/or other materials provided with the distribution.
-//
+// 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 // AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -37,7 +37,8 @@
 //================================================================
 // PKImageEncode_Iyuv
 //================================================================
-ERR WriteIYUVHeader(PKImageEncode* pIE)
+ERR WriteIYUVHeader(
+    PKImageEncode* pIE)
 {
     ERR err = WMP_errSuccess;
     // struct WMPStream* pS = pIE->pStream;
@@ -54,7 +55,8 @@ ERR WriteIYUVHeader(PKImageEncode* pIE)
 //================================================================
 // PKImageEncode_Yuv422
 //================================================================
-ERR WriteYUV422Header(PKImageEncode* pIE)
+ERR WriteYUV422Header(
+    PKImageEncode* pIE)
 {
     ERR err = WMP_errSuccess;
     // struct WMPStream* pS = pIE->pStream;
@@ -71,7 +73,8 @@ ERR WriteYUV422Header(PKImageEncode* pIE)
 //================================================================
 // PKImageEncode_Yuv444
 //================================================================
-ERR WriteYUV444Header(PKImageEncode* pIE)
+ERR WriteYUV444Header(
+    PKImageEncode* pIE)
 {
     ERR err = WMP_errSuccess;
     // struct WMPStream* pS = pIE->pStream;
@@ -85,41 +88,49 @@ ERR WriteYUV444Header(PKImageEncode* pIE)
     return err;
 }
 
-ERR PKImageEncode_WritePixels_IYUV(PKImageEncode* pIE, U32 cLine, U8* pbPixel,
+ERR PKImageEncode_WritePixels_IYUV(
+    PKImageEncode* pIE,
+    U32 cLine,
+    U8* pbPixel,
     U32 cbStride)
 {
     ERR err = WMP_errSuccess;
     struct WMPStream* pS = pIE->pStream;
     size_t iRow, iCol;
-    U32 uYSize, uUVSize;
-    U8* pY;
-    U8* pU;
-    U8* pV;
+    U32 uYSize, uUVSize; 
+    U8 *pY;
+    U8 *pU;
+    U8 *pV;
 
-    UNREFERENCED_PARAMETER(cbStride);
+    UNREFERENCED_PARAMETER( cbStride );
 
     // header
-    if (!pIE->fHeaderDone) {
+    if (!pIE->fHeaderDone)
+    {
         Call(WriteIYUVHeader(pIE));
     }
 
-    // from packed to planar:
+    //from packed to planar:
     uYSize = cLine * pIE->uWidth;
     uUVSize = (uYSize >> 2);
 
-    pY = (U8*)malloc(uYSize);
-    pU = (U8*)malloc(uUVSize);
-    pV = (U8*)malloc(uUVSize);
+    pY = (U8 *)malloc(uYSize);
+    pU = (U8 *)malloc(uUVSize);
+    pV = (U8 *)malloc(uUVSize);
 
-    if (pY == NULL || pU == NULL || pV == NULL) {
+    if(pY == NULL || pU == NULL || pV == NULL)
+    {
         return ICERR_ERROR;
     }
 
-    for (iRow = 0; iRow < pIE->uHeight; iRow += 2, pY += pIE->uWidth) {
-        for (iCol = 0; iCol < pIE->uWidth; iCol += 2, pY += 2) {
+    for (iRow = 0; iRow < pIE->uHeight; iRow += 2, pY += pIE->uWidth) 
+    {
+        for (iCol = 0; iCol < pIE->uWidth; iCol += 2, pY += 2)
+        {
+
             *pY = *pbPixel;
             pbPixel++;
-            *(pY + 1) = *pbPixel;
+            *(pY + 1)= *pbPixel;
             pbPixel++;
             *(pY + pIE->uWidth) = *pbPixel;
             pbPixel++;
@@ -127,27 +138,25 @@ ERR PKImageEncode_WritePixels_IYUV(PKImageEncode* pIE, U32 cLine, U8* pbPixel,
             pbPixel++;
 
             *pU = *pbPixel;
-            pbPixel++;
-            pU++;
+            pbPixel++; pU++;
             *pV = *pbPixel;
-            pbPixel++;
-            pV++;
+            pbPixel++; pV++;
         }
     }
 
-    pY -= uYSize;
-    pU -= uUVSize;
-    pV -= uUVSize;
+    pY-=uYSize;
+    pU-=uUVSize;
+    pV-=uUVSize;
 
     Call(pS->Write(pS, pY, uYSize));
     Call(pS->Write(pS, pU, uUVSize));
     Call(pS->Write(pS, pV, uUVSize));
 
-    if (pY != NULL)
+    if(pY!=NULL)
         free(pY);
-    if (pU != NULL)
+    if(pU!=NULL)
         free(pU);
-    if (pV != NULL)
+    if(pV!=NULL)
         free(pV);
 
     pIE->idxCurrentLine += cLine;
@@ -156,69 +165,73 @@ Cleanup:
     return err;
 }
 
-ERR PKImageEncode_WritePixels_YUV422(PKImageEncode* pIE, U32 cLine, U8* pbPixel,
+
+ERR PKImageEncode_WritePixels_YUV422(
+    PKImageEncode* pIE,
+    U32 cLine,
+    U8* pbPixel,
     U32 cbStride)
 {
     ERR err = WMP_errSuccess;
     struct WMPStream* pS = pIE->pStream;
     size_t iRow, iCol;
-    U32 uYSize, uUVSize;
-    U8* pY;
-    U8* pU;
-    U8* pV;
+    U32 uYSize, uUVSize; 
+    U8 *pY;
+    U8 *pU;
+    U8 *pV;
 
-    UNREFERENCED_PARAMETER(cbStride);
+    UNREFERENCED_PARAMETER( cbStride );
 
     // header
-    if (!pIE->fHeaderDone) {
+    if (!pIE->fHeaderDone)
+    {
         Call(WriteIYUVHeader(pIE));
     }
 
-    // from packed to planar:
+    //from packed to planar:
     uYSize = cLine * pIE->uWidth;
     uUVSize = (uYSize >> 1);
 
-    pY = (U8*)malloc(uYSize);
-    pU = (U8*)malloc(uUVSize);
-    pV = (U8*)malloc(uUVSize);
+    pY = (U8 *)malloc(uYSize);
+    pU = (U8 *)malloc(uUVSize);
+    pV = (U8 *)malloc(uUVSize);
 
-    if (pY == NULL || pU == NULL || pV == NULL) {
+    if(pY == NULL || pU == NULL || pV == NULL)
+    {
         return ICERR_ERROR;
     }
-    // YYUV
-    for (iRow = 0; iRow < pIE->uHeight; iRow += 1) {
-        for (iCol = 0; iCol < pIE->uWidth; iCol += 2) {
+//YYUV
+    for (iRow = 0; iRow < pIE->uHeight; iRow += 1) 
+    {
+        for (iCol = 0; iCol < pIE->uWidth; iCol += 2)
+        {
             *pU = *pbPixel;
-            pbPixel++;
-            pU++;
+            pbPixel++; pU++;
 
             *pY = *pbPixel;
-            pbPixel++;
-            pY++;
+            pbPixel++; pY++;
 
             *pV = *pbPixel;
-            pbPixel++;
-            pV++;
+            pbPixel++; pV++;
 
             *pY = *pbPixel;
-            pbPixel++;
-            pY++;
+            pbPixel++; pY++;
         }
     }
 
-    pY -= uYSize;
-    pU -= uUVSize;
-    pV -= uUVSize;
+    pY-=uYSize;
+    pU-=uUVSize;
+    pV-=uUVSize;
 
     Call(pS->Write(pS, pY, uYSize));
     Call(pS->Write(pS, pU, uUVSize));
     Call(pS->Write(pS, pV, uUVSize));
 
-    if (pY != NULL)
+    if(pY!=NULL)
         free(pY);
-    if (pU != NULL)
+    if(pU!=NULL)
         free(pU);
-    if (pV != NULL)
+    if(pV!=NULL)
         free(pV);
 
     pIE->idxCurrentLine += cLine;
@@ -227,64 +240,70 @@ Cleanup:
     return err;
 }
 
-ERR PKImageEncode_WritePixels_YUV444(PKImageEncode* pIE, U32 cLine, U8* pbPixel,
+
+ERR PKImageEncode_WritePixels_YUV444(
+    PKImageEncode* pIE,
+    U32 cLine,
+    U8* pbPixel,
     U32 cbStride)
 {
     ERR err = WMP_errSuccess;
     struct WMPStream* pS = pIE->pStream;
     size_t iRow, iCol;
-    U32 uYSize, uUVSize;
-    U8* pY;
-    U8* pU;
-    U8* pV;
+    U32 uYSize, uUVSize; 
+    U8 *pY;
+    U8 *pU;
+    U8 *pV;
 
-    UNREFERENCED_PARAMETER(cbStride);
+    UNREFERENCED_PARAMETER( cbStride );
 
     // header
-    if (!pIE->fHeaderDone) {
+    if (!pIE->fHeaderDone)
+    {
         Call(WriteIYUVHeader(pIE));
     }
 
-    // from packed to planar:
+    //from packed to planar:
     uYSize = cLine * pIE->uWidth;
     uUVSize = uYSize;
 
-    pY = (U8*)malloc(uYSize);
-    pU = (U8*)malloc(uUVSize);
-    pV = (U8*)malloc(uUVSize);
+    pY = (U8 *)malloc(uYSize);
+    pU = (U8 *)malloc(uUVSize);
+    pV = (U8 *)malloc(uUVSize);
 
-    if (pY == NULL || pU == NULL || pV == NULL) {
+    if(pY == NULL || pU == NULL || pV == NULL)
+    {
         return ICERR_ERROR;
     }
 
-    for (iRow = 0; iRow < pIE->uHeight; iRow += 1) {
-        for (iCol = 0; iCol < pIE->uWidth; iCol += 1) {
+    for (iRow = 0; iRow < pIE->uHeight; iRow += 1) 
+    {
+        for (iCol = 0; iCol < pIE->uWidth; iCol += 1)
+        {
+
             *pY = *pbPixel;
-            pbPixel++;
-            pY++;
+            pbPixel++; pY++;
 
             *pU = *pbPixel;
-            pbPixel++;
-            pU++;
+            pbPixel++; pU++;
             *pV = *pbPixel;
-            pbPixel++;
-            pV++;
+            pbPixel++; pV++;
         }
     }
 
-    pY -= uYSize;
-    pU -= uUVSize;
-    pV -= uUVSize;
+    pY-=uYSize;
+    pU-=uUVSize;
+    pV-=uUVSize;
 
     Call(pS->Write(pS, pY, uYSize));
     Call(pS->Write(pS, pU, uUVSize));
     Call(pS->Write(pS, pV, uUVSize));
 
-    if (pY != NULL)
+    if(pY!=NULL)
         free(pY);
-    if (pU != NULL)
+    if(pU!=NULL)
         free(pU);
-    if (pV != NULL)
+    if(pV!=NULL)
         free(pV);
 
     pIE->idxCurrentLine += cLine;
@@ -293,7 +312,10 @@ Cleanup:
     return err;
 }
 
-ERR PKImageEncode_Create_IYUV(PKImageEncode** ppIE)
+
+
+ERR PKImageEncode_Create_IYUV(
+    PKImageEncode** ppIE)
 {
     ERR err = WMP_errSuccess;
     PKImageEncode* pIE = NULL;
@@ -307,7 +329,8 @@ Cleanup:
     return err;
 }
 
-ERR PKImageEncode_Create_YUV422(PKImageEncode** ppIE)
+ERR PKImageEncode_Create_YUV422(
+    PKImageEncode** ppIE)
 {
     ERR err = WMP_errSuccess;
     PKImageEncode* pIE = NULL;
@@ -321,7 +344,8 @@ Cleanup:
     return err;
 }
 
-ERR PKImageEncode_Create_YUV444(PKImageEncode** ppIE)
+ERR PKImageEncode_Create_YUV444(
+    PKImageEncode** ppIE)
 {
     ERR err = WMP_errSuccess;
     PKImageEncode* pIE = NULL;
@@ -335,14 +359,17 @@ Cleanup:
     return err;
 }
 
+
 //================================================================
 // PKImageDecode_IYUV
 //================================================================
-ERR ParseIYUVHeader(PKImageDecode* pID, struct WMPStream* pWS)
+ERR ParseIYUVHeader(
+    PKImageDecode* pID,
+    struct WMPStream* pWS)
 {
     ERR err = WMP_errSuccess;
 
-    UNREFERENCED_PARAMETER(pWS);
+    UNREFERENCED_PARAMETER( pWS );
 
     // Set header other header parameters
     pID->guidPixFormat = GUID_PKPixelFormat12bppYUV420;
@@ -350,8 +377,7 @@ ERR ParseIYUVHeader(PKImageDecode* pID, struct WMPStream* pWS)
     pID->uHeight = 144;
     pID->uWidth = 176;
 
-    // I don't need offpixel for raw data!    Call(pWS->GetPos(pWS,
-    // &pID->YUV420.offPixel));
+    //I don't need offpixel for raw data!    Call(pWS->GetPos(pWS, &pID->YUV420.offPixel));
 
     return err;
 }
@@ -359,11 +385,13 @@ ERR ParseIYUVHeader(PKImageDecode* pID, struct WMPStream* pWS)
 //================================================================
 // PKImageDecode_YUV422
 //================================================================
-ERR ParseYUV422Header(PKImageDecode* pID, struct WMPStream* pWS)
+ERR ParseYUV422Header(
+    PKImageDecode* pID,
+    struct WMPStream* pWS)
 {
     ERR err = WMP_errSuccess;
 
-    UNREFERENCED_PARAMETER(pWS);
+    UNREFERENCED_PARAMETER( pWS );
 
     // Set header other header parameters
     pID->guidPixFormat = GUID_PKPixelFormat16bppYUV422;
@@ -377,11 +405,13 @@ ERR ParseYUV422Header(PKImageDecode* pID, struct WMPStream* pWS)
 //================================================================
 // PKImageDecode_YUV422
 //================================================================
-ERR ParseYUV444Header(PKImageDecode* pID, struct WMPStream* pWS)
+ERR ParseYUV444Header(
+    PKImageDecode* pID,
+    struct WMPStream* pWS)
 {
     ERR err = WMP_errSuccess;
 
-    UNREFERENCED_PARAMETER(pWS);
+    UNREFERENCED_PARAMETER( pWS );
 
     // Set header other header parameters
     pID->guidPixFormat = GUID_PKPixelFormat24bppYUV444;
@@ -392,7 +422,9 @@ ERR ParseYUV444Header(PKImageDecode* pID, struct WMPStream* pWS)
     return err;
 }
 
-ERR PKImageDecode_Initialize_IYUV(PKImageDecode* pID, struct WMPStream* pWS)
+ERR PKImageDecode_Initialize_IYUV(
+    PKImageDecode* pID,
+    struct WMPStream* pWS)
 {
     ERR err = WMP_errSuccess;
 
@@ -403,7 +435,9 @@ Cleanup:
     return err;
 }
 
-ERR PKImageDecode_Initialize_YUV422(PKImageDecode* pID, struct WMPStream* pWS)
+ERR PKImageDecode_Initialize_YUV422(
+    PKImageDecode* pID,
+    struct WMPStream* pWS)
 {
     ERR err = WMP_errSuccess;
 
@@ -414,7 +448,9 @@ Cleanup:
     return err;
 }
 
-ERR PKImageDecode_Initialize_YUV444(PKImageDecode* pID, struct WMPStream* pWS)
+ERR PKImageDecode_Initialize_YUV444(
+    PKImageDecode* pID,
+    struct WMPStream* pWS)
 {
     ERR err = WMP_errSuccess;
 
@@ -425,31 +461,36 @@ Cleanup:
     return err;
 }
 
-ERR PKImageDecode_Copy_IYUV(PKImageDecode* pID, const PKRect* pRect, U8* pb,
+
+ERR PKImageDecode_Copy_IYUV(
+    PKImageDecode* pID,
+    const PKRect* pRect,
+    U8* pb,
     U32 cbStride)
 {
     ERR err = WMP_errSuccess;
-    U32 uYSize, uUVSize;
-    U8* pY;
-    U8* pU;
-    U8* pV;
+    U32 uYSize, uUVSize; 
+    U8 *pY;
+    U8 *pU;
+    U8 *pV;
 
     struct WMPStream* pS = pID->pStream;
 
-    size_t iRow, iCol;
+    size_t iRow, iCol; 
 
-    UNREFERENCED_PARAMETER(pRect);
-    UNREFERENCED_PARAMETER(cbStride);
+    UNREFERENCED_PARAMETER( pRect );
+    UNREFERENCED_PARAMETER( cbStride );
 
-    // from planar to packed! YYYYUV YYYYUV
+    //from planar to packed! YYYYUV YYYYUV
     uYSize = pID->uWidth * pID->uHeight;
     uUVSize = (uYSize >> 2);
 
-    pY = (U8*)malloc(uYSize);
-    pU = (U8*)malloc(uUVSize);
-    pV = (U8*)malloc(uUVSize);
+    pY = (U8 *)malloc(uYSize);
+    pU = (U8 *)malloc(uUVSize);
+    pV = (U8 *)malloc(uUVSize);
 
-    if (pY == NULL || pU == NULL || pV == NULL) {
+    if(pY == NULL || pU == NULL || pV == NULL)
+    {
         return ICERR_ERROR;
     }
 
@@ -457,11 +498,13 @@ ERR PKImageDecode_Copy_IYUV(PKImageDecode* pID, const PKRect* pRect, U8* pb,
     Call(pS->Read(pS, pU, uUVSize));
     Call(pS->Read(pS, pV, uUVSize));
 
-    // re-organize it to Y0 Y1
+    //re-organize it to Y0 Y1
     //                  Y2 Y3 U V
 
-    for (iRow = 0; iRow < pID->uHeight; iRow += 2, pY += pID->uWidth) {
-        for (iCol = 0; iCol < pID->uWidth; iCol += 2, pY += 2) {
+    for (iRow = 0; iRow < pID->uHeight; iRow += 2, pY += pID->uWidth)
+    {
+        for (iCol = 0; iCol < pID->uWidth; iCol += 2, pY += 2)
+        {
             *pb = *pY;
             pb++;
             *pb = *(pY + 1);
@@ -472,52 +515,55 @@ ERR PKImageDecode_Copy_IYUV(PKImageDecode* pID, const PKRect* pRect, U8* pb,
             pb++;
 
             *pb = *pU;
-            pb++;
-            pU++;
+            pb++; pU++;
             *pb = *pV;
-            pb++;
-            pV++;
+            pb++; pV++;
         }
     }
 
-    pY -= uYSize;
-    pU -= uUVSize;
-    pV -= uUVSize;
-    if (pY != NULL)
+    pY-=uYSize;
+    pU-=uUVSize;
+    pV-=uUVSize;
+    if(pY!=NULL)
         free(pY);
-    if (pU != NULL)
+    if(pU!=NULL)
         free(pU);
-    if (pV != NULL)
+    if(pV!=NULL)
         free(pV);
 
 Cleanup:
     return err;
 }
 
-ERR PKImageDecode_Copy_YUV422(PKImageDecode* pID, const PKRect* pRect, U8* pb,
+
+ERR PKImageDecode_Copy_YUV422(
+    PKImageDecode* pID,
+    const PKRect* pRect,
+    U8* pb,
     U32 cbStride)
 {
     ERR err = WMP_errSuccess;
-    U32 uYSize, uUVSize;
-    U8* pY;
-    U8* pU;
-    U8* pV;
+    U32 uYSize, uUVSize; 
+    U8 *pY;
+    U8 *pU;
+    U8 *pV;
 
     struct WMPStream* pS = pID->pStream;
 
-    size_t iRow, iCol;
+    size_t iRow, iCol; 
 
-    UNREFERENCED_PARAMETER(pRect);
-    UNREFERENCED_PARAMETER(cbStride);
+    UNREFERENCED_PARAMETER( pRect );
+    UNREFERENCED_PARAMETER( cbStride );
 
     uYSize = pID->uWidth * pID->uHeight;
     uUVSize = (uYSize >> 1);
 
-    pY = (U8*)malloc(uYSize);
-    pU = (U8*)malloc(uUVSize);
-    pV = (U8*)malloc(uUVSize);
+    pY = (U8 *)malloc(uYSize);
+    pU = (U8 *)malloc(uUVSize);
+    pV = (U8 *)malloc(uUVSize);
 
-    if (pY == NULL || pU == NULL || pV == NULL) {
+    if(pY == NULL || pU == NULL || pV == NULL)
+    {
         return ICERR_ERROR;
     }
 
@@ -525,67 +571,70 @@ ERR PKImageDecode_Copy_YUV422(PKImageDecode* pID, const PKRect* pRect, U8* pb,
     Call(pS->Read(pS, pU, uUVSize));
     Call(pS->Read(pS, pV, uUVSize));
 
-    // re-organize to iMode 0 : YYUV
+    //re-organize to iMode 0 : YYUV
 
-    for (iRow = 0; iRow < pID->uHeight; iRow += 1) {
-        for (iCol = 0; iCol < pID->uWidth; iCol += 2) {
+    for (iRow = 0; iRow < pID->uHeight; iRow += 1)
+    {
+        for (iCol = 0; iCol < pID->uWidth; iCol += 2)
+        {
             *pb = *pU;
-            pb++;
-            pU++;
+            pb++; pU++;
 
             *pb = *pY;
-            pb++;
-            pY++;
+            pb++; pY++;
 
             *pb = *pV;
-            pb++;
-            pV++;
+            pb++; pV++;
 
             *pb = *pY;
-            pb++;
-            pY++;
+            pb++; pY++;
         }
     }
 
-    pY -= uYSize;
-    pU -= uUVSize;
-    pV -= uUVSize;
-    if (pY != NULL)
+    pY-=uYSize;
+    pU-=uUVSize;
+    pV-=uUVSize;
+    if(pY!=NULL)
         free(pY);
-    if (pU != NULL)
+    if(pU!=NULL)
         free(pU);
-    if (pV != NULL)
+    if(pV!=NULL)
         free(pV);
 
 Cleanup:
     return err;
 }
 
-ERR PKImageDecode_Copy_YUV444(PKImageDecode* pID, const PKRect* pRect, U8* pb,
+
+ERR PKImageDecode_Copy_YUV444(
+    PKImageDecode* pID,
+    const PKRect* pRect,
+    U8* pb,
     U32 cbStride)
 {
     ERR err = WMP_errSuccess;
-    U32 uYSize, uUVSize;
-    U8* pY;
-    U8* pU;
-    U8* pV;
+    U32 uYSize, uUVSize; 
+    U8 *pY;
+    U8 *pU;
+    U8 *pV;
 
     struct WMPStream* pS = pID->pStream;
 
-    size_t iRow, iCol;
+    size_t iRow, iCol; 
 
-    UNREFERENCED_PARAMETER(pRect);
-    UNREFERENCED_PARAMETER(cbStride);
+    UNREFERENCED_PARAMETER( pRect );
+    UNREFERENCED_PARAMETER( cbStride );
 
-    // from planar to packed! YYYYUV YYYYUV
+    //from planar to packed! YYYYUV YYYYUV
     uYSize = pID->uWidth * pID->uHeight;
     uUVSize = uYSize;
 
-    pY = (U8*)malloc(uYSize);
-    pU = (U8*)malloc(uUVSize);
-    pV = (U8*)malloc(uUVSize);
+    pY = (U8 *)malloc(uYSize);
+    pU = (U8 *)malloc(uUVSize);
+    pV = (U8 *)malloc(uUVSize);
 
-    if (pY == NULL || pU == NULL || pV == NULL) {
+    if(pY == NULL || pU == NULL || pV == NULL)
+    {
         return ICERR_ERROR;
     }
 
@@ -593,38 +642,39 @@ ERR PKImageDecode_Copy_YUV444(PKImageDecode* pID, const PKRect* pRect, U8* pb,
     Call(pS->Read(pS, pU, uUVSize));
     Call(pS->Read(pS, pV, uUVSize));
 
-    // Organize it as YUVYUVYUV...
+    //Organize it as YUVYUVYUV...
 
-    for (iRow = 0; iRow < pID->uHeight; iRow += 1) {
-        for (iCol = 0; iCol < pID->uWidth; iCol += 1) {
+    for (iRow = 0; iRow < pID->uHeight; iRow += 1)
+    {
+        for (iCol = 0; iCol < pID->uWidth; iCol += 1)
+        {
             *pb = *pY;
-            pb++;
-            pY++;
+            pb++; pY++; 
 
             *pb = *pU;
-            pb++;
-            pU++;
+            pb++; pU++;
             *pb = *pV;
-            pb++;
-            pV++;
+            pb++; pV++;
         }
     }
 
-    pY -= uYSize;
-    pU -= uUVSize;
-    pV -= uUVSize;
-    if (pY != NULL)
+    pY-=uYSize;
+    pU-=uUVSize;
+    pV-=uUVSize;
+    if(pY!=NULL)
         free(pY);
-    if (pU != NULL)
+    if(pU!=NULL)
         free(pU);
-    if (pV != NULL)
+    if(pV!=NULL)
         free(pV);
 
 Cleanup:
     return err;
 }
 
-ERR PKImageDecode_Create_IYUV(PKImageDecode** ppID)
+
+ERR PKImageDecode_Create_IYUV(
+    PKImageDecode** ppID)
 {
     ERR err = WMP_errSuccess;
     PKImageDecode* pID = NULL;
@@ -639,7 +689,8 @@ Cleanup:
     return err;
 }
 
-ERR PKImageDecode_Create_YUV422(PKImageDecode** ppID)
+ERR PKImageDecode_Create_YUV422(
+    PKImageDecode** ppID)
 {
     ERR err = WMP_errSuccess;
     PKImageDecode* pID = NULL;
@@ -654,7 +705,8 @@ Cleanup:
     return err;
 }
 
-ERR PKImageDecode_Create_YUV444(PKImageDecode** ppID)
+ERR PKImageDecode_Create_YUV444(
+    PKImageDecode** ppID)
 {
     ERR err = WMP_errSuccess;
     PKImageDecode* pID = NULL;
@@ -668,3 +720,4 @@ ERR PKImageDecode_Create_YUV444(PKImageDecode** ppID)
 Cleanup:
     return err;
 }
+

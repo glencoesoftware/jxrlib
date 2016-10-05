@@ -2,16 +2,16 @@
 //
 // Copyright © Microsoft Corp.
 // All rights reserved.
-//
+// 
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
-//
+// 
 // • Redistributions of source code must retain the above copyright notice,
 //   this list of conditions and the following disclaimer.
 // • Redistributions in binary form must reproduce the above copyright notice,
 //   this list of conditions and the following disclaimer in the documentation
 //   and/or other materials provided with the distribution.
-//
+// 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 // AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -32,14 +32,14 @@
 /** rounding behavior: [0 0 0 0] <-> [+ - - -]
     [+ + + +] <-> [+3/4 - - -]
     [- - - -] <-> [- - - -] **/
-Void strDCT2x2dn(PixelI* pa, PixelI* pb, PixelI* pc, PixelI* pd)
+Void strDCT2x2dn(PixelI *pa, PixelI *pb, PixelI *pc, PixelI *pd)
 {
     PixelI a, b, c, d, C, t;
     a = *pa;
     b = *pb;
     C = *pc;
     d = *pd;
-
+  
     a += d;
     b -= C;
     t = ((a - b) >> 1);
@@ -54,14 +54,14 @@ Void strDCT2x2dn(PixelI* pa, PixelI* pb, PixelI* pc, PixelI* pd)
     *pd = d;
 }
 
-Void strDCT2x2up(PixelI* pa, PixelI* pb, PixelI* pc, PixelI* pd)
+Void strDCT2x2up(PixelI *pa, PixelI *pb, PixelI *pc, PixelI *pd)
 {
     PixelI a, b, c, d, C, t;
     a = *pa;
     b = *pb;
     C = *pc;
     d = *pd;
-
+  
     a += d;
     b -= C;
     t = ((a - b + 1) >> 1);
@@ -76,7 +76,7 @@ Void strDCT2x2up(PixelI* pa, PixelI* pb, PixelI* pc, PixelI* pd)
     *pd = d;
 }
 
-Void FOURBUTTERFLY_HARDCODED1(PixelI* p)
+Void FOURBUTTERFLY_HARDCODED1(PixelI *p)
 {
     strDCT2x2dn(&p[0], &p[4], &p[8], &p[12]);
     strDCT2x2dn(&p[1], &p[5], &p[9], &p[13]);

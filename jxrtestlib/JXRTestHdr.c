@@ -2,16 +2,16 @@
 //
 // Copyright © Microsoft Corp.
 // All rights reserved.
-//
+// 
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
-//
+// 
 // • Redistributions of source code must retain the above copyright notice,
 //   this list of conditions and the following disclaimer.
 // • Redistributions in binary form must reproduce the above copyright notice,
 //   this list of conditions and the following disclaimer in the documentation
 //   and/or other materials provided with the distribution.
-//
+// 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 // AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -40,7 +40,8 @@
 //================================================================
 // PKImageEncode_HDR
 //================================================================
-ERR WriteHDRHeader(PKImageEncode* pIE)
+ERR WriteHDRHeader(
+    PKImageEncode* pIE)
 {
     ERR err = WMP_errSuccess;
     struct WMPStream* pS = pIE->pStream;
@@ -64,7 +65,10 @@ Cleanup:
     return err;
 }
 
-ERR PKImageEncode_WritePixels_HDR(PKImageEncode* pIE, U32 cLine, U8* pbPixel,
+ERR PKImageEncode_WritePixels_HDR(
+    PKImageEncode* pIE,
+    U32 cLine,
+    U8* pbPixel,
     U32 cbStride)
 {
     ERR err = WMP_errSuccess;
@@ -74,7 +78,8 @@ ERR PKImageEncode_WritePixels_HDR(PKImageEncode* pIE, U32 cLine, U8* pbPixel,
     size_t i = 0;
 
     // header
-    if (!pIE->fHeaderDone) {
+    if (!pIE->fHeaderDone)
+    {
         // WriteHDRHeader() also inits this object
         Call(WriteHDRHeader(pIE));
     }
@@ -84,15 +89,14 @@ ERR PKImageEncode_WritePixels_HDR(PKImageEncode* pIE, U32 cLine, U8* pbPixel,
     cbLineM = pIE->cbPixel * pIE->uWidth;
     cbLineS = (cbLineM + 3) / 4 * 4;
 
-    // FailIf(pRect->X < 0 || pID->uWidth <= pRect->X, WMP_errInvalidParameter);
-    // FailIf(pRect->Y < 0 || pID->uHeight <= pRect->Y, WMP_errInvalidParameter);
-    // FailIf(pRect->Width < 0 || pID->uWidth < pRect->X + pRect->Width,
-    // WMP_errInvalidParameter);
-    // FailIf(pRect->Height < 0 || pID->uHeight < pRect->Y + pRect->Height,
-    // WMP_errInvalidParameter);
+    //FailIf(pRect->X < 0 || pID->uWidth <= pRect->X, WMP_errInvalidParameter);
+    //FailIf(pRect->Y < 0 || pID->uHeight <= pRect->Y, WMP_errInvalidParameter);
+    //FailIf(pRect->Width < 0 || pID->uWidth < pRect->X + pRect->Width, WMP_errInvalidParameter);
+    //FailIf(pRect->Height < 0 || pID->uHeight < pRect->Y + pRect->Height, WMP_errInvalidParameter);
     FailIf(cbStride < cbLineM, WMP_errInvalidParameter);
 
-    for (i = 0; i <= cLine - 1; i++) {
+    for (i = 0; i <= cLine - 1; i++)
+    {
         size_t offM = cbStride * i;
         size_t offS = cbLineS * (pIE->idxCurrentLine + i);
 
@@ -105,7 +109,8 @@ Cleanup:
     return err;
 }
 
-ERR PKImageEncode_Create_HDR(PKImageEncode** ppIE)
+ERR PKImageEncode_Create_HDR(
+    PKImageEncode** ppIE)
 {
     ERR err = WMP_errSuccess;
     PKImageEncode* pIE = NULL;
@@ -119,38 +124,40 @@ Cleanup:
     return err;
 }
 
+
 //================================================================
 // PKImageDecode_HDR
 //================================================================
-ERR ParseHDRHeader(PKTestDecode* pID, struct WMPStream* pWS)
+ERR ParseHDRHeader(
+    PKTestDecode* pID,
+    struct WMPStream* pWS)
 {
     ERR err = WMP_errSuccess;
 
     char txtbuff[512];
     Bool done = FALSE;
 
-    FailIf(NULL == fgets(txtbuff, 12, pWS->state.file.pFile),
-        WMP_errUnsupportedFormat);
+    FailIf(NULL == fgets(txtbuff, 12, pWS->state.file.pFile), WMP_errUnsupportedFormat);
     FailIf(0 != strcmp(txtbuff, "#?RADIANCE\n"), WMP_errUnsupportedFormat);
 
     // Read lines to image size
     while (!done) {
-        FailIf(NULL == fgets(txtbuff, 512, pWS->state.file.pFile),
-            WMP_errUnsupportedFormat);
+        FailIf(NULL == fgets(txtbuff, 512, pWS->state.file.pFile), WMP_errUnsupportedFormat);
 
         if (0 == strncmp(txtbuff, "FORMAT", 6)) {
-            FailIf(0 != strcmp(txtbuff, "FORMAT=32-bit_rle_rgbe\n"),
-                WMP_errUnsupportedFormat);
+            FailIf(0 != strcmp(txtbuff, "FORMAT=32-bit_rle_rgbe\n"), WMP_errUnsupportedFormat);
         }
         if (0 == strncmp(txtbuff, "-Y", 2)) {
             sscanf(txtbuff, "-Y %d +X %d\n", &pID->uHeight, &pID->uWidth);
             done = TRUE;
         }
-    }
+      }
 
     Call(pWS->Read(pWS, txtbuff, 3));
 
-    if (((2 == txtbuff[0]) && (2 == txtbuff[1]) && (0 == (txtbuff[2] & 0x80))) || ((1 == txtbuff[0]) && (1 == txtbuff[1]) && (1 == txtbuff[2]))) {
+    if(((2 == txtbuff[0]) && (2 == txtbuff[1]) && (0 == (txtbuff[2] & 0x80))) ||
+       ((1 == txtbuff[0]) && (1 == txtbuff[1]) && (1 == txtbuff[2])))
+    {
         printf("Doesn't support compressed HDR files.\n");
         err = WMP_errUnsupportedFormat;
         goto Cleanup;
@@ -158,18 +165,20 @@ ERR ParseHDRHeader(PKTestDecode* pID, struct WMPStream* pWS)
 
     // Set header other header parameters
     pID->guidPixFormat = GUID_PKPixelFormat32bppRGBE;
-    pID->EXT.HDR.cbPixel = 4;
+    pID->EXT.HDR.cbPixel = 4; 
     // Set pointer to first pixel
     Call(pWS->GetPos(pWS, &pID->EXT.HDR.offPixel));
     pID->EXT.HDR.offPixel -= 3;
     Call(pWS->SetPos(pWS, pID->EXT.HDR.offPixel));
 
-// We don't need: pID->fResX and pID->fResY
+    // We don't need: pID->fResX and pID->fResY
 Cleanup:
     return err;
 }
 
-ERR PKImageDecode_Initialize_HDR(PKTestDecode* pID, struct WMPStream* pWS)
+ERR PKImageDecode_Initialize_HDR(
+    PKTestDecode* pID,
+    struct WMPStream* pWS)
 {
     ERR err = WMP_errSuccess;
 
@@ -180,7 +189,10 @@ Cleanup:
     return err;
 }
 
-ERR PKImageDecode_Copy_HDR(PKTestDecode* pID, const PKRect* pRect, U8* pb,
+ERR PKImageDecode_Copy_HDR(
+    PKTestDecode* pID,
+    const PKRect* pRect,
+    U8* pb,
     U32 cbStride)
 {
     ERR err = WMP_errSuccess;
@@ -189,18 +201,17 @@ ERR PKImageDecode_Copy_HDR(PKTestDecode* pID, const PKRect* pRect, U8* pb,
 
     size_t cbLineS = (pID->EXT.HDR.cbPixel * pID->uWidth + 3) / 4 * 4;
     size_t cbLineM = pID->EXT.HDR.cbPixel * pRect->Width;
-
+    
     I32 i = 0;
 
-    // FailIf(pRect->X < 0 || pID->uWidth <= pRect->X, WMP_errInvalidParameter);
-    // FailIf(pRect->Y < 0 || pID->uHeight <= pRect->Y, WMP_errInvalidParameter);
-    // FailIf(pRect->Width < 0 || pID->uWidth < pRect->X + pRect->Width,
-    // WMP_errInvalidParameter);
-    // FailIf(pRect->Height < 0 || pID->uHeight < pRect->Y + pRect->Height,
-    // WMP_errInvalidParameter);
+    //FailIf(pRect->X < 0 || pID->uWidth <= pRect->X, WMP_errInvalidParameter);
+    //FailIf(pRect->Y < 0 || pID->uHeight <= pRect->Y, WMP_errInvalidParameter);
+    //FailIf(pRect->Width < 0 || pID->uWidth < pRect->X + pRect->Width, WMP_errInvalidParameter);
+    //FailIf(pRect->Height < 0 || pID->uHeight < pRect->Y + pRect->Height, WMP_errInvalidParameter);
     FailIf(cbStride < cbLineM, WMP_errInvalidParameter);
 
-    for (i = pRect->Y; i < pRect->Y + pRect->Height; i++) {
+    for (i = pRect->Y ; i < pRect->Y + pRect->Height ; i++)
+    {
         size_t offLine = pID->EXT.HDR.cbPixel * pRect->X;
         size_t offS = cbLineS * i + offLine;
         size_t offM = cbStride * (i - pRect->Y) + offLine;
@@ -213,7 +224,8 @@ Cleanup:
     return err;
 }
 
-ERR PKImageDecode_Create_HDR(PKTestDecode** ppID)
+ERR PKImageDecode_Create_HDR(
+    PKTestDecode** ppID)
 {
     ERR err = WMP_errSuccess;
     PKTestDecode* pID = NULL;
@@ -227,3 +239,4 @@ ERR PKImageDecode_Create_HDR(PKTestDecode** ppID)
 Cleanup:
     return err;
 }
+
