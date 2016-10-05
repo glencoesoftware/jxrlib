@@ -29,8 +29,8 @@
 //***************************************************************************
 // Includes
 //***************************************************************************
-#include "strcodec.h"
 #include "perfTimer.h"
+#include "strcodec.h"
 #include <time.h>
 
 #ifndef DISABLE_PERF_MEASUREMENT

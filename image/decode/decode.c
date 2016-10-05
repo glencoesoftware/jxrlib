@@ -37,8 +37,8 @@ Author:
 
 Revision History:
 *******************************************************************************/
-#include "strcodec.h"
 #include "decode.h"
+#include "strcodec.h"
 
 #ifdef MEM_TRACE
 #define TRACE_MALLOC 1
