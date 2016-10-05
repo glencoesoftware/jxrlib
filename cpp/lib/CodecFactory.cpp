@@ -72,19 +72,14 @@ namespace jxrlib {
   FormatConverter CodecFactory::createFormatConverter(ImageDecoder &imageDecoder,
                                         std::string extension) {
     FormatConverter converter;
-    int extLength = extension.length();
-    char *ext = new char[extLength + 1];
-    strncpy(ext, extension.c_str(), extLength);
 
     Call(pCodecFactory->CreateFormatConverter(&converter.pConverter));
     Call(converter.pConverter->Initialize(converter.pConverter,
                                           imageDecoder.pDecoder,
-                                          ext,
+                                          (char *) extension.c_str(),
                                           imageDecoder.pDecoder->guidPixFormat));
-    delete[] ext;
     return converter;
   Cleanup:
-    delete[] ext;
     std::string msg = "ERROR: Unable to create format converter for extension: " + extension;
     throw FormatError(msg);
   }
