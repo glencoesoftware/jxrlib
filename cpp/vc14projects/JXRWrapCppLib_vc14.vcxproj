@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
+    <ProjectName>JXRWrapCppLib</ProjectName>
     <ProjectGuid>{C50D7492-A242-4E4B-A171-6B0843473B23}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>JXRWrapCppLib</RootNamespace>

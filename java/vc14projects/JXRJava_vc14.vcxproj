@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
+    <ProjectName>JXRJava</ProjectName>
     <ProjectGuid>{F843C6E7-F064-4E79-9E2C-6874196CE7D5}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>JXRJava</RootNamespace>
@@ -89,7 +90,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;JXRJAVA_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\cpp\lib;..\JXRTestLib;..\JXRGlueLib;..\image\sys;..\common\include;$(JAVA_HOME)\include;$(JAVA_HOME)\include\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\cpp\lib;..\..\JXRTestLib;..\..\JXRGlueLib;..\..\image\sys;..\..\common\include;$(JAVA_HOME)\include;$(JAVA_HOME)\include\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -104,7 +105,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;JXRJAVA_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\cpp\lib;..\JXRTestLib;..\JXRGlueLib;..\image\sys;..\common\include;$(JAVA_HOME)\include;$(JAVA_HOME)\include\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\cpp\lib;..\..\JXRTestLib;..\..\JXRGlueLib;..\..\image\sys;..\..\common\include;$(JAVA_HOME)\include;$(JAVA_HOME)\include\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -121,6 +122,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;JXRJAVA_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\cpp\lib;..\..\JXRTestLib;..\..\JXRGlueLib;..\..\image\sys;..\..\common\include;$(JAVA_HOME)\include;$(JAVA_HOME)\include\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -139,6 +141,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;JXRJAVA_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\cpp\lib;..\..\JXRTestLib;..\..\JXRGlueLib;..\..\image\sys;..\..\common\include;$(JAVA_HOME)\include;$(JAVA_HOME)\include\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -148,10 +151,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\java\target\swig\JXR_wrap.cpp" />
+    <ClCompile Include="..\target\swig\JXR_wrap.cxx" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\cpp\VC14Projects\JXRWrapCppLib_vc14.vcxproj">
+    <ProjectReference Include="..\..\cpp\VC14Projects\JXRWrapCppLib_vc14.vcxproj">
       <Project>{c50d7492-a242-4e4b-a171-6b0843473b23}</Project>
     </ProjectReference>
   </ItemGroup>
