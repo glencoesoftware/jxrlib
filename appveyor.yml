@@ -1,0 +1,12 @@
+version: 0.1.{build}
+build_script:
+  - msbuild "jxrencoderdecoder\JXR_vc14.sln" /verbosity:minimal /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+install:
+  - choco install swig
+before_build:
+  - mkdir java\target\swig\ome\jxrlib
+  - swig.exe -java -c++ -package ome.jxrlib -outdir java\target\swig\ome\jxrlib -o java\target\swig\JXR_wrap.cxx java\JXR.i
+after_build:
+  - mvn -f java\native-windows_64\pom.xml package
+artifacts:
+  - path: 'java\native-windows_64\target\*.jar'
