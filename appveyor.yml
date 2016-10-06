@@ -12,7 +12,7 @@ build:
   project: jxrencoderdecoder\JXR_vc14.sln
   verbosity: minimal
 install:
-  - choco install swig
+  - cinst swig
 before_build:
   - mkdir C:\Users\appveyor\.m2
   - ps: (Get-Content java\settings.xml) -replace '__MAVEN_SERVER_USERNAME__', "$env:MAVEN_SERVER_USERNAME" | %{$_ -replace '__MAVEN_SERVER_PASSWORD__', "$env:MAVEN_SERVER_PASSWORD"} | Out-File -encoding ASCII C:\Users\appveyor\.m2\settings.xml
