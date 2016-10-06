@@ -32,7 +32,7 @@
       <url>http://artifacts.openmicroscopy.org/artifactory/ome.snapshots</url>
     </repository>
   </repositories>
-  
+
   <dependencies>
     <dependency>
       <groupId>org.scijava</groupId>
@@ -49,8 +49,13 @@
       <artifactId>jxrlib-native-linux_64</artifactId>
       <version>0.1.0-SNAPSHOT</version>
     </dependency>
+    <dependency>
+      <groupId>ome</groupId>
+      <artifactId>jxrlib-native-osx_64</artifactId>
+      <version>0.1.0-SNAPSHOT</version>
+    </dependency>
   </dependencies>
-  
+
   <build>
     <resources>
       <resource>
@@ -89,29 +94,6 @@
         </executions>
       </plugin>
       <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-osx_64-resources</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>
-                ${basedir}/target/native-resources/META-INF/lib/osx_64
-              </outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${basedir}/../build</directory>
-                  <include>*.dylib</include>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <executions>
@@ -126,8 +108,8 @@
         </configuration>
       </plugin>
     </plugins>
-  </build> 
-  
+  </build>
+
   <distributionManagement>
     <repository>
       <id>ome.staging</id>
