@@ -4,10 +4,12 @@ build_script:
 install:
   - choco install swig
 before_build:
+  - set
   - mkdir java\target\swig\ome\jxrlib
   - swig.exe -java -c++ -package ome.jxrlib -outdir java\target\swig\ome\jxrlib -o java\target\swig\JXR_wrap.cxx java\JXR.i
 after_build:
   - mvn -f java\native-windows_64\pom.xml package
+  - dir C:\Users\appveyor\.m2
 artifacts:
   - path: 'java\native-windows_64\target\*.jar'
 cache:
