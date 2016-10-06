@@ -10,3 +10,6 @@ after_build:
   - mvn -f java\native-windows_64\pom.xml package
 artifacts:
   - path: 'java\native-windows_64\target\*.jar'
+cache:
+# Don't repopulate the entire Maven repository every time we build
+  - C:\Users\appveyor\.m2
