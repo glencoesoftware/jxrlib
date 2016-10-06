@@ -1,5 +1,9 @@
 language: cpp
 
+env:
+  global:
+      - secure: "kof5OhO8fMloYaFhXN0V6SPz5cn/PPAs7sX4e4qD/y9KFMYx7q3MS48cddVlNn1o6MuzydbUKAO6ZUQIKjRU5N0gljpcC4/UsBn+58EzyOymNdRsc+cdlX4kmENcqcLtH6emkigmJWlULsCnSHTB+CETglDXxCRsrS7Ib0MmsUXyFzZpOLteh+5WsOkpMxw+t1JTj06b36XWuihyhMc7/XcpXyDkLRy9GHyAO0CI/AdBJtBX0oS3l/Gmu52g8uiY/nc4680mhBuDcN7A9UMWsVCIttxOGU27vU2AckqZ60B+hBioc+W7I+WGPKIAw46+UyMB7G96M9kPo1F06qyvYJNypD+jFNns+PDGm4rj3xOTDskbohgpfjXZOz+mJgTL9Jd0bg60+tkAjTLjXx/s6FsqkLwqrCA1REPufKnM3zreXFQgJ0mY9139+bSpsRWg02A8fwo8G1Fe6oXaWaB6o3iAeG/baA2E/sQZvXnUSnms1X/KYtbFQuNKTOWDLDOxIcs5yz/OC8mLhGWKrofyOQY9dsuuu5HLD1gVqdo5cmSUc63gWWjRsnqVxHxouo3vRW/s/vgufW5SfMipzrfiMTh4tufDzHShlcOFqjq69lLedUaIax5zKUAlh5y9ZqWB90VI23LRCD/uknhjPcohGHvr6jpRKu3xYQiVWNVMc5Q="
+
 os:
   - linux
   - osx
@@ -24,5 +28,6 @@ before_install:
 script:
   - make swig
   - make all
-  - cd java
-  - mvn package
+  - cat java/settings.xml | sed s/__MAVEN_SERVER_USERNAME__/$MAVEN_SERVER_USERNAME/g | sed s/__MAVEN_SERVER_PASSWORD__/$MAVEN_SERVER_PASSWORD/g > ~/.m2/settings.xml
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd java/native-osx_64 ; else cd java/native-linux_64 ; fi
+  - mvn package deploy
