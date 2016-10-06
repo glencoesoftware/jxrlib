@@ -4,8 +4,13 @@ environment:
     secure: NHojTgftWGEuFELngMwvtw==
   MAVEN_SERVER_PASSWORD:
     secure: XUQb599qvG/NeUfpgu9ObA==
-build_script:
-  - msbuild "jxrencoderdecoder\JXR_vc14.sln" /verbosity:minimal /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+configuration:
+  - Release
+platform:
+  - x64
+build:
+  - project: jxrencoderdecoder\JXR_vc14.sln
+  - verbosity: minimal
 install:
   - choco install swig
 before_build:
