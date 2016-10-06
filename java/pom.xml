@@ -125,7 +125,7 @@
               </outputDirectory>
               <resources>
                 <resource>
-                  <directory>${basedir}/../jxrencoderdecoder/x64/Debug</directory>
+                  <directory>${basedir}/VC14Projects/Release/JXRJava/x64</directory>
                   <include>*.dll</include>
                 </resource>
               </resources>
