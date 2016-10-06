@@ -10,8 +10,8 @@ install:
   - choco install swig
 before_build:
   - set
-  - ps: (Get-Content java\settings.xml) -replace '__MAVEN_SERVER_USERNAME__', Get-ChildItem Env:MAVEN_SERVER_USERNAME | Out-File C:\Users\appveyor\.m2\settings.xml
-  - ps: (Get-Content java\settings.xml) -replace '__MAVEN_SERVER_PASSWORD__', Get-ChildItem Env:MAVEN_SERVER_PASSWORD | Out-File C:\Users\appveyor\.m2\settings.xml
+  - ps: (Get-Content java\settings.xml) -replace '__MAVEN_SERVER_USERNAME__', "$env:MAVEN_SERVER_USERNAME" | Out-File C:\Users\appveyor\.m2\settings.xml
+  - ps: (Get-Content java\settings.xml) -replace '__MAVEN_SERVER_PASSWORD__', "$env:MAVEN_SERVER_PASSWORD" | Out-File C:\Users\appveyor\.m2\settings.xml
   - dir C:\Users\appveyor\.m2
   - type C:\Users\appveyor\.m2\settings.xml
   - mkdir java\target\swig\ome\jxrlib
