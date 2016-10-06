@@ -27,6 +27,10 @@
       <id>ome.releases</id>
       <url>http://artifacts.openmicroscopy.org/artifactory/ome.releases</url>
     </repository>
+    <repository>
+      <id>ome.snapshots</id>
+      <url>http://artifacts.openmicroscopy.org/artifactory/ome.snapshots</url>
+    </repository>
   </repositories>
   
   <dependencies>
