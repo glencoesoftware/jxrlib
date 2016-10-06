@@ -52,7 +52,7 @@
               </outputDirectory>
               <resources>
                 <resource>
-                  <directory>${basedir}/../build</directory>
+                  <directory>${basedir}/../../build</directory>
                   <include>*.so</include>
                 </resource>
               </resources>
