@@ -64,7 +64,7 @@ JAVA_HOME:=jrunscript -e 'java.lang.System.out.println(new java.io.File(java.lan
 endif
 
 ifndef JAVA_INCLUDE
-JAVA_INCLUDE=$(JAVA_HOME)include
+JAVA_INCLUDE=$(JAVA_HOME)/include
 endif
 
 ifndef DIR_BUILD
