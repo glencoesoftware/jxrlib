@@ -5,6 +5,7 @@ install:
   - choco install swig
 before_build:
   - set
+  - dir C:\Users\appveyor\.m2
   - mkdir java\target\swig\ome\jxrlib
   - swig.exe -java -c++ -package ome.jxrlib -outdir java\target\swig\ome\jxrlib -o java\target\swig\JXR_wrap.cxx java\JXR.i
 after_build:
