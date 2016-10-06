@@ -9,8 +9,8 @@ configuration:
 platform:
   - x64
 build:
-  - project: jxrencoderdecoder\JXR_vc14.sln
-  - verbosity: minimal
+  project: jxrencoderdecoder\JXR_vc14.sln
+  verbosity: minimal
 install:
   - choco install swig
 before_build:
