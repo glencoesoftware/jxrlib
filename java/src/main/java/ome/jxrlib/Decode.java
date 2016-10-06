@@ -88,9 +88,14 @@ public class Decode implements Closeable {
 
     public static void printBytes(byte imageBytes[]) {
         for (int i = 0 ; i < imageBytes.length ; i += 4) {
-            System.err.print(String.format("0x%02x%02x%02x%02x%s",
-                                           imageBytes[i], imageBytes[i + 1], imageBytes[i + 2], imageBytes[i + 3],
-                                           (i + 4) % 40 == 0 ? "\n" : " "));
+            byte a = i < imageBytes.length? imageBytes[i] : 0;
+            byte b = i + 1 < imageBytes.length? imageBytes[i + 1] : 0;
+            byte c = i + 2 < imageBytes.length? imageBytes[i + 2] : 0;
+            byte d = i + 3 < imageBytes.length? imageBytes[i + 3] : 0;
+            System.err.print(String.format(
+                "0x%02x%02x%02x%02x%s",
+                a, b, c, d,
+                (i + 4) % 40 == 0 ? "\n" : " "));
         }
     }
 
