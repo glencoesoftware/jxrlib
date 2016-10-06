@@ -40,6 +40,11 @@
       <artifactId>jxrlib-native-windows_64</artifactId>
       <version>0.1.0-SNAPSHOT</version>
     </dependency>
+    <dependency>
+      <groupId>ome</groupId>
+      <artifactId>jxrlib-native-linux_64</artifactId>
+      <version>0.1.0-SNAPSHOT</version>
+    </dependency>
   </dependencies>
   
   <build>
@@ -82,24 +87,6 @@
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
         <executions>
-          <execution>
-            <id>copy-linux_64-resources</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>
-                ${basedir}/target/native-resources/META-INF/lib/linux_64
-              </outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${basedir}/../build</directory>
-                  <include>*.so</include>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
           <execution>
             <id>copy-osx_64-resources</id>
             <phase>validate</phase>
