@@ -1,9 +1,9 @@
 version: 0.1.{build}
 environment:
   MAVEN_SERVER_USERNAME:
-    secure: NHojTgftWGEuFELngMwvtw==
+    secure: e08wzRaJqCfWF+u2FUVjrQ==
   MAVEN_SERVER_PASSWORD:
-    secure: XUQb599qvG/NeUfpgu9ObA==
+    secure: WwLee6S3XIBtsV8RqH4MdA==
 configuration:
   - Release
 platform:
