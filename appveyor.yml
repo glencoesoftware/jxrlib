@@ -1,4 +1,7 @@
 version: 0.1.{build}
+environment:
+  MAVEN_SERVER_PASSWORD:
+    secure: NHojTgftWGEuFELngMwvtw==
 build_script:
   - msbuild "jxrencoderdecoder\JXR_vc14.sln" /verbosity:minimal /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 install:
