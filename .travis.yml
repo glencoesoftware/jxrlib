@@ -32,3 +32,8 @@ script:
   - mvn package
 # Only deploy the clang compiled artifacts
   - if [[ "$CXX" == "clang++" ]]; then mvn deploy ; fi
+
+cache:
+  directories:
+# Don't repopulate the entire Maven repository every time we build
+    - $HOME/.m2/repository
