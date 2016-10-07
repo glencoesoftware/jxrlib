@@ -60,7 +60,7 @@ ENDIANFLAG=
 endif
 
 ifndef JAVA_HOME
-JAVA_HOME:=jrunscript -e 'java.lang.System.out.println(new java.io.File(java.lang.System.getProperty("java.home")).getParent());'
+JAVA_HOME:=$(shell jrunscript -e 'java.lang.System.out.println(new java.io.File(java.lang.System.getProperty("java.home")).getParent());')
 endif
 
 ifndef JAVA_INCLUDE
