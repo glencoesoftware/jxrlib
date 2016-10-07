@@ -210,7 +210,7 @@ int main(int argc, char* argv[]) {
       break;
     case 4 :
       if (std::strncmp(argv[1], "--from-czi-offset", 17) == 0) {
-        stream_file(argv[2], std::atol(argv[3]));
+        stream_file(argv[2], atol(argv[3]));
       }
       break;
     default : std::cerr << "Incorrect usage..." << std::endl;
