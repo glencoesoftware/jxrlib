@@ -36,6 +36,7 @@ namespace jxrlib {
     CodecFactory();
 
     ImageDecoder decoderFromFile(std::string inputFile);
+    ImageDecoder decoderFromFile(std::string inputFile, long offset);
     ImageDecoder decoderFromBytes(std::vector<unsigned char> data);
     ImageDecoder decoderFromBytes(char *bytes, size_t len);
     FormatConverter createFormatConverter(ImageDecoder &imageDecoder,

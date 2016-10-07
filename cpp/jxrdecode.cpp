@@ -140,6 +140,27 @@ void stream_file(std::string inputFile) {
   decoder.close();
 }
 
+void stream_file(std::string inputFile, long offset) {
+  Factory factory;
+  CodecFactory codecFactory;
+
+  ImageDecoder decoder = codecFactory.decoderFromFile(inputFile, offset);
+  std::cerr << "Opened decoder for file: " << inputFile << " at offset: " << offset << std::endl;
+
+  unsigned int frameCount = decoder.getFrameCount();
+  std::cerr << "Found " << frameCount << " frames" << std::endl;
+
+  for(int i = 0 ; i < frameCount ; i++) {
+    decoder.selectFrame(i);
+    std::vector<char> bytes = decoder.getRawBytes();
+
+    std::cerr << bytes.size() << " Bytes:" << std::endl;
+    print_bytes(bytes);
+  }
+
+  decoder.close();
+}
+
 void convert_file(std::string inputFile, std::string outputFile) {
   Factory factory;
   CodecFactory codecFactory;
@@ -187,6 +208,12 @@ int main(int argc, char* argv[]) {
         convert_file(argv[1], argv[2]);
       }
       break;
+    case 4 :
+      if (std::strncmp(argv[1], "--from-czi-offset", 17) == 0) {
+        stream_file(argv[2], std::atol(argv[3]));
+      }
+      break;
+    default : std::cerr << "Incorrect usage..." << std::endl;
     }
   }
   catch (const FormatError &e) {

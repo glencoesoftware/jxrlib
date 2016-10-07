@@ -85,8 +85,8 @@ CFLAGS=-I. -Icommon/include -I$(DIR_SYS) $(ENDIANFLAG) -D__ANSI__ -DDISABLE_PERF
 CXXFLAGS=-I. -Icommon/include -I$(DIR_SYS) -I$(DIR_GLUE) -I$(DIR_TEST) -Wno-self-assign-field -Wno-unsequenced -fPIC
 
 ifdef DEBUG
-CFLAGS:=$(CFLAGS) -g -O0
-CXXFLAGS:= $(CXXFLAGS) -g -O0
+CFLAGS:=$(CFLAGS) -g -O0 -DDEBUG
+CXXFLAGS:= $(CXXFLAGS) -g -O0 -DDEBUG
 endif
 
 ifeq ($(strip $(shell uname)), Darwin)

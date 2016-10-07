@@ -24,8 +24,10 @@
 
 #include <iostream>
 #include <fstream>
+#include <cstdio>
 #include <cstring>
 #include <memory>
+#include <string>
 
 #include "JXRGlue.h"
 #include "windowsmediaphoto.h"
@@ -49,6 +51,48 @@ namespace jxrlib {
     return decoder;
   Cleanup:
     std::string msg = "ERROR: Unable to create decoder from file: " + inputFile;
+    throw FormatError(msg);
+  }
+
+  ImageDecoder CodecFactory::decoderFromFile(std::string inputFile, long offset) {
+    ImageDecoder decoder;
+
+    int err = 0;
+    std::string ext = ".jxr";
+    const PKIID *pIID = NULL;
+
+    struct WMPStream* pStream = NULL;
+
+    // fake the "jxr" file extension to create the decoder
+    Call(GetImageDecodeIID(ext.c_str(), &pIID));
+    Call(PKCodecFactory_CreateCodec(pIID, (void**)&decoder.pDecoder));
+#ifdef DEBUG
+    printf("Made decoder...");
+#endif
+
+    // manually create the stream from the file and advance to offset
+    Call(CreateWS_File(&pStream, inputFile.c_str(), "rb"));
+    err = std::fseek(pStream->state.file.pFile, offset, SEEK_SET);
+    if (err != 0) {
+      throw FormatError("ERROR: Unable to advance file to desired position.");
+    }
+#ifdef DEBUG
+    printf("Advanced file...");
+    printf("First couple characters: %c%c%c", std::fgetc(pStream->state.file.pFile),  std::fgetc(pStream->state.file.pFile), std::fgetc(pStream->state.file.pFile));
+#endif
+
+    // initialize the decoder with the prepared stream
+    Call(decoder.pDecoder->Initialize(decoder.pDecoder, pStream));
+#ifdef DEBUG
+    printf("Initialized with the stream...");
+    std::fseek(pStream->state.file.pFile, -3, SEEK_CUR);
+#endif
+    decoder.pDecoder->fStreamOwner = !0;
+    decoder.initialize();
+
+    return decoder;
+  Cleanup:
+    std::string msg = "ERROR: Unable to create decoder from file: " + inputFile + " at offset: " + std::to_string(offset);
     throw FormatError(msg);
   }
 
