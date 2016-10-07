@@ -7,8 +7,6 @@ env:
 matrix:
   include:
     - os: linux
-      dist: trusty
-      sudo: required
       addons:
         apt:
           packages:
