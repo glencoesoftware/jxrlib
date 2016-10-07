@@ -27,6 +27,7 @@
 #include <cstdio>
 #include <cstring>
 #include <memory>
+#include <sstream>
 #include <string>
 
 #include "JXRGlue.h"
@@ -92,8 +93,9 @@ namespace jxrlib {
 
     return decoder;
   Cleanup:
-    std::string msg = "ERROR: Unable to create decoder from file: " + inputFile + " at offset: " + std::to_string(offset);
-    throw FormatError(msg);
+    std::stringstream msg;
+    msg << "ERROR: Unable to create decoder from file: " << inputFile << " at offset: " << offset;
+    throw FormatError(msg.str().c_str());
   }
 
   ImageDecoder CodecFactory::decoderFromBytes(std::vector<unsigned char> data) {
