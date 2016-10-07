@@ -40,6 +40,8 @@ script:
   - mvn package
 # Only deploy the clang compiled artifacts
   - if [[ "$CXX" == "clang++" ]]; then mvn deploy ; fi
+# Prepare to run tests
+  - cd $TRAVIS_BUILD_DIR
   - ./gradlew -b java/cli/build.gradle clean installDist
   - cd build
   - mkdir -p transcoded/C/ transcoded/C++/ transcoded/Java/
