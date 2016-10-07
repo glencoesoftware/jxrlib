@@ -6,12 +6,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>ome</groupId>
-  <artifactId>jxrlib</artifactId>
+  <artifactId>jxrlib-cli</artifactId>
   <version>0.1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>JXRLib Java Bindings</name>
-  <description>Java bindings and pre-built binaries for jxrlib.</description>
+  <name>JXRLib Command Line Tool</name>
+  <description>Command line tool for working with jxrlib Java bindings.</description>
   <url>https://jxrlib.codeplex.com/</url>
   <inceptionYear>2016</inceptionYear>
 
@@ -35,23 +35,13 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.scijava</groupId>
-      <artifactId>native-lib-loader</artifactId>
-      <version>2.1.4</version>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.1.7</version>
     </dependency>
     <dependency>
       <groupId>ome</groupId>
-      <artifactId>jxrlib-native-windows_64</artifactId>
-      <version>0.1.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>ome</groupId>
-      <artifactId>jxrlib-native-linux_64</artifactId>
-      <version>0.1.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>ome</groupId>
-      <artifactId>jxrlib-native-osx_64</artifactId>
+      <artifactId>jxrlib</artifactId>
       <version>0.1.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
@@ -68,25 +58,28 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <version>3.0.2</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>ome.jxrlib.Main</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <version>1.12</version>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.5.0</version>
         <executions>
           <execution>
-            <id>add-source</id>
-            <phase>generate-sources</phase>
             <goals>
-              <goal>add-source</goal>
+              <goal>java</goal>
             </goals>
-            <configuration>
-              <sources>
-                <source>target/swig</source>
-              </sources>
-            </configuration>
           </execution>
         </executions>
+        <configuration>
+          <mainClass>ome.jxrlib.Main</mainClass>
+        </configuration>
       </plugin>
     </plugins>
   </build>
