@@ -33,6 +33,7 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update ; brew install swig ; fi
 
 script:
+  - set -e
   - make swig
   - make all
   - mkdir -p $HOME/.m2
