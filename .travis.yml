@@ -11,6 +11,7 @@ matrix:
         apt:
           packages:
             - swig
+            - gradle
       compiler: gcc
     - os: linux
       dist: trusty
@@ -39,7 +40,7 @@ script:
   - mvn package
 # Only deploy the clang compiled artifacts
   - if [[ "$CXX" == "clang++" ]]; then mvn deploy ; fi
-  - gradle -b java/cli/build.gradle clean installDist
+  - ./gradlew -b java/cli/build.gradle clean installDist
   - cd build
   - mkdir -p transcoded/C/ transcoded/C++/ transcoded/Java/
 # Test base jxrlib C library
@@ -58,3 +59,5 @@ cache:
   directories:
 # Don't repopulate the entire Maven repository every time we build
     - $HOME/.m2/repository
+# Don't redownload the Gradle wrapper distributions
+    - $HOME/.gradle/wrapper/dists
