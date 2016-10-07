@@ -1,0 +1,33 @@
+plugins {
+    id 'application'
+    id 'eclipse'
+    id 'java'
+}
+
+group = 'ome.jxrlib-cli'
+version = '0.1.0-SNAPSHOT'
+
+mainClassName = 'ome.jxrlib.Main'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        url 'http://artifacts.openmicroscopy.org/artifactory/ome.releases'
+    }
+    maven {
+        url 'http://artifacts.openmicroscopy.org/artifactory/ome.snapshots'
+    }
+}
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'minutes'
+}
+
+dependencies {
+    compile 'ch.qos.logback:logback-classic:1.1.7'
+    compile 'ome:jxrlib:0.1.0-SNAPSHOT'
+}
