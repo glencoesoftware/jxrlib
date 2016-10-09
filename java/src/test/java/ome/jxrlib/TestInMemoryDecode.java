@@ -77,10 +77,10 @@ public class TestInMemoryDecode {
         Assert.assertEquals(_bpp, bpp);
 
         ByteBuffer imageBuffer = ByteBuffer.allocateDirect(
-            (int) (_width * _height * bpp));
+            (int) (_width * _height * _bpp));
         decode.toBytes(imageBuffer);
 
-        Assert.assertEquals(md5, md5(imageBuffer));
+        Assert.assertEquals(md5(imageBuffer), md5);
     }
 
     // Can be useful if debugging destructors.
