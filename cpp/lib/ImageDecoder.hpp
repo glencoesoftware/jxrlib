@@ -44,6 +44,7 @@ namespace jxrlib {
     bool getBlackWhite();
     unsigned int getWidth();
     unsigned int getHeight();
+    unsigned int getBytesPerPixel();
     Resolution getResolution();
     std::vector<char> getRawBytes();
 

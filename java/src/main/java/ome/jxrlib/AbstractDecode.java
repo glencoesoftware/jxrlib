@@ -54,6 +54,10 @@ abstract class AbstractDecode implements Closeable {
         return decoder.getHeight();
     }
 
+    public long getBytesPerPixel() {
+        return decoder.getBytesPerPixel();
+    }
+
     public byte[] toBytes() {
         ByteArrayOutputStream decodedBytes = new ByteArrayOutputStream();
         for (long i = 0 ; i < frameCount ; i++) {

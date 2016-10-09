@@ -130,6 +130,7 @@ namespace jxrlib {
   bool ImageDecoder::getBlackWhite() { return pDecoder->WMP.wmiSCP.bBlackWhite; }
   unsigned int ImageDecoder::getWidth() { return pDecoder->WMP.wmiI.cROIWidth; }
   unsigned int ImageDecoder::getHeight() { return pDecoder->WMP.wmiI.cROIHeight; }
+  unsigned int ImageDecoder::getBytesPerPixel() { return pDecoder->WMP.wmiI.cBitsPerUnit / 8; }
 
   Resolution ImageDecoder::getResolution() {
     float rX = 0.0, rY = 0.0;
@@ -154,7 +155,7 @@ namespace jxrlib {
     unsigned char *image_buffer;
     std::vector<char> ret;
 
-    size_t bytesPerPixel = pDecoder->WMP.wmiI.cBitsPerUnit / 8;
+    size_t bytesPerPixel = getBytesPerPixel();
     Call(pDecoder->GetSize(pDecoder, &width, &height));
     buf_size = width * height * bytesPerPixel;
     image_buffer = (unsigned char *)malloc(buf_size);
