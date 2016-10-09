@@ -75,7 +75,7 @@ namespace jxrlib {
     unsigned int getHeight();
     unsigned int getBytesPerPixel();
     jxrlib::Resolution getResolution();
-    std::vector<char> getRawBytes();
+    void getRawBytes(unsigned char *NIOBUFFER);
   };
 
   %typemap(javaclassmodifiers) ImageEncoder "class"

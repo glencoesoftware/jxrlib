@@ -55,7 +55,6 @@ void stream_data() {
   Factory factory;
   CodecFactory codecFactory;
   std::vector<unsigned char> bytes;
-  std::vector<char> decoded_bytes;
 
   std::cin.unsetf(std::ios_base::skipws);
   for(unsigned char val ; std::cin >> val ; ){
@@ -70,17 +69,24 @@ void stream_data() {
   codecFactory.decoderFromBytes(decoder, bytes);
   std::cerr << "Opened decoder with " << bytes.size() << " bytes" << std::endl;
 
+  unsigned int frameSize =
+    decoder.getWidth() * decoder.getHeight() * decoder.getBytesPerPixel();
+  unsigned char *image_buffer = new unsigned char[frameSize];
 
   unsigned int frameCount = decoder.getFrameCount();
   std::cerr << "Found " << frameCount << " frames" << std::endl;
 
   for(int i = 0 ; i < frameCount ; i++) {
     decoder.selectFrame(i);
-    decoded_bytes = decoder.getRawBytes();
+    decoder.getRawBytes(image_buffer);
+    std::vector<unsigned char> decoded_bytes(
+      image_buffer, image_buffer + frameSize);
 
     std::cerr << decoded_bytes.size() << " Bytes:" << std::endl;
     print_bytes(decoded_bytes, stdout);
   }
+
+  delete image_buffer;
 }
 
 void stream_file_bytes(std::string inputFile) {
@@ -98,23 +104,29 @@ void stream_file_bytes(std::string inputFile) {
 
   Factory factory;
   CodecFactory codecFactory;
-  std::vector<char> decoded_bytes;
 
   ImageDecoder decoder;
   codecFactory.decoderFromBytes(decoder, (unsigned char *)bytes.data(), bytes.size());
   std::cerr << "Opened decoder with " << bytes.size() << " bytes" << std::endl;
 
+  unsigned int frameSize =
+    decoder.getWidth() * decoder.getHeight() * decoder.getBytesPerPixel();
+  unsigned char *image_buffer = new unsigned char[frameSize];
 
   unsigned int frameCount = decoder.getFrameCount();
   std::cerr << "Found " << frameCount << " frames" << std::endl;
 
   for(int i = 0 ; i < frameCount ; i++) {
     decoder.selectFrame(i);
-    decoded_bytes = decoder.getRawBytes();
+    decoder.getRawBytes(image_buffer);
+    std::vector<unsigned char> decoded_bytes(
+      image_buffer, image_buffer + frameSize);
 
     std::cerr << decoded_bytes.size() << " Bytes:" << std::endl;
     print_bytes(decoded_bytes, stdout);
   }
+
+  delete image_buffer;
 }
 
 void stream_file(std::string inputFile) {
@@ -124,16 +136,24 @@ void stream_file(std::string inputFile) {
   ImageDecoder decoder = codecFactory.decoderFromFile(inputFile);
   std::cerr << "Opened decoder for file: " << inputFile << std::endl;
 
+  unsigned int frameSize =
+    decoder.getWidth() * decoder.getHeight() * decoder.getBytesPerPixel();
+  unsigned char *image_buffer = new unsigned char[frameSize];
+
   unsigned int frameCount = decoder.getFrameCount();
   std::cerr << "Found " << frameCount << " frames" << std::endl;
 
   for(int i = 0 ; i < frameCount ; i++) {
     decoder.selectFrame(i);
-    std::vector<char> bytes = decoder.getRawBytes();
+    decoder.getRawBytes(image_buffer);
+    std::vector<unsigned char> bytes(
+      image_buffer, image_buffer + frameSize);
 
     std::cerr << bytes.size() << " Bytes:" << std::endl;
     print_bytes(bytes);
   }
+
+  delete image_buffer;
 }
 
 void stream_file(std::string inputFile, long offset) {
@@ -143,16 +163,24 @@ void stream_file(std::string inputFile, long offset) {
   ImageDecoder decoder = codecFactory.decoderFromFile(inputFile, offset);
   std::cerr << "Opened decoder for file: " << inputFile << " at offset: " << offset << std::endl;
 
+  unsigned int frameSize =
+    decoder.getWidth() * decoder.getHeight() * decoder.getBytesPerPixel();
+  unsigned char *image_buffer = new unsigned char[frameSize];
+
   unsigned int frameCount = decoder.getFrameCount();
   std::cerr << "Found " << frameCount << " frames" << std::endl;
 
   for(int i = 0 ; i < frameCount ; i++) {
     decoder.selectFrame(i);
-    std::vector<char> bytes = decoder.getRawBytes();
+    decoder.getRawBytes(image_buffer);
+    std::vector<unsigned char> bytes(
+      image_buffer, image_buffer + frameSize);
 
     std::cerr << bytes.size() << " Bytes:" << std::endl;
     print_bytes(bytes);
   }
+
+  delete image_buffer;
 }
 
 void convert_file(std::string inputFile, std::string outputFile) {

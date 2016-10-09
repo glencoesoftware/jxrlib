@@ -21,6 +21,7 @@ package ome.jxrlib;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -47,7 +48,7 @@ public class TestInMemoryDecode {
         return outputStream.toByteArray();
     }
 
-    String md5(byte[] bytes) {
+    String md5(ByteBuffer byteBuffer) {
         MessageDigest md;
         try {
             md = MessageDigest.getInstance("MD5");
@@ -55,6 +56,8 @@ public class TestInMemoryDecode {
             // This should never happen
             throw new RuntimeException(e);
         }
+        byte[] bytes = new byte[byteBuffer.capacity()];
+        byteBuffer.get(bytes);
         return DatatypeConverter.printHexBinary(md.digest(bytes)).toLowerCase();
     }
 
@@ -64,14 +67,20 @@ public class TestInMemoryDecode {
         String filename, long width, long height, long bpp, String md5)
             throws IOException {
         byte[] data = getData(filename);
-        byte[] decodedData;
-        TestDecode decode = new TestDecode(data);
-        Assert.assertEquals(decode.getWidth(), width);
-        Assert.assertEquals(decode.getHeight(), height);
-        Assert.assertEquals(decode.getBytesPerPixel(), bpp);
-        decodedData = decode.toBytes();
 
-        Assert.assertEquals(md5, md5(decodedData));
+        TestDecode decode = new TestDecode(data);
+        long _width = decode.getWidth();
+        Assert.assertEquals(_width, width);
+        long _height = decode.getHeight();
+        Assert.assertEquals(_height, height);
+        long _bpp = decode.getBytesPerPixel();
+        Assert.assertEquals(_bpp, bpp);
+
+        ByteBuffer imageBuffer = ByteBuffer.allocateDirect(
+            (int) (_width * _height * bpp));
+        decode.toBytes(imageBuffer);
+
+        Assert.assertEquals(md5, md5(imageBuffer));
     }
 
     // Can be useful if debugging destructors.

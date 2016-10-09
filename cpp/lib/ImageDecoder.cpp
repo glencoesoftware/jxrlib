@@ -154,19 +154,13 @@ namespace jxrlib {
     throw FormatError("ERROR: Could not get decoder resolution");
   }
 
-  std::vector<char> ImageDecoder::getRawBytes() {
+  void ImageDecoder::getRawBytes(unsigned char *image_buffer) {
     ERR err = WMP_errSuccess;
     int width, height;
     PKRect rc;
-    size_t buf_size;
-    unsigned char *image_buffer;
-    std::vector<char> ret;
 
     size_t bytesPerPixel = getBytesPerPixel();
     Call(pDecoder->GetSize(pDecoder, &width, &height));
-    buf_size = width * height * bytesPerPixel;
-    image_buffer = (unsigned char *)malloc(buf_size);
-    ret.resize(buf_size);
 
     rc.X = 0;
     rc.Y = 0;
@@ -174,10 +168,7 @@ namespace jxrlib {
     rc.Height = height;
 
     Call(pDecoder->Copy(pDecoder, &rc, image_buffer, width * bytesPerPixel));
-    ret.assign(image_buffer, image_buffer + buf_size);
-    free(image_buffer);
-
-    return ret;
+    return;
   Cleanup:
     std::stringstream msg;
     msg << "ERROR: Could not get image bytes: " << err;

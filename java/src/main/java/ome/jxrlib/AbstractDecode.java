@@ -60,17 +60,8 @@ abstract class AbstractDecode {
         return decoder.getBytesPerPixel();
     }
 
-    public byte[] toBytes() {
-        ByteArrayOutputStream decodedBytes = new ByteArrayOutputStream();
-        for (long i = 0 ; i < frameCount ; i++) {
-            decoder.selectFrame(i);
-            ImageData data = decoder.getRawBytes();
-            decodedBytes = new ByteArrayOutputStream((int)data.size());
-            for (int j = 0 ; j < data.size() ; j++) {
-                decodedBytes.write(data.get(j));
-            }
-        }
-        return decodedBytes.toByteArray();
+    public void toBytes(ByteBuffer imageBuffer) {
+        decoder.getRawBytes(imageBuffer);
     }
 
     public void toFile(File outputFile) {
