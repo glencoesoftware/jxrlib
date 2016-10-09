@@ -47,7 +47,7 @@ script:
   - mkdir -p transcoded/C/ transcoded/C++/ transcoded/Java/
 # Test base jxrlib C library
   - for input in ../fixtures/first-tiles/*; do bn=${input##*/} ; bn=${bn%.jxr} ; ./JxrDecApp -i "$input" -o "transcoded/C/$bn.tif" ; done
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export DYLD_LIBRARY_PATH=. ; else export LD_LIBRARY_PATH=. ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export DYLD_LIBRARY_PATH=`pwd` ; else export LD_LIBRARY_PATH=`pwd` ; fi
 # Test jxrlib C++ wrapper library (file to file)
   - for input in ../fixtures/first-tiles/*; do bn=${input##*/} ; bn=${bn%.jxr} ; ./jxrdecode "$input" "transcoded/C++/$bn.tif" ; done
 # Test jxrlib C++ wrapper library (in memory)
@@ -55,7 +55,7 @@ script:
 # Test jxrlib Java bindings (file to file)
   - for input in ../fixtures/first-tiles/*; do bn=${input##*/} ; bn=${bn%.jxr} ; ../java/cli/build/install/cli/bin/cli "$input" "transcoded/Java/$bn.tif" ; done
 # Test jxrlib Java bindings (in memory)
-  - LD_LIBRARY_PATH=`pwd` mvn -f ../java/pom.xml test
+  - mvn -f ../java/pom.xml test
 
 cache:
   directories:
