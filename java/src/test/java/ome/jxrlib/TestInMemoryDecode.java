@@ -18,48 +18,15 @@
 
 package ome.jxrlib;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
-import javax.xml.bind.DatatypeConverter;
 
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-public class TestInMemoryDecode {
-
-    byte[] getData(String filename) throws IOException {
-        InputStream stream =
-            this.getClass().getClassLoader().getResourceAsStream(filename);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-        byte[] buffer = new byte[1024 * 1024];
-        int rlen = 0;
-        while ((rlen = stream.read(buffer)) != -1) {
-            outputStream.write(buffer, 0, rlen);
-        }
-
-        return outputStream.toByteArray();
-    }
-
-    String md5(ByteBuffer byteBuffer) {
-        MessageDigest md;
-        try {
-            md = MessageDigest.getInstance("MD5");
-        } catch (NoSuchAlgorithmException e) {
-            // This should never happen
-            throw new RuntimeException(e);
-        }
-        byte[] bytes = new byte[byteBuffer.capacity()];
-        byteBuffer.get(bytes);
-        return DatatypeConverter.printHexBinary(md.digest(bytes)).toLowerCase();
-    }
+public class TestInMemoryDecode extends AbstractTest {
 
     @Parameters({"filename", "width", "height", "bpp", "md5"})
     @Test
