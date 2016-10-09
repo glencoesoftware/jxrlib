@@ -18,7 +18,6 @@
 
 package ome.jxrlib;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.nio.ByteBuffer;
 
@@ -35,7 +34,8 @@ abstract class AbstractDecode {
     public AbstractDecode(File inputFile) {
         this.inputFile = inputFile;
         this.dataBuffer = null;
-        decoder = codecFactory.decoderFromFile(inputFile);
+        decoder = new ImageDecoder();
+        codecFactory.decoderFromFile(decoder, inputFile.getAbsolutePath());
         frameCount = decoder.getFrameCount();
     }
 

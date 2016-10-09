@@ -32,17 +32,11 @@ typedef struct {
 namespace jxrlib {
 
   %typemap(javaclassmodifiers) CodecFactory "class"
-  %typemap(javacode) CodecFactory %{
-  public ImageDecoder decoderFromFile(java.io.File inputFile) {
-    return decoderFromFile(inputFile.getAbsolutePath());
-  }
-  %}
-
   class CodecFactory {
   public:
-    jxrlib::ImageDecoder decoderFromFile(std::string inputFile);
-    void decoderFromBytes(jxrlib::ImageDecoder& imageDecoder, unsigned char *NIOBUFFER, size_t len);
-    jxrlib::FormatConverter createFormatConverter(jxrlib::ImageDecoder& imageDecoder, std::string extension);
+    void decoderFromFile(jxrlib::ImageDecoder& decoder, std::string inputFile);
+    void decoderFromBytes(jxrlib::ImageDecoder& decoder, unsigned char *NIOBUFFER, size_t len);
+    jxrlib::FormatConverter createFormatConverter(jxrlib::ImageDecoder& decoder, std::string extension);
   };
 
   %typemap(javaclassmodifiers) Factory "class"

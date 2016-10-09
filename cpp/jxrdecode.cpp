@@ -133,7 +133,8 @@ void stream_file(std::string inputFile) {
   Factory factory;
   CodecFactory codecFactory;
 
-  ImageDecoder decoder = codecFactory.decoderFromFile(inputFile);
+  ImageDecoder decoder;
+  codecFactory.decoderFromFile(decoder, inputFile);
   std::cerr << "Opened decoder for file: " << inputFile << std::endl;
 
   unsigned int frameSize =
@@ -160,7 +161,8 @@ void stream_file(std::string inputFile, long offset) {
   Factory factory;
   CodecFactory codecFactory;
 
-  ImageDecoder decoder = codecFactory.decoderFromFile(inputFile, offset);
+  ImageDecoder decoder;
+  codecFactory.decoderFromFile(decoder, inputFile, offset);
   std::cerr << "Opened decoder for file: " << inputFile << " at offset: " << offset << std::endl;
 
   unsigned int frameSize =
@@ -187,7 +189,8 @@ void convert_file(std::string inputFile, std::string outputFile) {
   Factory factory;
   CodecFactory codecFactory;
 
-  ImageDecoder decoder = codecFactory.decoderFromFile(inputFile);
+  ImageDecoder decoder;
+  codecFactory.decoderFromFile(decoder, inputFile);
   std::cerr << "Opened decoder for file: " << inputFile << std::endl;
 
   unsigned int frameCount = decoder.getFrameCount();

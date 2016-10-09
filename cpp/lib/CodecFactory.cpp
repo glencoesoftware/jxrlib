@@ -54,19 +54,16 @@ namespace jxrlib {
     }
   }
 
-  ImageDecoder CodecFactory::decoderFromFile(std::string inputFile) {
-    ImageDecoder decoder;
+  void CodecFactory::decoderFromFile(ImageDecoder &decoder, std::string inputFile) {
     Call(pCodecFactory->CreateDecoderFromFile(inputFile.c_str(), &decoder.pDecoder));
     decoder.initialize();
-    return decoder;
+    return;
   Cleanup:
     std::string msg = "ERROR: Unable to create decoder from file: " + inputFile;
     throw FormatError(msg);
   }
 
-  ImageDecoder CodecFactory::decoderFromFile(std::string inputFile, long offset) {
-    ImageDecoder decoder;
-
+  void CodecFactory::decoderFromFile(ImageDecoder &decoder, std::string inputFile, long offset) {
     int err = 0;
     std::string ext = ".jxr";
     const PKIID *pIID = NULL;
@@ -100,7 +97,7 @@ namespace jxrlib {
     decoder.pDecoder->fStreamOwner = !0;
     decoder.initialize();
 
-    return decoder;
+    return;
   Cleanup:
     std::stringstream msg;
     msg << "ERROR: Unable to create decoder from file: " << inputFile << " at offset: " << offset;
