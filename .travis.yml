@@ -48,6 +48,7 @@ script:
   - for input in ../fixtures/first-tiles/*; do ./jxrdecode --in-memory "$input" &> /dev/null ; done
 # Test jxrlib Java bindings (in memory and file to file)
   - mvn -f ../java/pom.xml test
+# Package and deploy
   - cd $TRAVIS_BUILD_DIR
   - mkdir -p $HOME/.m2
   - cat java/settings.xml | sed s/__MAVEN_SERVER_USERNAME__/$MAVEN_SERVER_USERNAME/g | sed s/__MAVEN_SERVER_PASSWORD__/$MAVEN_SERVER_PASSWORD/g > $HOME/.m2/settings.xml
