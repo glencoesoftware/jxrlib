@@ -30,6 +30,7 @@
 build: all
 
 CC=cc
+SWIG?=swig
 
 JXR_VERSION=1.1
 
@@ -252,7 +253,7 @@ SRC_JAVA=$(wildcard $(DIR_SRC)/$(DIR_JAVA)/$(JAVA_PKG)/*.java)
 
 swig:
 	mkdir -p $(DIR_SRC)/$(DIR_JAVA)/$(JAVA_PKG)
-	swig -java -c++ -package ome.jxrlib -outdir $(DIR_SRC)/$(DIR_JAVA)/$(JAVA_PKG) -o $(DIR_SRC)/$(DIR_JAVA)/JXR_wrap.cxx java/JXR.i
+	$(SWIG) -java -c++ -package ome.jxrlib -outdir $(DIR_SRC)/$(DIR_JAVA)/$(JAVA_PKG) -o $(DIR_SRC)/$(DIR_JAVA)/JXR_wrap.cxx java/JXR.i
 
 $(DIR_BUILD)/libjxrjava.$(LIBSUFFIX): $(LIBRARIES) $(CXX_LIBRARIES)
 	@echo "Building JNI"
