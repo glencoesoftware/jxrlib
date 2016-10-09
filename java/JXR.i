@@ -41,7 +41,7 @@ namespace jxrlib {
   class CodecFactory {
   public:
     jxrlib::ImageDecoder decoderFromFile(std::string inputFile);
-    jxrlib::ImageDecoder decoderFromBytes(unsigned char *NIOBUFFER, size_t len);
+    void decoderFromBytes(jxrlib::ImageDecoder& imageDecoder, unsigned char *NIOBUFFER, size_t len);
     jxrlib::FormatConverter createFormatConverter(jxrlib::ImageDecoder& imageDecoder, std::string extension);
   };
 
@@ -76,7 +76,6 @@ namespace jxrlib {
     unsigned int getBytesPerPixel();
     jxrlib::Resolution getResolution();
     std::vector<char> getRawBytes();
-    void close();
   };
 
   %typemap(javaclassmodifiers) ImageEncoder "class"

@@ -27,6 +27,7 @@ import java.security.NoSuchAlgorithmException;
 import javax.xml.bind.DatatypeConverter;
 
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -64,14 +65,22 @@ public class TestInMemoryDecode {
             throws IOException {
         byte[] data = getData(filename);
         byte[] decodedData;
-        try (TestDecode decode = new TestDecode(data)) {
-            Assert.assertEquals(decode.getWidth(), width);
-            Assert.assertEquals(decode.getHeight(), height);
-            Assert.assertEquals(decode.getBytesPerPixel(), bpp);
-            decodedData = decode.toBytes();
-        }
+        TestDecode decode = new TestDecode(data);
+        Assert.assertEquals(decode.getWidth(), width);
+        Assert.assertEquals(decode.getHeight(), height);
+        Assert.assertEquals(decode.getBytesPerPixel(), bpp);
+        decodedData = decode.toBytes();
 
         Assert.assertEquals(md5, md5(decodedData));
     }
 
+    // Can be useful if debugging destructors.
+    /*
+    @AfterMethod
+    public void cleanup() {
+        System.err.println("Java cleanup.");
+        System.gc();
+        System.runFinalization();
+    }
+    */
 }

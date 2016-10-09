@@ -34,6 +34,7 @@ namespace jxrlib {
     friend class CodecFactory;
   public:
     ImageDecoder() : pDecoder(NULL), err(WMP_errSuccess) {};
+    ~ImageDecoder();
     void initialize();
     void initialize(Stream &data);
 
@@ -47,8 +48,6 @@ namespace jxrlib {
     unsigned int getBytesPerPixel();
     Resolution getResolution();
     std::vector<char> getRawBytes();
-
-    void close();
   };
 
 } // namespace jxrlib

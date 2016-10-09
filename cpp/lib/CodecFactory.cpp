@@ -46,6 +46,9 @@ namespace jxrlib {
   }
 
   CodecFactory::~CodecFactory() {
+#ifdef DEBUG
+    std::cerr << "CodecFactory " << this << " destructor!" << std::endl;
+#endif
     if (pCodecFactory) {
       pCodecFactory->Release(&pCodecFactory);
     }
@@ -104,19 +107,18 @@ namespace jxrlib {
     throw FormatError(msg.str().c_str());
   }
 
-  ImageDecoder CodecFactory::decoderFromBytes(std::vector<unsigned char> data) {
-    return decoderFromBytes(data.data(), data.size());
+  void CodecFactory::decoderFromBytes(ImageDecoder &decoder, std::vector<unsigned char> data) {
+    decoderFromBytes(decoder, data.data(), data.size());
   }
 
-  ImageDecoder CodecFactory::decoderFromBytes(unsigned char *bytes, size_t len) {
-    ImageDecoder decoder;
+  void CodecFactory::decoderFromBytes(ImageDecoder &decoder, unsigned char *bytes, size_t len) {
     Stream dataStream(bytes, len);
     const PKIID *pIID = NULL;
 
     Call(GetImageDecodeIID((const char *)".jxr", &pIID));
     Call(PKCodecFactory_CreateCodec(pIID, (void**)&decoder.pDecoder));
     decoder.initialize(dataStream);
-    return decoder;
+    return;
   Cleanup:
     throw FormatError("ERROR: Unable to create decoder from bytes in memory");
   }

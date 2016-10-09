@@ -20,6 +20,9 @@
 
 #include "Factory.hpp"
 
+#include <iostream>
+#include <fstream>
+
 #include "FormatError.hpp"
 #include "windowsmediaphoto.h"
 
@@ -33,6 +36,9 @@ namespace jxrlib {
   }
 
   Factory::~Factory() {
+#ifdef DEBUG
+    std::cerr << "Factory " << this << " destructor!" << std::endl;
+#endif
     if (pFactory) {
       pFactory->Release(&pFactory);
     }

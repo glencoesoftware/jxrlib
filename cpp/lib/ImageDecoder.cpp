@@ -20,6 +20,8 @@
 
 #include "ImageDecoder.hpp"
 
+#include <fstream>
+#include <iostream>
 #include <sstream>
 #include <string>
 
@@ -30,6 +32,15 @@
 #include "Stream.hpp"
 
 namespace jxrlib {
+
+  ImageDecoder::~ImageDecoder() {
+#ifdef DEBUG
+    std::cerr << "ImageDecoder " << this << " destructor!" << std::endl;
+#endif
+    if (pDecoder) {
+      pDecoder->Release(&pDecoder);
+    }
+  }
 
   void ImageDecoder::initialize() {
     // set default color format
@@ -141,10 +152,6 @@ namespace jxrlib {
     return res;
   Cleanup:
     throw FormatError("ERROR: Could not get decoder resolution");
-  }
-
-  void ImageDecoder::close() {
-    pDecoder->Release(&pDecoder);
   }
 
   std::vector<char> ImageDecoder::getRawBytes() {

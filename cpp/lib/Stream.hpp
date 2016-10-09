@@ -30,6 +30,9 @@ namespace jxrlib {
     struct WMPStream *pStream;
     ERR err;
     Stream() : pStream(NULL), err(WMP_errSuccess) {}
+    // No destructor required as resources are cleaned up by
+    // PKImageDecode_Release
+    //~Stream();
     Stream(unsigned char *bytes, size_t len);
   };
 

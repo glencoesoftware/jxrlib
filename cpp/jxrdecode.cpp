@@ -66,7 +66,8 @@ void stream_data() {
   print_bytes(bytes);
   std::cerr << std::endl;
 
-  ImageDecoder decoder = codecFactory.decoderFromBytes(bytes);
+  ImageDecoder decoder;
+  codecFactory.decoderFromBytes(decoder, bytes);
   std::cerr << "Opened decoder with " << bytes.size() << " bytes" << std::endl;
 
 
@@ -80,8 +81,6 @@ void stream_data() {
     std::cerr << decoded_bytes.size() << " Bytes:" << std::endl;
     print_bytes(decoded_bytes, stdout);
   }
-
-  decoder.close();
 }
 
 void stream_file_bytes(std::string inputFile) {
@@ -101,7 +100,8 @@ void stream_file_bytes(std::string inputFile) {
   CodecFactory codecFactory;
   std::vector<char> decoded_bytes;
 
-  ImageDecoder decoder = codecFactory.decoderFromBytes((unsigned char *)bytes.data(), bytes.size());
+  ImageDecoder decoder;
+  codecFactory.decoderFromBytes(decoder, (unsigned char *)bytes.data(), bytes.size());
   std::cerr << "Opened decoder with " << bytes.size() << " bytes" << std::endl;
 
 
@@ -115,8 +115,6 @@ void stream_file_bytes(std::string inputFile) {
     std::cerr << decoded_bytes.size() << " Bytes:" << std::endl;
     print_bytes(decoded_bytes, stdout);
   }
-
-  decoder.close();
 }
 
 void stream_file(std::string inputFile) {
@@ -136,8 +134,6 @@ void stream_file(std::string inputFile) {
     std::cerr << bytes.size() << " Bytes:" << std::endl;
     print_bytes(bytes);
   }
-
-  decoder.close();
 }
 
 void stream_file(std::string inputFile, long offset) {
@@ -157,8 +153,6 @@ void stream_file(std::string inputFile, long offset) {
     std::cerr << bytes.size() << " Bytes:" << std::endl;
     print_bytes(bytes);
   }
-
-  decoder.close();
 }
 
 void convert_file(std::string inputFile, std::string outputFile) {
@@ -185,8 +179,6 @@ void convert_file(std::string inputFile, std::string outputFile) {
     encoder.writeSource(converter);
     encoder.close();
   }
-
-  decoder.close();
 }
 
 int main(int argc, char* argv[]) {
