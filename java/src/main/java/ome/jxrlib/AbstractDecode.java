@@ -24,8 +24,8 @@ import java.io.File;
 
 abstract class AbstractDecode implements Closeable {
 
-    private static final Factory factory = new Factory();
-    private static final CodecFactory codecFactory = new CodecFactory();
+    private final Factory factory = new Factory();
+    private final CodecFactory codecFactory = new CodecFactory();
 
     private final File inputFile;
     private final byte data[];
