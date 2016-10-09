@@ -29,23 +29,22 @@ abstract class AbstractDecode implements Closeable {
     private final CodecFactory codecFactory = new CodecFactory();
 
     private final File inputFile;
-    private final byte data[];
+    private final ByteBuffer dataBuffer;
     private final ImageDecoder decoder;
     private final long frameCount;
 
     public AbstractDecode(File inputFile) {
         this.inputFile = inputFile;
-        this.data = null;
+        this.dataBuffer = null;
         decoder = codecFactory.decoderFromFile(inputFile);
         frameCount = decoder.getFrameCount();
     }
 
     public AbstractDecode(byte data[]) {
         this.inputFile = null;
-        this.data = data;
-        ByteBuffer buffer = ByteBuffer.allocateDirect(data.length);
-        buffer.put(data);
-        decoder = codecFactory.decoderFromBytes(buffer, data.length);
+        this.dataBuffer = ByteBuffer.allocateDirect(data.length);
+        dataBuffer.put(data);
+        decoder = codecFactory.decoderFromBytes(dataBuffer, data.length);
         frameCount = decoder.getFrameCount();
     }
 

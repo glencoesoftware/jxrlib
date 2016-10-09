@@ -28,9 +28,8 @@ namespace jxrlib {
 
   struct Stream {
     struct WMPStream *pStream;
-    unsigned char *data;
     ERR err;
-    Stream() : pStream(NULL), data(NULL), err(WMP_errSuccess) {}
+    Stream() : pStream(NULL), err(WMP_errSuccess) {}
     Stream(unsigned char *bytes, size_t len);
   };
 
