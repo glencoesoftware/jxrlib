@@ -36,14 +36,7 @@ script:
   - set -e
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export SWIG=swig3.0 ; fi
   - make clean swig all
-  - mkdir -p $HOME/.m2
-  - cat java/settings.xml | sed s/__MAVEN_SERVER_USERNAME__/$MAVEN_SERVER_USERNAME/g | sed s/__MAVEN_SERVER_PASSWORD__/$MAVEN_SERVER_PASSWORD/g > $HOME/.m2/settings.xml
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd java/native-osx_64 ; else cd java/native-linux_64 ; fi
-  - mvn package
-# Only deploy the clang compiled artifacts
-  - if [[ "$CXX" == "clang++" ]]; then mvn deploy ; fi
 # Prepare to run tests
-  - cd $TRAVIS_BUILD_DIR
   - cd build
   - mkdir -p transcoded/C/ transcoded/C++/ transcoded/Java/
 # Test base jxrlib C library
@@ -55,6 +48,13 @@ script:
   - for input in ../fixtures/first-tiles/*; do ./jxrdecode --in-memory "$input" &> /dev/null ; done
 # Test jxrlib Java bindings (in memory and file to file)
   - mvn -f ../java/pom.xml test
+  - cd $TRAVIS_BUILD_DIR
+  - mkdir -p $HOME/.m2
+  - cat java/settings.xml | sed s/__MAVEN_SERVER_USERNAME__/$MAVEN_SERVER_USERNAME/g | sed s/__MAVEN_SERVER_PASSWORD__/$MAVEN_SERVER_PASSWORD/g > $HOME/.m2/settings.xml
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd java/native-osx_64 ; else cd java/native-linux_64 ; fi
+  - mvn package
+# Only deploy the clang compiled artifacts
+  - if [[ "$CXX" == "clang++" ]]; then mvn deploy ; fi
 
 cache:
   directories:
