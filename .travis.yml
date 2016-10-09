@@ -7,11 +7,12 @@ env:
 matrix:
   include:
     - os: linux
+      dist: trusty
+      sudo: required
       addons:
         apt:
           packages:
-            - swig
-            - gradle
+            - swig3.0
       compiler: gcc
     - os: linux
       dist: trusty
@@ -19,7 +20,7 @@ matrix:
       addons:
         apt:
           packages:
-            - swig
+            - swig3.0
       compiler: clang
     - os: osx
       osx_image: beta-xcode6.2  # Mac OS X 10.9
@@ -48,6 +49,7 @@ script:
 # Test base jxrlib C library
   - for input in ../fixtures/first-tiles/*; do bn=${input##*/} ; bn=${bn%.jxr} ; ./JxrDecApp -i "$input" -o "transcoded/C/$bn.tif" ; done
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export DYLD_LIBRARY_PATH=`pwd` ; else export LD_LIBRARY_PATH=`pwd` ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export SWIG=swig3.0 ; fi
 # Test jxrlib C++ wrapper library (file to file)
   - for input in ../fixtures/first-tiles/*; do bn=${input##*/} ; bn=${bn%.jxr} ; ./jxrdecode "$input" "transcoded/C++/$bn.tif" ; done
 # Test jxrlib C++ wrapper library (in memory)
