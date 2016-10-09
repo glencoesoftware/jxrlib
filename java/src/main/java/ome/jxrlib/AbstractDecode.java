@@ -21,6 +21,7 @@ package ome.jxrlib;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
+import java.nio.ByteBuffer;
 
 abstract class AbstractDecode implements Closeable {
 
@@ -42,7 +43,9 @@ abstract class AbstractDecode implements Closeable {
     public AbstractDecode(byte data[]) {
         this.inputFile = null;
         this.data = data;
-        decoder = codecFactory.decoderFromBytes(data, data.length);
+        ByteBuffer buffer = ByteBuffer.allocateDirect(data.length);
+        buffer.put(data);
+        decoder = codecFactory.decoderFromBytes(buffer, data.length);
         frameCount = decoder.getFrameCount();
     }
 

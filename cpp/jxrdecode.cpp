@@ -101,7 +101,7 @@ void stream_file_bytes(std::string inputFile) {
   CodecFactory codecFactory;
   std::vector<char> decoded_bytes;
 
-  ImageDecoder decoder = codecFactory.decoderFromBytes(bytes.data(), bytes.size());
+  ImageDecoder decoder = codecFactory.decoderFromBytes((unsigned char *)bytes.data(), bytes.size());
   std::cerr << "Opened decoder with " << bytes.size() << " bytes" << std::endl;
 
 

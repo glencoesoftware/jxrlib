@@ -4,7 +4,6 @@
 %include std_string.i
 %include arrays_java.i
 %include various.i
-%apply char *BYTE { char bytes[] };
 %{
   #include "CodecFactory.hpp"
   #include "Factory.hpp"
@@ -42,7 +41,7 @@ namespace jxrlib {
   class CodecFactory {
   public:
     jxrlib::ImageDecoder decoderFromFile(std::string inputFile);
-    jxrlib::ImageDecoder decoderFromBytes(char bytes[], size_t len);
+    jxrlib::ImageDecoder decoderFromBytes(unsigned char *NIOBUFFER, size_t len);
     jxrlib::FormatConverter createFormatConverter(jxrlib::ImageDecoder& imageDecoder, std::string extension);
   };
 
