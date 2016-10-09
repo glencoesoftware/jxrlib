@@ -7,7 +7,7 @@
 
   <groupId>ome</groupId>
   <artifactId>jxrlib</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.2.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>JXRLib Java Bindings</name>
@@ -42,17 +42,17 @@
     <dependency>
       <groupId>ome</groupId>
       <artifactId>jxrlib-native-windows_64</artifactId>
-      <version>0.1.0-SNAPSHOT</version>
+      <version>0.2.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>ome</groupId>
       <artifactId>jxrlib-native-linux_64</artifactId>
-      <version>0.1.0-SNAPSHOT</version>
+      <version>0.2.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>ome</groupId>
       <artifactId>jxrlib-native-osx_64</artifactId>
-      <version>0.1.0-SNAPSHOT</version>
+      <version>0.2.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>
