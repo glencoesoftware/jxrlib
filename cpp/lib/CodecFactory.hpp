@@ -34,6 +34,7 @@ namespace jxrlib {
     ERR err;
   public:
     CodecFactory();
+    ~CodecFactory();
 
     ImageDecoder decoderFromFile(std::string inputFile);
     ImageDecoder decoderFromFile(std::string inputFile, long offset);

@@ -32,6 +32,12 @@ namespace jxrlib {
     throw FormatError("ERROR: Unable to instantiate Factory.");
   }
 
+  Factory::~Factory() {
+    if (pFactory) {
+      pFactory->Release(&pFactory);
+    }
+  }
+
   Stream Factory::createStreamFromFilename(std::string filename) {
     Stream fileStream;
     Call(pFactory->CreateStreamFromFilename(&fileStream.pStream,

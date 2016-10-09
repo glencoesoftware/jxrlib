@@ -33,6 +33,7 @@ namespace jxrlib {
     ERR err;
   public:
     Factory();
+    ~Factory();
     Stream createStreamFromFilename(std::string filename);
   };
 

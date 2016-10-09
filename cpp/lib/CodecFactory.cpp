@@ -45,6 +45,12 @@ namespace jxrlib {
     throw FormatError("ERROR: Unable to instantiate CodecFactory.");
   }
 
+  CodecFactory::~CodecFactory() {
+    if (pCodecFactory) {
+      pCodecFactory->Release(&pCodecFactory);
+    }
+  }
+
   ImageDecoder CodecFactory::decoderFromFile(std::string inputFile) {
     ImageDecoder decoder;
     Call(pCodecFactory->CreateDecoderFromFile(inputFile.c_str(), &decoder.pDecoder));
