@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
+
+<suite name="ome.jxrlib">
+
+  <test name="BF-1scene-nozstack-compression50pct">
+    <parameter name="filename" value="BF-1scene-nozstack-compression50pct.jxr" />
+    <parameter name="width" value="587" />
+    <parameter name="height" value="246" />
+    <parameter name="bpp" value="3" />
+    <parameter name="md5" value="c47d171c6659e4c5d44207a8ab7a1ca4" />
+    <classes>
+      <class name="ome.jxrlib.TestInMemoryDecode"/>
+    </classes>
+  </test>
+
+  <test name="BF-1scene-nozstack-compression85pct">
+    <parameter name="filename" value="BF-1scene-nozstack-compression85pct.jxr" />
+    <parameter name="width" value="587" />
+    <parameter name="height" value="246" />
+    <parameter name="bpp" value="3" />
+    <parameter name="md5" value="c8d868d691c32d8392400bffb856bddc" />
+    <classes>
+      <class name="ome.jxrlib.TestInMemoryDecode"/>
+    </classes>
+  </test>
+
+  <test name="BF-1scene-nozstack-compressionlossless">
+    <parameter name="filename" value="BF-1scene-nozstack-compressionlossless.jxr" />
+    <parameter name="width" value="587" />
+    <parameter name="height" value="246" />
+    <parameter name="bpp" value="3" />
+    <parameter name="md5" value="018a28fb6ce524e3b3acff240fe44b58" />
+    <classes>
+      <class name="ome.jxrlib.TestInMemoryDecode"/>
+    </classes>
+  </test>
+
+  <test name="BF-1scene-zstack-compression85pct">
+    <parameter name="filename" value="BF-1scene-zstack-compression85pct.jxr" />
+    <parameter name="width" value="587" />
+    <parameter name="height" value="246" />
+    <parameter name="bpp" value="3" />
+    <parameter name="md5" value="d3cd74ca968e4f7086e268a8b7955f7f" />
+    <classes>
+      <class name="ome.jxrlib.TestInMemoryDecode"/>
+    </classes>
+  </test>
+
+  <test name="BF-1scene-zstack-EDF-compression85pct">
+    <parameter name="filename" value="BF-1scene-zstack-EDF-compression85pct.jxr" />
+    <parameter name="width" value="587" />
+    <parameter name="height" value="246" />
+    <parameter name="bpp" value="3" />
+    <parameter name="md5" value="3670678d8f91985fcc998214c5953993" />
+    <classes>
+      <class name="ome.jxrlib.TestInMemoryDecode"/>
+    </classes>
+  </test>
+
+  <test name="BF-2scenes-nozstack-compression85pct">
+    <parameter name="filename" value="BF-2scenes-nozstack-compression85pct.jxr" />
+    <parameter name="width" value="587" />
+    <parameter name="height" value="246" />
+    <parameter name="bpp" value="3" />
+    <parameter name="md5" value="169bec9efabdb2104f87d0b2292b78af" />
+    <classes>
+      <class name="ome.jxrlib.TestInMemoryDecode"/>
+    </classes>
+  </test>
+
+  <test name="BF-2scenes-zstack-EDF-compression85pct">
+    <parameter name="filename" value="BF-2scenes-zstack-EDF-compression85pct.jxr" />
+    <parameter name="width" value="587" />
+    <parameter name="height" value="246" />
+    <parameter name="bpp" value="3" />
+    <parameter name="md5" value="44aedce0262e12a09f576920373b9675" />
+    <classes>
+      <class name="ome.jxrlib.TestInMemoryDecode"/>
+    </classes>
+  </test>
+
+  <test name="FL_1channel_noZ_compression85pct">
+    <parameter name="filename" value="FL_1channel_noZ_compression85pct.jxr" />
+    <parameter name="width" value="2040" />
+    <parameter name="height" value="2040" />
+    <parameter name="bpp" value="2" />
+    <parameter name="md5" value="c9e00c1c7aca1659725b23ca940e144a" />
+    <classes>
+      <class name="ome.jxrlib.TestInMemoryDecode"/>
+    </classes>
+  </test>
+
+  <test name="FL_3channel_2scenes_noZ_compression85pct">
+    <parameter name="filename" value="FL_3channel_2scenes_noZ_compression85pct.jxr" />
+    <parameter name="width" value="690" />
+    <parameter name="height" value="690" />
+    <parameter name="bpp" value="2" />
+    <parameter name="md5" value="e6daab7801c9d20e167ccb75a5e0f7c6" />
+    <classes>
+      <class name="ome.jxrlib.TestInMemoryDecode"/>
+    </classes>
+  </test>
+
+  <test name="FL_3channel_2scenes_Zstack_compression85pct">
+    <parameter name="filename" value="FL_3channel_2scenes_Zstack_compression85pct.jxr" />
+    <parameter name="width" value="690" />
+    <parameter name="height" value="690" />
+    <parameter name="bpp" value="2" />
+    <parameter name="md5" value="e2b97bc424786239a798d9cd73113d36" />
+    <classes>
+      <class name="ome.jxrlib.TestInMemoryDecode"/>
+    </classes>
+  </test>
+
+  <test name="FL_3channel_2scenes_Zstack_EDF_compression85pct">
+    <parameter name="filename" value="FL_3channel_2scenes_Zstack_EDF_compression85pct.jxr" />
+    <parameter name="width" value="697" />
+    <parameter name="height" value="690" />
+    <parameter name="bpp" value="2" />
+    <parameter name="md5" value="aa82b4b3c8698870c318c7a2441f3143" />
+    <classes>
+      <class name="ome.jxrlib.TestInMemoryDecode"/>
+    </classes>
+  </test>
+
+  <test name="FL_3channel_noZ_compression85pct">
+    <parameter name="filename" value="FL_3channel_noZ_compression85pct.jxr" />
+    <parameter name="width" value="2040" />
+    <parameter name="height" value="2040" />
+    <parameter name="bpp" value="2" />
+    <parameter name="md5" value="2ac92d7699f3a4a77e260c0b5a51c8c6" />
+    <classes>
+      <class name="ome.jxrlib.TestInMemoryDecode"/>
+    </classes>
+  </test>
+
+  <test name="FL_3channel_noZ_compression_lossless">
+    <parameter name="filename" value="FL_3channel_noZ_compression_lossless.jxr" />
+    <parameter name="width" value="2040" />
+    <parameter name="height" value="2040" />
+    <parameter name="bpp" value="2" />
+    <parameter name="md5" value="9bce4515d533c5617f206f5935bc8c4e" />
+    <classes>
+      <class name="ome.jxrlib.TestInMemoryDecode"/>
+    </classes>
+  </test>
+
+</suite>
