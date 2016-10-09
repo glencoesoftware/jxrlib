@@ -55,7 +55,7 @@ script:
 # Test jxrlib Java bindings (file to file)
   - for input in ../fixtures/first-tiles/*; do bn=${input##*/} ; bn=${bn%.jxr} ; ../java/cli/build/install/cli/bin/cli "$input" "transcoded/Java/$bn.tif" ; done
 # Test jxrlib Java bindings (in memory)
-  - for input in ../fixtures/first-tiles/*; do ../java/cli/build/install/cli/bin/cli --in-memory "$input" &> /dev/null ; done
+  - LD_LIBRARY_PATH=`pwd` mvn -f ../java/pom.xml test
 
 cache:
   directories:
