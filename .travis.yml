@@ -37,6 +37,7 @@ before_install:
       ./configure --prefix $HOME/swig/;
       make;
       make install;
+      cd $TRAVIS_BUILD_DIR;
     fi
 
 script:
