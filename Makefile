@@ -29,7 +29,6 @@
 ##
 build: all
 
-CC=cc
 SWIG?=swig
 
 JXR_VERSION=1.1
@@ -91,13 +90,14 @@ CXXFLAGS:= $(CXXFLAGS) -g -O0 -DDEBUG
 endif
 
 ifeq ($(strip $(shell uname)), Darwin)
-  CC = clang
-	CXX = clang++
-	LIBSUFFIX = dylib
+  CC?=clang
+  CXX?=clang++
+  LIBSUFFIX = dylib
   PLATFORM = darwin
 else
-	CXX = g++
-	LIBSUFFIX = so
+  CC?=cc
+  CXX?=g++
+  LIBSUFFIX = so
   PLATFORM = linux
 endif
 
