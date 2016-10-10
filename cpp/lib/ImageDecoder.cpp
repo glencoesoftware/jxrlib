@@ -142,7 +142,7 @@ namespace jxrlib {
   }
 
   bool ImageDecoder::getBlackWhite() {
-    return pDecoder->WMP.wmiSCP.bBlackWhite;
+    return pDecoder->WMP.wmiSCP.bBlackWhite == TRUE;
   }
 
   unsigned int ImageDecoder::getWidth() {
