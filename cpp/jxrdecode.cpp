@@ -71,22 +71,18 @@ void stream_data() {
 
   unsigned int frameSize =
     decoder.getWidth() * decoder.getHeight() * decoder.getBytesPerPixel();
-  unsigned char *image_buffer = new unsigned char[frameSize];
+  std::vector<unsigned char> decodedBytes(frameSize);
 
   unsigned int frameCount = decoder.getFrameCount();
   std::cerr << "Found " << frameCount << " frames" << std::endl;
 
   for(int i = 0 ; i < frameCount ; i++) {
     decoder.selectFrame(i);
-    decoder.getRawBytes(image_buffer);
-    std::vector<unsigned char> decoded_bytes(
-      image_buffer, image_buffer + frameSize);
+    decoder.getRawBytes(decodedBytes.data());
 
-    std::cerr << decoded_bytes.size() << " Bytes:" << std::endl;
-    print_bytes(decoded_bytes, stdout);
+    std::cerr << decodedBytes.size() << " Bytes:" << std::endl;
+    print_bytes(decodedBytes, stdout);
   }
-
-  delete image_buffer;
 }
 
 void stream_file_bytes(std::string inputFile) {
@@ -111,22 +107,18 @@ void stream_file_bytes(std::string inputFile) {
 
   unsigned int frameSize =
     decoder.getWidth() * decoder.getHeight() * decoder.getBytesPerPixel();
-  unsigned char *image_buffer = new unsigned char[frameSize];
+  std::vector<unsigned char> decodedBytes(frameSize);
 
   unsigned int frameCount = decoder.getFrameCount();
   std::cerr << "Found " << frameCount << " frames" << std::endl;
 
   for(int i = 0 ; i < frameCount ; i++) {
     decoder.selectFrame(i);
-    decoder.getRawBytes(image_buffer);
-    std::vector<unsigned char> decoded_bytes(
-      image_buffer, image_buffer + frameSize);
+    decoder.getRawBytes(decodedBytes.data());
 
-    std::cerr << decoded_bytes.size() << " Bytes:" << std::endl;
-    print_bytes(decoded_bytes, stdout);
+    std::cerr << decodedBytes.size() << " Bytes:" << std::endl;
+    print_bytes(decodedBytes, stdout);
   }
-
-  delete image_buffer;
 }
 
 void stream_file(std::string inputFile) {
@@ -139,22 +131,18 @@ void stream_file(std::string inputFile) {
 
   unsigned int frameSize =
     decoder.getWidth() * decoder.getHeight() * decoder.getBytesPerPixel();
-  unsigned char *image_buffer = new unsigned char[frameSize];
+  std::vector<unsigned char> bytes(frameSize);
 
   unsigned int frameCount = decoder.getFrameCount();
   std::cerr << "Found " << frameCount << " frames" << std::endl;
 
   for(int i = 0 ; i < frameCount ; i++) {
     decoder.selectFrame(i);
-    decoder.getRawBytes(image_buffer);
-    std::vector<unsigned char> bytes(
-      image_buffer, image_buffer + frameSize);
+    decoder.getRawBytes(bytes.data());
 
     std::cerr << bytes.size() << " Bytes:" << std::endl;
     print_bytes(bytes);
   }
-
-  delete image_buffer;
 }
 
 void stream_file(std::string inputFile, long offset) {
@@ -167,22 +155,18 @@ void stream_file(std::string inputFile, long offset) {
 
   unsigned int frameSize =
     decoder.getWidth() * decoder.getHeight() * decoder.getBytesPerPixel();
-  unsigned char *image_buffer = new unsigned char[frameSize];
+  std::vector<unsigned char> bytes(frameSize);
 
   unsigned int frameCount = decoder.getFrameCount();
   std::cerr << "Found " << frameCount << " frames" << std::endl;
 
   for(int i = 0 ; i < frameCount ; i++) {
     decoder.selectFrame(i);
-    decoder.getRawBytes(image_buffer);
-    std::vector<unsigned char> bytes(
-      image_buffer, image_buffer + frameSize);
+    decoder.getRawBytes(bytes.data());
 
     std::cerr << bytes.size() << " Bytes:" << std::endl;
     print_bytes(bytes);
   }
-
-  delete image_buffer;
 }
 
 void convert_file(std::string inputFile, std::string outputFile) {
