@@ -46,7 +46,7 @@ namespace jxrlib {
 
     // Set size
     Call(pEncoder->SetSize(
-		pEncoder, (I32)decoder.getWidth(), (I32)decoder.getHeight()));
+        pEncoder, (I32)decoder.getWidth(), (I32)decoder.getHeight()));
     decoderRes = decoder.getResolution();
     Call(pEncoder->SetResolution(pEncoder, decoderRes.X, decoderRes.Y));
     return;
