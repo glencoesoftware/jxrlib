@@ -43,9 +43,9 @@ namespace jxrlib {
 
     GUID getGUIDPixFormat();
     bool getBlackWhite();
-    unsigned int getWidth();
-    unsigned int getHeight();
-    unsigned int getBytesPerPixel();
+    size_t getWidth();
+    size_t getHeight();
+    size_t getBytesPerPixel();
     Resolution getResolution();
     void getRawBytes(unsigned char *image_buffer);
   };

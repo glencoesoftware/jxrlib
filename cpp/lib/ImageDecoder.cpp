@@ -145,15 +145,15 @@ namespace jxrlib {
     return pDecoder->WMP.wmiSCP.bBlackWhite == TRUE;
   }
 
-  unsigned int ImageDecoder::getWidth() {
+  size_t ImageDecoder::getWidth() {
     return pDecoder->WMP.wmiI.cROIWidth;
   }
 
-  unsigned int ImageDecoder::getHeight() {
+  size_t ImageDecoder::getHeight() {
     return pDecoder->WMP.wmiI.cROIHeight;
   }
 
-  unsigned int ImageDecoder::getBytesPerPixel() {
+  size_t ImageDecoder::getBytesPerPixel() {
     return pDecoder->WMP.wmiI.cBitsPerUnit / 8;
   }
 
@@ -170,10 +170,10 @@ namespace jxrlib {
 
   void ImageDecoder::getRawBytes(unsigned char *image_buffer) {
     ERR err = WMP_errSuccess;
-    int width, height;
+	I32 width, height, bytesPerPixel;
     PKRect rc;
 
-    size_t bytesPerPixel = getBytesPerPixel();
+    bytesPerPixel = (I32) getBytesPerPixel();
     Call(pDecoder->GetSize(pDecoder, &width, &height));
 
     rc.X = 0;

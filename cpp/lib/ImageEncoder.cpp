@@ -45,7 +45,8 @@ namespace jxrlib {
     pEncoder->WMP.wmiSCP.bBlackWhite = decoder.getBlackWhite();
 
     // Set size
-    Call(pEncoder->SetSize(pEncoder, decoder.getWidth(), decoder.getHeight()));
+    Call(pEncoder->SetSize(
+		pEncoder, (I32)decoder.getWidth(), (I32)decoder.getHeight()));
     decoderRes = decoder.getResolution();
     Call(pEncoder->SetResolution(pEncoder, decoderRes.X, decoderRes.Y));
     return;
