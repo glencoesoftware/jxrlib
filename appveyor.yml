@@ -14,12 +14,12 @@ build:
 install:
   - cinst swig
 before_build:
-  - if not exist C:\Users\appveyor\.m2 mkdir C:\Users\appveyor\.m2
-  - ps: (Get-Content java\settings.xml) -replace '__MAVEN_SERVER_USERNAME__', "$env:MAVEN_SERVER_USERNAME" | %{$_ -replace '__MAVEN_SERVER_PASSWORD__', "$env:MAVEN_SERVER_PASSWORD"} | Out-File -encoding ASCII C:\Users\appveyor\.m2\settings.xml
   - mkdir java\target\swig\ome\jxrlib
   - swig.exe -java -c++ -package ome.jxrlib -outdir java\target\swig\ome\jxrlib -o java\target\swig\JXR_wrap.cxx java\JXR.i
-after_build:
-  - mvn -f java\native-windows_64\pom.xml package deploy
+on_success:
+  - IF NOT EXIST C:\Users\appveyor\.m2 mkdir C:\Users\appveyor\.m2
+  - ps: (Get-Content java\settings.xml) -replace '__MAVEN_SERVER_USERNAME__', "$env:MAVEN_SERVER_USERNAME" | %{$_ -replace '__MAVEN_SERVER_PASSWORD__', "$env:MAVEN_SERVER_PASSWORD"} | Out-File -encoding ASCII C:\Users\appveyor\.m2\settings.xml
+  - IF DEFINED APPVEYOR_PULL_REQUEST_NUMBER mvn -f java\native-windows_64\pom.xml package deploy
 artifacts:
   - path: 'java\native-windows_64\target\*.jar'
 cache:
