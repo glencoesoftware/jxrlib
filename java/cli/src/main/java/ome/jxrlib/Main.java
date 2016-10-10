@@ -21,24 +21,26 @@ package ome.jxrlib;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.file.Paths;
 
 public class Main {
 
-      public static void printBytes(byte imageBytes[]) {
-          for (int i = 0 ; i < imageBytes.length ; i += 4) {
-              byte a = i < imageBytes.length? imageBytes[i] : 0;
-              byte b = i + 1 < imageBytes.length? imageBytes[i + 1] : 0;
-              byte c = i + 2 < imageBytes.length? imageBytes[i + 2] : 0;
-              byte d = i + 3 < imageBytes.length? imageBytes[i + 3] : 0;
-              System.err.print(String.format(
-                  "0x%02x%02x%02x%02x%s",
-                  a, b, c, d,
-                  (i + 4) % 40 == 0 ? "\n" : " "));
-          }
+   public static void printBytes(ByteBuffer imageBuffer) {
+        for (int i = 0 ; i < imageBuffer.capacity() ; i += 4) {
+            byte a = i < imageBuffer.capacity()? imageBuffer.get(i) : 0;
+            byte b = i + 1 < imageBuffer.capacity()? imageBuffer.get(i + 1) : 0;
+            byte c = i + 2 < imageBuffer.capacity()? imageBuffer.get(i + 2) : 0;
+            byte d = i + 3 < imageBuffer.capacity()? imageBuffer.get(i + 3) : 0;
+            System.err.print(String.format(
+                "0x%02x%02x%02x%02x%s",
+                a, b, c, d,
+                (i + 4) % 40 == 0 ? "\n" : " "));
+        }
     }
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws DecodeException {
         Decode decode;
 
         if (args.length == 0) {
@@ -53,27 +55,41 @@ public class Main {
                 byte[] bytes = readData.toByteArray();
 
                 decode = new Decode(bytes);
+                long width = decode.getWidth();
+                long height = decode.getHeight();
+                long bpp = decode.getBytesPerPixel();
+                ByteBuffer imageBuffer = ByteBuffer.allocateDirect(
+                    (int) (width * height * bpp));
+
                 System.err.println("Opened decoder for bytes...");
-                byte[] imageBytes = decode.toBytes();
+                decode.toBytes(imageBuffer);
                 System.err.println("Decoded bytes:");
-                printBytes(imageBytes);
+                printBytes(imageBuffer);
             } catch (IOException e) {
                 System.err.println("Problem parsing input data! " + e.getMessage());
             }
         } else if (args[0].equals("--in-memory")) {
           try {
             System.err.println("input file = " + args[1]);
-            RandomAccessFile inputFile = new RandomAccessFile(args[1], "r");
-            byte[] inputBuffer = new byte[(int) inputFile.length()];
-            inputFile.readFully(inputBuffer);
-            inputFile.close();
+            ByteBuffer inputBuffer;
+            try (FileChannel channel = FileChannel.open(Paths.get(args[1]))) {
+              inputBuffer = ByteBuffer.allocateDirect((int) channel.size());
+              channel.read(inputBuffer);
+              channel.position(0);
+            }
 
             decode = new Decode(inputBuffer);
+            long width = decode.getWidth();
+            long height = decode.getHeight();
+            long bpp = decode.getBytesPerPixel();
+            ByteBuffer imageBuffer = ByteBuffer.allocateDirect(
+                (int) (width * height * bpp));
+
             System.err.println("Opened in-memory decoder for file: " + args[1]);
             if (args.length == 2) {
-                byte[] imageBytes = decode.toBytes();
+                decode.toBytes(imageBuffer);
                 System.err.println("Decoded bytes:");
-                printBytes(imageBytes);
+                printBytes(imageBuffer);
             } else if (args.length == 3) {
                 decode.toFile(new File(args[2]));
             } else {
@@ -87,11 +103,17 @@ public class Main {
             File inputFile = new File(args[0]);
 
             decode = new Decode(inputFile);
+            long width = decode.getWidth();
+            long height = decode.getHeight();
+            long bpp = decode.getBytesPerPixel();
+            ByteBuffer imageBuffer = ByteBuffer.allocateDirect(
+                (int) (width * height * bpp));
+
             System.err.println("Opened decoder for file: " + inputFile);
             if (args.length == 1) {
-                byte[] imageBytes = decode.toBytes();
+                decode.toBytes(imageBuffer);
                 System.err.println("Decoded bytes:");
-                printBytes(imageBytes);
+                printBytes(imageBuffer);
             } else if (args.length == 2) {
                 decode.toFile(new File(args[1]));
             } else {
