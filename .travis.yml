@@ -29,8 +29,7 @@ matrix:
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update ; brew install swig ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]
-    then
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       cd /tmp/
       curl -s -J -O -k -L 'https://sourceforge.net/projects/swig/files/swig/swig-3.0.10/swig-3.0.10.tar.gz/download'
       tar zxf swig-3.0.10.tar.gz
