@@ -59,12 +59,13 @@ public class TestFileToFileDecode extends AbstractTest {
         System.err.println("Output file: " + outputFile);
         decode.toFile(outputFile.toFile());
 
-        FileChannel channel = FileChannel.open(outputFile);
-        ByteBuffer outputFileBuffer = ByteBuffer.allocate((int)channel.size());
-        channel.read(outputFileBuffer);
-        outputFileBuffer.position(0);
-        // XXX: These are all wrong right now due to encoder issues
-        //Assert.assertEquals(md5(outputFileBuffer), tiffMd5);
+        try (FileChannel channel = FileChannel.open(outputFile)) {
+            ByteBuffer outputFileBuffer = ByteBuffer.allocate((int)channel.size());
+            channel.read(outputFileBuffer);
+            outputFileBuffer.position(0);
+            // XXX: These are all wrong right now due to encoder issues
+            //Assert.assertEquals(md5(outputFileBuffer), tiffMd5);
+        }
     }
 
     @AfterClass
