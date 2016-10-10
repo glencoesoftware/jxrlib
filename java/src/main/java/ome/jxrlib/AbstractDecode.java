@@ -66,7 +66,10 @@ abstract class AbstractDecode {
         return decoder.getBytesPerPixel();
     }
 
-    public void toBytes(ByteBuffer imageBuffer) {
+    public void toBytes(ByteBuffer imageBuffer) throws DecodeException {
+        if (!imageBuffer.isDirect()) {
+            throw new DecodeException("Buffer must be allocated direct.");
+        }
         decoder.getRawBytes(imageBuffer);
     }
 

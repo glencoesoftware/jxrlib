@@ -33,7 +33,9 @@ import org.testng.annotations.Test;
 
 public class TestInMemoryDecode extends AbstractTest {
 
-    void assertDecode(AbstractDecode decode, long width, long height, long bpp, String md5) {
+    void assertDecode(
+            AbstractDecode decode, long width, long height, long bpp,
+            String md5) throws DecodeException {
         long _width = decode.getWidth();
         Assert.assertEquals(_width, width);
         long _height = decode.getHeight();
