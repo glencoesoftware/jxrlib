@@ -29,5 +29,5 @@ configurations.all {
 
 dependencies {
     compile 'ch.qos.logback:logback-classic:1.1.7'
-    compile 'ome:jxrlib:0.2.0-SNAPSHOT'
+    compile 'ome:jxrlib-all:0.2.0-SNAPSHOT'
 }
