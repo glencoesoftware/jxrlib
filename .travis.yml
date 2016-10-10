@@ -55,9 +55,11 @@ script:
 # Test jxrlib C++ wrapper library (in memory)
   - for input in ../fixtures/first-tiles/*; do ./jxrdecode --in-memory "$input" &> /dev/null ; done
 # Test jxrlib Java bindings (in memory and file to file)
-  - mvn -f ../java/pom.xml test
-# Package and deploy
   - cd $TRAVIS_BUILD_DIR
+  - mvn -f java/pom.xml test
+# Testing was successful, deploy the clang environment artifacts when on Linux and we're not building a PR
+  - if [[ "$CXX" == "clang++" ]] && [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then mvn -f java/pom.xml deploy; fi
+# Package and deploy
   - mkdir -p $HOME/.m2
   - cat java/settings.xml | sed s/__MAVEN_SERVER_USERNAME__/$MAVEN_SERVER_USERNAME/g | sed s/__MAVEN_SERVER_PASSWORD__/$MAVEN_SERVER_PASSWORD/g > $HOME/.m2/settings.xml
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd java/native-osx_64 ; else cd java/native-linux_64 ; fi
