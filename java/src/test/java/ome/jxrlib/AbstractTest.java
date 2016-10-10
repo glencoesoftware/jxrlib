@@ -18,9 +18,6 @@
 
 package ome.jxrlib;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -28,20 +25,6 @@ import java.security.NoSuchAlgorithmException;
 import javax.xml.bind.DatatypeConverter;
 
 abstract class AbstractTest {
-
-    byte[] getData(String filename) throws IOException {
-        InputStream stream =
-            this.getClass().getClassLoader().getResourceAsStream(filename);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-        byte[] buffer = new byte[1024 * 1024];
-        int rlen = 0;
-        while ((rlen = stream.read(buffer)) != -1) {
-            outputStream.write(buffer, 0, rlen);
-        }
-
-        return outputStream.toByteArray();
-    }
 
     String md5(ByteBuffer byteBuffer) {
         MessageDigest md;
