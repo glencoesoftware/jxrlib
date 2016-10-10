@@ -19,7 +19,12 @@
 package ome.jxrlib;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -28,14 +33,7 @@ import org.testng.annotations.Test;
 
 public class TestInMemoryDecode extends AbstractTest {
 
-    @Parameters({"filename", "width", "height", "bpp", "md5"})
-    @Test
-    public void test(
-        String filename, long width, long height, long bpp, String md5)
-            throws IOException {
-        byte[] data = getData(filename);
-
-        TestDecode decode = new TestDecode(data);
+    void assertDecode(AbstractDecode decode, long width, long height, long bpp, String md5) {
         long _width = decode.getWidth();
         Assert.assertEquals(_width, width);
         long _height = decode.getHeight();
@@ -48,6 +46,35 @@ public class TestInMemoryDecode extends AbstractTest {
         decode.toBytes(imageBuffer);
 
         Assert.assertEquals(md5(imageBuffer), md5);
+    }
+
+    @Parameters({"filename", "width", "height", "bpp", "md5"})
+    @Test
+    public void testByteArray(
+        String filename, long width, long height, long bpp, String md5)
+            throws IOException, DecodeException {
+        byte[] data = getData(filename);
+
+        TestDecode decode = new TestDecode(data);
+        assertDecode(decode, width, height, bpp, md5);
+    }
+
+    @Parameters({"filename", "width", "height", "bpp", "md5"})
+    @Test
+    public void testByteBuffer(
+        String filename, long width, long height, long bpp, String md5)
+            throws IOException, URISyntaxException, DecodeException {
+        URL url = this.getClass().getClassLoader().getResource(filename);
+        Path inputFile = Paths.get(url.toURI());
+
+        ByteBuffer dataBuffer;
+        try (FileChannel channel = FileChannel.open(inputFile)) {
+            dataBuffer = ByteBuffer.allocateDirect((int)channel.size());
+            channel.read(dataBuffer);
+            dataBuffer.position(0);
+        }
+        TestDecode decode = new TestDecode(dataBuffer);
+        assertDecode(decode, width, height, bpp, md5);
     }
 
     // Can be useful if debugging destructors.

@@ -18,25 +18,14 @@
 
 package ome.jxrlib;
 
-import java.io.File;
-import java.nio.ByteBuffer;
+public class DecodeException extends Exception {
 
-public class TestDecode extends AbstractDecode {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -2498374739906992239L;
 
-    static {
-        System.loadLibrary("jxrjava");
+    public DecodeException(String message) {
+        super(message);
     }
-
-    public TestDecode(File inputFile) {
-        super(inputFile);
-    }
-
-    public TestDecode(byte data[]) throws DecodeException {
-        super(data);
-    }
-
-    public TestDecode(ByteBuffer dataBuffer) throws DecodeException {
-        super(dataBuffer);
-    }
-
 }

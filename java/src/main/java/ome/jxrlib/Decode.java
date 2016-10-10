@@ -19,6 +19,7 @@
 package ome.jxrlib;
 
 import java.io.File;
+import java.nio.ByteBuffer;
 
 import org.scijava.nativelib.NativeLibraryUtil;
 
@@ -32,8 +33,12 @@ public class Decode extends AbstractDecode {
         super(inputFile);
     }
 
-    public Decode(byte data[]) {
+    public Decode(byte data[]) throws DecodeException {
         super(data);
+    }
+
+    public Decode(ByteBuffer dataBuffer) throws DecodeException {
+        super(dataBuffer);
     }
 
 }
