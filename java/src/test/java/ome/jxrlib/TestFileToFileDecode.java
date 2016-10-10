@@ -56,7 +56,6 @@ public class TestFileToFileDecode extends AbstractTest {
         TestDecode decode = new TestDecode(inputFile.toFile());
         Path outputFile = temporaryDirectory.resolve(
                 filename.replace(".jxr", ".tif"));
-        System.err.println("Output file: " + outputFile);
         decode.toFile(outputFile.toFile());
 
         try (FileChannel channel = FileChannel.open(outputFile)) {
