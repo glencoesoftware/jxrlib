@@ -116,6 +116,12 @@ public class TestInMemoryDecode extends AbstractTest {
         decode.toBytes(ByteBuffer.allocate(1));
     }
 
+    @Test(expectedExceptions={FormatError.class})
+    public void testInvalidInput()
+            throws IOException, URISyntaxException, DecodeException {
+        new TestDecode(ByteBuffer.allocateDirect(1));
+    }
+
     // Can be useful if debugging destructors.
     /*
     @AfterMethod

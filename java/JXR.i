@@ -31,25 +31,7 @@ typedef struct {
 
 namespace jxrlib {
 
-  %typemap(javaclassmodifiers) CodecFactory "class"
-  class CodecFactory {
-  public:
-    void decoderFromFile(jxrlib::ImageDecoder& decoder, std::string inputFile);
-    void decoderFromBytes(jxrlib::ImageDecoder& decoder, unsigned char *NIOBUFFER, size_t len);
-    jxrlib::FormatConverter createFormatConverter(jxrlib::ImageDecoder& decoder, std::string extension);
-  };
-
-  %typemap(javaclassmodifiers) Factory "class"
-  class Factory {
-  public:
-    jxrlib::Stream createStreamFromFilename(std::string filename);
-  };
-
-  %typemap(javaclassmodifiers) FormatConverter "class"
-  class FormatConverter {};
-
-  %typemap(javaclassmodifiers) FormatError "class"
-  %typemap(javabase) FormatError "java.lang.Exception";
+  %typemap(javabase) FormatError "java.lang.Exception"
   %rename(getMessage) FormatError::what();
   class FormatError {
   public:
@@ -57,27 +39,53 @@ namespace jxrlib {
     std::string what();
   };
 
+  %typemap(throws) FormatError {
+    jclass exception = jenv->FindClass("ome/jxrlib/FormatError");
+    if (exception) {
+      jenv->ThrowNew(exception, $1.what());
+    }
+    return $null;
+  }
+
+  %typemap(javaclassmodifiers) CodecFactory "class"
+  class CodecFactory {
+  public:
+    void decoderFromFile(jxrlib::ImageDecoder& decoder, std::string inputFile) throw(FormatError);
+    void decoderFromBytes(jxrlib::ImageDecoder& decoder, unsigned char *NIOBUFFER, size_t len) throw(FormatError);
+    jxrlib::FormatConverter createFormatConverter(jxrlib::ImageDecoder& decoder, std::string extension) throw(FormatError);
+  };
+
+  %typemap(javaclassmodifiers) Factory "class"
+  class Factory {
+  public:
+    Factory() throw(FormatError);
+    jxrlib::Stream createStreamFromFilename(std::string filename) throw(FormatError);;
+  };
+
+  %typemap(javaclassmodifiers) FormatConverter "class"
+  class FormatConverter {};
+
   %typemap(javaclassmodifiers) ImageDecoder "class"
   class ImageDecoder {
   public:
-    void initialize();
-    unsigned int getFrameCount();
-    void selectFrame(unsigned int frameNum);
+    void initialize() throw(FormatError);
+    unsigned int getFrameCount() throw(FormatError);
+    void selectFrame(unsigned int frameNum) throw(FormatError);
     GUID getGUIDPixFormat();
     bool getBlackWhite();
     size_t getWidth();
     size_t getHeight();
     size_t getBytesPerPixel();
-    jxrlib::Resolution getResolution();
-    void getRawBytes(unsigned char *NIOBUFFER);
+    jxrlib::Resolution getResolution() throw(FormatError);
+    void getRawBytes(unsigned char *NIOBUFFER) throw(FormatError);
   };
 
   %typemap(javaclassmodifiers) ImageEncoder "class"
   class ImageEncoder {
   public:
-    ImageEncoder(jxrlib::Stream encodeStream, std::string extension);
-    void initializeWithDecoder(jxrlib::ImageDecoder& decoder);
-    void writeSource(jxrlib::FormatConverter& converter);
+    ImageEncoder(jxrlib::Stream encodeStream, std::string extension) throw(FormatError);
+    void initializeWithDecoder(jxrlib::ImageDecoder& decoder) throw(FormatError);
+    void writeSource(jxrlib::FormatConverter& converter) throw(FormatError);
     void close();
   };
 
