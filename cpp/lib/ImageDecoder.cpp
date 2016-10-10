@@ -137,11 +137,25 @@ namespace jxrlib {
     throw FormatError(errMsg);
   }
 
-  GUID ImageDecoder::getGUIDPixFormat() { return pDecoder->guidPixFormat; }
-  bool ImageDecoder::getBlackWhite() { return pDecoder->WMP.wmiSCP.bBlackWhite; }
-  unsigned int ImageDecoder::getWidth() { return pDecoder->WMP.wmiI.cROIWidth; }
-  unsigned int ImageDecoder::getHeight() { return pDecoder->WMP.wmiI.cROIHeight; }
-  unsigned int ImageDecoder::getBytesPerPixel() { return pDecoder->WMP.wmiI.cBitsPerUnit / 8; }
+  GUID ImageDecoder::getGUIDPixFormat() {
+    return pDecoder->guidPixFormat;
+  }
+
+  bool ImageDecoder::getBlackWhite() {
+    return pDecoder->WMP.wmiSCP.bBlackWhite;
+  }
+
+  unsigned int ImageDecoder::getWidth() {
+    return pDecoder->WMP.wmiI.cROIWidth;
+  }
+
+  unsigned int ImageDecoder::getHeight() {
+    return pDecoder->WMP.wmiI.cROIHeight;
+  }
+
+  unsigned int ImageDecoder::getBytesPerPixel() {
+    return pDecoder->WMP.wmiI.cBitsPerUnit / 8;
+  }
 
   Resolution ImageDecoder::getResolution() {
     float rX = 0.0, rY = 0.0;
