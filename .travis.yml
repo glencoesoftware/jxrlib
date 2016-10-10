@@ -54,8 +54,8 @@ script:
   - cat java/settings.xml | sed s/__MAVEN_SERVER_USERNAME__/$MAVEN_SERVER_USERNAME/g | sed s/__MAVEN_SERVER_PASSWORD__/$MAVEN_SERVER_PASSWORD/g > $HOME/.m2/settings.xml
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd java/native-osx_64 ; else cd java/native-linux_64 ; fi
   - mvn package
-# Only deploy the clang compiled artifacts
-  - if [[ "$CXX" == "clang++" ]]; then mvn deploy ; fi
+# Only deploy the clang compiled artifacts when we're not building a PR
+  - if [[ "$CXX" == "clang++" ]] && [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then mvn deploy ; fi
 
 cache:
   directories:
