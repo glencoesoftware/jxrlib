@@ -18,31 +18,39 @@
 
 package ome.jxrlib;
 
-import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
 import java.io.File;
+import java.nio.ByteBuffer;
 
-abstract class AbstractDecode implements Closeable {
+abstract class AbstractDecode {
 
     private final Factory factory = new Factory();
     private final CodecFactory codecFactory = new CodecFactory();
 
     private final File inputFile;
-    private final byte data[];
+    private final ByteBuffer dataBuffer;
     private final ImageDecoder decoder;
     private final long frameCount;
 
     public AbstractDecode(File inputFile) {
         this.inputFile = inputFile;
-        this.data = null;
-        decoder = codecFactory.decoderFromFile(inputFile);
+        this.dataBuffer = null;
+        decoder = new ImageDecoder();
+        codecFactory.decoderFromFile(decoder, inputFile.getAbsolutePath());
         frameCount = decoder.getFrameCount();
     }
 
-    public AbstractDecode(byte data[]) {
+    public AbstractDecode(byte data[]) throws DecodeException {
+        this(ByteBuffer.allocateDirect(data.length).put(data));
+    }
+
+    public AbstractDecode(ByteBuffer dataBuffer) throws DecodeException {
+        if (!dataBuffer.isDirect()) {
+            throw new DecodeException("Buffer must be allocated direct.");
+        }
         this.inputFile = null;
-        this.data = data;
-        decoder = codecFactory.decoderFromBytes(data, data.length);
+        this.dataBuffer = dataBuffer;
+        decoder = new ImageDecoder();
+        codecFactory.decoderFromBytes(decoder, dataBuffer, dataBuffer.capacity());
         frameCount = decoder.getFrameCount();
     }
 
@@ -58,17 +66,11 @@ abstract class AbstractDecode implements Closeable {
         return decoder.getBytesPerPixel();
     }
 
-    public byte[] toBytes() {
-        ByteArrayOutputStream decodedBytes = new ByteArrayOutputStream();
-        for (long i = 0 ; i < frameCount ; i++) {
-            decoder.selectFrame(i);
-            ImageData data = decoder.getRawBytes();
-            decodedBytes = new ByteArrayOutputStream((int)data.size());
-            for (int j = 0 ; j < data.size() ; j++) {
-                decodedBytes.write(data.get(j));
-            }
+    public void toBytes(ByteBuffer imageBuffer) throws DecodeException {
+        if (!imageBuffer.isDirect()) {
+            throw new DecodeException("Buffer must be allocated direct.");
         }
-        return decodedBytes.toByteArray();
+        decoder.getRawBytes(imageBuffer);
     }
 
     public void toFile(File outputFile) {
@@ -86,12 +88,6 @@ abstract class AbstractDecode implements Closeable {
             encoder.initializeWithDecoder(decoder);
             encoder.writeSource(converter);
             encoder.close();
-        }
-    }
-
-    public void close() {
-        if (decoder != null) {
-            decoder.close();
         }
     }
 

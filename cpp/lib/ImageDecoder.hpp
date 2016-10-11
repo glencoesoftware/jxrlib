@@ -34,6 +34,7 @@ namespace jxrlib {
     friend class CodecFactory;
   public:
     ImageDecoder() : pDecoder(NULL), err(WMP_errSuccess) {};
+    ~ImageDecoder();
     void initialize();
     void initialize(Stream &data);
 
@@ -42,13 +43,11 @@ namespace jxrlib {
 
     GUID getGUIDPixFormat();
     bool getBlackWhite();
-    unsigned int getWidth();
-    unsigned int getHeight();
-    unsigned int getBytesPerPixel();
+    size_t getWidth();
+    size_t getHeight();
+    size_t getBytesPerPixel();
     Resolution getResolution();
-    std::vector<char> getRawBytes();
-
-    void close();
+    void getRawBytes(unsigned char *image_buffer);
   };
 
 } // namespace jxrlib

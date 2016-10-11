@@ -7,19 +7,18 @@ env:
 matrix:
   include:
     - os: linux
+      sudo: false
       addons:
         apt:
           packages:
-            - swig
-            - gradle
+            - pcre3-dev
       compiler: gcc
     - os: linux
-      dist: trusty
-      sudo: required
+      sudo: false
       addons:
         apt:
           packages:
-            - swig
+            - pcre3-dev
       compiler: clang
     - os: osx
       osx_image: beta-xcode6.2  # Mac OS X 10.9
@@ -30,19 +29,22 @@ matrix:
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update ; brew install swig ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      cd /tmp/;
+      curl -s -J -O -k -L 'https://sourceforge.net/projects/swig/files/swig/swig-3.0.10/swig-3.0.10.tar.gz/download';
+      tar zxf swig-3.0.10.tar.gz;
+      cd swig-3.0.10;
+      ./configure --prefix $HOME/swig/;
+      make;
+      make install;
+      cd $TRAVIS_BUILD_DIR;
+    fi
 
 script:
   - set -e
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export SWIG=$HOME/swig/bin/swig ; fi
   - make clean swig all
-  - mkdir -p $HOME/.m2
-  - cat java/settings.xml | sed s/__MAVEN_SERVER_USERNAME__/$MAVEN_SERVER_USERNAME/g | sed s/__MAVEN_SERVER_PASSWORD__/$MAVEN_SERVER_PASSWORD/g > $HOME/.m2/settings.xml
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd java/native-osx_64 ; else cd java/native-linux_64 ; fi
-  - mvn package
-# Only deploy the clang compiled artifacts
-  - if [[ "$CXX" == "clang++" ]]; then mvn deploy ; fi
 # Prepare to run tests
-  - cd $TRAVIS_BUILD_DIR
-  - ./gradlew -b java/cli/build.gradle clean installDist
   - cd build
   - mkdir -p transcoded/C/ transcoded/C++/ transcoded/Java/
 # Test base jxrlib C library
@@ -52,10 +54,18 @@ script:
   - for input in ../fixtures/first-tiles/*; do bn=${input##*/} ; bn=${bn%.jxr} ; ./jxrdecode "$input" "transcoded/C++/$bn.tif" ; done
 # Test jxrlib C++ wrapper library (in memory)
   - for input in ../fixtures/first-tiles/*; do ./jxrdecode --in-memory "$input" &> /dev/null ; done
-# Test jxrlib Java bindings (file to file)
-  - for input in ../fixtures/first-tiles/*; do bn=${input##*/} ; bn=${bn%.jxr} ; ../java/cli/build/install/cli/bin/cli "$input" "transcoded/Java/$bn.tif" ; done
-# Test jxrlib Java bindings (in memory)
-  - mvn -f ../java/pom.xml test
+# Test jxrlib Java bindings (in memory and file to file)
+  - cd $TRAVIS_BUILD_DIR
+  - mvn -f java/pom.xml test
+# Testing was successful, deploy the clang environment artifacts when on Linux and we're not building a PR
+  - if [[ "$CXX" == "clang++" ]] && [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then mvn -f java/pom.xml deploy; fi
+# Package and deploy
+  - mkdir -p $HOME/.m2
+  - cat java/settings.xml | sed s/__MAVEN_SERVER_USERNAME__/$MAVEN_SERVER_USERNAME/g | sed s/__MAVEN_SERVER_PASSWORD__/$MAVEN_SERVER_PASSWORD/g > $HOME/.m2/settings.xml
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd java/native-osx_64 ; else cd java/native-linux_64 ; fi
+  - mvn package
+# Only deploy the clang compiled artifacts when we're not building a PR
+  - if [[ "$CXX" == "clang++" ]] && [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then mvn deploy ; fi
 
 cache:
   directories:

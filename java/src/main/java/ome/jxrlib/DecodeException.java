@@ -1,7 +1,6 @@
 /*
- * #%L
- * Copyright (C) 2016 Glencoe Software, Inc. All rights reserved.
- * %%
+ * Copyright (C) 2106 Glencoe Software, Inc. All rights reserved.
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -15,23 +14,18 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- * #%L
  */
 
-#include "Stream.hpp"
+package ome.jxrlib;
 
-#include <cstdlib>
-#include <cstring>
-#include "FormatError.hpp"
+public class DecodeException extends Exception {
 
-namespace jxrlib {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -2498374739906992239L;
 
-  Stream::Stream(unsigned char *bytes, size_t len) : pStream(NULL), err(WMP_errSuccess) {
-    Call(CreateWS_Memory(&pStream, bytes, len));
-    return;
-  Cleanup:
-    throw FormatError("ERROR: Unable to initialize stream with bytes");
-  }
-
-} // namespace jxrlib
-
+    public DecodeException(String message) {
+        super(message);
+    }
+}

@@ -9,8 +9,10 @@
     <parameter name="height" value="246" />
     <parameter name="bpp" value="3" />
     <parameter name="md5" value="c47d171c6659e4c5d44207a8ab7a1ca4" />
+    <parameter name="tiffMd5" value="0xdeadbeef" />
     <classes>
       <class name="ome.jxrlib.TestInMemoryDecode"/>
+      <class name="ome.jxrlib.TestFileToFileDecode"/>
     </classes>
   </test>
 
@@ -20,8 +22,10 @@
     <parameter name="height" value="246" />
     <parameter name="bpp" value="3" />
     <parameter name="md5" value="c8d868d691c32d8392400bffb856bddc" />
+    <parameter name="tiffMd5" value="0xdeadbeef" />
     <classes>
       <class name="ome.jxrlib.TestInMemoryDecode"/>
+      <class name="ome.jxrlib.TestFileToFileDecode"/>
     </classes>
   </test>
 
@@ -31,8 +35,10 @@
     <parameter name="height" value="246" />
     <parameter name="bpp" value="3" />
     <parameter name="md5" value="018a28fb6ce524e3b3acff240fe44b58" />
+    <parameter name="tiffMd5" value="0xdeadbeef" />
     <classes>
       <class name="ome.jxrlib.TestInMemoryDecode"/>
+      <class name="ome.jxrlib.TestFileToFileDecode"/>
     </classes>
   </test>
 
@@ -42,8 +48,10 @@
     <parameter name="height" value="246" />
     <parameter name="bpp" value="3" />
     <parameter name="md5" value="d3cd74ca968e4f7086e268a8b7955f7f" />
+    <parameter name="tiffMd5" value="0xdeadbeef" />
     <classes>
       <class name="ome.jxrlib.TestInMemoryDecode"/>
+      <class name="ome.jxrlib.TestFileToFileDecode"/>
     </classes>
   </test>
 
@@ -53,8 +61,10 @@
     <parameter name="height" value="246" />
     <parameter name="bpp" value="3" />
     <parameter name="md5" value="3670678d8f91985fcc998214c5953993" />
+    <parameter name="tiffMd5" value="0xdeadbeef" />
     <classes>
       <class name="ome.jxrlib.TestInMemoryDecode"/>
+      <class name="ome.jxrlib.TestFileToFileDecode"/>
     </classes>
   </test>
 
@@ -64,8 +74,10 @@
     <parameter name="height" value="246" />
     <parameter name="bpp" value="3" />
     <parameter name="md5" value="169bec9efabdb2104f87d0b2292b78af" />
+    <parameter name="tiffMd5" value="0xdeadbeef" />
     <classes>
       <class name="ome.jxrlib.TestInMemoryDecode"/>
+      <class name="ome.jxrlib.TestFileToFileDecode"/>
     </classes>
   </test>
 
@@ -75,8 +87,10 @@
     <parameter name="height" value="246" />
     <parameter name="bpp" value="3" />
     <parameter name="md5" value="44aedce0262e12a09f576920373b9675" />
+    <parameter name="tiffMd5" value="0xdeadbeef" />
     <classes>
       <class name="ome.jxrlib.TestInMemoryDecode"/>
+      <class name="ome.jxrlib.TestFileToFileDecode"/>
     </classes>
   </test>
 
@@ -86,8 +100,10 @@
     <parameter name="height" value="2040" />
     <parameter name="bpp" value="2" />
     <parameter name="md5" value="c9e00c1c7aca1659725b23ca940e144a" />
+    <parameter name="tiffMd5" value="0xdeadbeef" />
     <classes>
       <class name="ome.jxrlib.TestInMemoryDecode"/>
+      <class name="ome.jxrlib.TestFileToFileDecode"/>
     </classes>
   </test>
 
@@ -97,8 +113,10 @@
     <parameter name="height" value="690" />
     <parameter name="bpp" value="2" />
     <parameter name="md5" value="e6daab7801c9d20e167ccb75a5e0f7c6" />
+    <parameter name="tiffMd5" value="0xdeadbeef" />
     <classes>
       <class name="ome.jxrlib.TestInMemoryDecode"/>
+      <class name="ome.jxrlib.TestFileToFileDecode"/>
     </classes>
   </test>
 
@@ -108,8 +126,10 @@
     <parameter name="height" value="690" />
     <parameter name="bpp" value="2" />
     <parameter name="md5" value="e2b97bc424786239a798d9cd73113d36" />
+    <parameter name="tiffMd5" value="0xdeadbeef" />
     <classes>
       <class name="ome.jxrlib.TestInMemoryDecode"/>
+      <class name="ome.jxrlib.TestFileToFileDecode"/>
     </classes>
   </test>
 
@@ -119,8 +139,10 @@
     <parameter name="height" value="690" />
     <parameter name="bpp" value="2" />
     <parameter name="md5" value="aa82b4b3c8698870c318c7a2441f3143" />
+    <parameter name="tiffMd5" value="0xdeadbeef" />
     <classes>
       <class name="ome.jxrlib.TestInMemoryDecode"/>
+      <class name="ome.jxrlib.TestFileToFileDecode"/>
     </classes>
   </test>
 
@@ -130,8 +152,10 @@
     <parameter name="height" value="2040" />
     <parameter name="bpp" value="2" />
     <parameter name="md5" value="2ac92d7699f3a4a77e260c0b5a51c8c6" />
+    <parameter name="tiffMd5" value="0xdeadbeef" />
     <classes>
       <class name="ome.jxrlib.TestInMemoryDecode"/>
+      <class name="ome.jxrlib.TestFileToFileDecode"/>
     </classes>
   </test>
 
@@ -141,8 +165,10 @@
     <parameter name="height" value="2040" />
     <parameter name="bpp" value="2" />
     <parameter name="md5" value="9bce4515d533c5617f206f5935bc8c4e" />
+    <parameter name="tiffMd5" value="0xdeadbeef" />
     <classes>
       <class name="ome.jxrlib.TestInMemoryDecode"/>
+      <class name="ome.jxrlib.TestFileToFileDecode"/>
     </classes>
   </test>
 

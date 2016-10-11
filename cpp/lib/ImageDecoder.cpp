@@ -20,6 +20,8 @@
 
 #include "ImageDecoder.hpp"
 
+#include <fstream>
+#include <iostream>
 #include <sstream>
 #include <string>
 
@@ -30,6 +32,15 @@
 #include "Stream.hpp"
 
 namespace jxrlib {
+
+  ImageDecoder::~ImageDecoder() {
+#ifdef DEBUG
+    std::cerr << "ImageDecoder " << this << " destructor!" << std::endl;
+#endif
+    if (pDecoder) {
+      pDecoder->Release(&pDecoder);
+    }
+  }
 
   void ImageDecoder::initialize() {
     // set default color format
@@ -126,11 +137,25 @@ namespace jxrlib {
     throw FormatError(errMsg);
   }
 
-  GUID ImageDecoder::getGUIDPixFormat() { return pDecoder->guidPixFormat; }
-  bool ImageDecoder::getBlackWhite() { return pDecoder->WMP.wmiSCP.bBlackWhite; }
-  unsigned int ImageDecoder::getWidth() { return pDecoder->WMP.wmiI.cROIWidth; }
-  unsigned int ImageDecoder::getHeight() { return pDecoder->WMP.wmiI.cROIHeight; }
-  unsigned int ImageDecoder::getBytesPerPixel() { return pDecoder->WMP.wmiI.cBitsPerUnit / 8; }
+  GUID ImageDecoder::getGUIDPixFormat() {
+    return pDecoder->guidPixFormat;
+  }
+
+  bool ImageDecoder::getBlackWhite() {
+    return pDecoder->WMP.wmiSCP.bBlackWhite == TRUE;
+  }
+
+  size_t ImageDecoder::getWidth() {
+    return pDecoder->WMP.wmiI.cROIWidth;
+  }
+
+  size_t ImageDecoder::getHeight() {
+    return pDecoder->WMP.wmiI.cROIHeight;
+  }
+
+  size_t ImageDecoder::getBytesPerPixel() {
+    return pDecoder->WMP.wmiI.cBitsPerUnit / 8;
+  }
 
   Resolution ImageDecoder::getResolution() {
     float rX = 0.0, rY = 0.0;
@@ -143,23 +168,13 @@ namespace jxrlib {
     throw FormatError("ERROR: Could not get decoder resolution");
   }
 
-  void ImageDecoder::close() {
-    pDecoder->Release(&pDecoder);
-  }
-
-  std::vector<char> ImageDecoder::getRawBytes() {
+  void ImageDecoder::getRawBytes(unsigned char *image_buffer) {
     ERR err = WMP_errSuccess;
-    int width, height;
+	I32 width, height, bytesPerPixel;
     PKRect rc;
-    size_t buf_size;
-    unsigned char *image_buffer;
-    std::vector<char> ret;
 
-    size_t bytesPerPixel = getBytesPerPixel();
+    bytesPerPixel = (I32) getBytesPerPixel();
     Call(pDecoder->GetSize(pDecoder, &width, &height));
-    buf_size = width * height * bytesPerPixel;
-    image_buffer = (unsigned char *)malloc(buf_size);
-    ret.resize(buf_size);
 
     rc.X = 0;
     rc.Y = 0;
@@ -167,10 +182,7 @@ namespace jxrlib {
     rc.Height = height;
 
     Call(pDecoder->Copy(pDecoder, &rc, image_buffer, width * bytesPerPixel));
-    ret.assign(image_buffer, image_buffer + buf_size);
-    free(image_buffer);
-
-    return ret;
+    return;
   Cleanup:
     std::stringstream msg;
     msg << "ERROR: Could not get image bytes: " << err;

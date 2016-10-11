@@ -46,24 +46,24 @@ namespace jxrlib {
   }
 
   CodecFactory::~CodecFactory() {
+#ifdef DEBUG
+    std::cerr << "CodecFactory " << this << " destructor!" << std::endl;
+#endif
     if (pCodecFactory) {
       pCodecFactory->Release(&pCodecFactory);
     }
   }
 
-  ImageDecoder CodecFactory::decoderFromFile(std::string inputFile) {
-    ImageDecoder decoder;
+  void CodecFactory::decoderFromFile(ImageDecoder &decoder, std::string inputFile) {
     Call(pCodecFactory->CreateDecoderFromFile(inputFile.c_str(), &decoder.pDecoder));
     decoder.initialize();
-    return decoder;
+    return;
   Cleanup:
     std::string msg = "ERROR: Unable to create decoder from file: " + inputFile;
     throw FormatError(msg);
   }
 
-  ImageDecoder CodecFactory::decoderFromFile(std::string inputFile, long offset) {
-    ImageDecoder decoder;
-
+  void CodecFactory::decoderFromFile(ImageDecoder &decoder, std::string inputFile, long offset) {
     int err = 0;
     std::string ext = ".jxr";
     const PKIID *pIID = NULL;
@@ -97,26 +97,25 @@ namespace jxrlib {
     decoder.pDecoder->fStreamOwner = !0;
     decoder.initialize();
 
-    return decoder;
+    return;
   Cleanup:
     std::stringstream msg;
     msg << "ERROR: Unable to create decoder from file: " << inputFile << " at offset: " << offset;
     throw FormatError(msg.str().c_str());
   }
 
-  ImageDecoder CodecFactory::decoderFromBytes(std::vector<unsigned char> data) {
-    return decoderFromBytes((char *)data.data(), data.size());
+  void CodecFactory::decoderFromBytes(ImageDecoder &decoder, std::vector<unsigned char> data) {
+    decoderFromBytes(decoder, data.data(), data.size());
   }
 
-  ImageDecoder CodecFactory::decoderFromBytes(char *bytes, size_t len) {
-    ImageDecoder decoder;
-    Stream dataStream((unsigned char *)bytes, len);
+  void CodecFactory::decoderFromBytes(ImageDecoder &decoder, unsigned char *bytes, size_t len) {
+    Stream dataStream(bytes, len);
     const PKIID *pIID = NULL;
 
     Call(GetImageDecodeIID((const char *)".jxr", &pIID));
     Call(PKCodecFactory_CreateCodec(pIID, (void**)&decoder.pDecoder));
     decoder.initialize(dataStream);
-    return decoder;
+    return;
   Cleanup:
     throw FormatError("ERROR: Unable to create decoder from bytes in memory");
   }

@@ -21,18 +21,38 @@ package ome.jxrlib;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
-import javax.xml.bind.DatatypeConverter;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-public class TestInMemoryDecode {
+public class TestInMemoryDecode extends AbstractTest {
 
-    byte[] getData(String filename) throws IOException {
+    void assertDecode(
+            AbstractDecode decode, long width, long height, long bpp,
+            String md5) throws DecodeException {
+        long _width = decode.getWidth();
+        Assert.assertEquals(_width, width);
+        long _height = decode.getHeight();
+        Assert.assertEquals(_height, height);
+        long _bpp = decode.getBytesPerPixel();
+        Assert.assertEquals(_bpp, bpp);
+
+        ByteBuffer imageBuffer = ByteBuffer.allocateDirect(
+            (int) (_width * _height * _bpp));
+        decode.toBytes(imageBuffer);
+
+        Assert.assertEquals(md5(imageBuffer), md5);
+    }
+
+    byte[] asByteArray(String filename) throws IOException {
         InputStream stream =
             this.getClass().getClassLoader().getResourceAsStream(filename);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -46,32 +66,69 @@ public class TestInMemoryDecode {
         return outputStream.toByteArray();
     }
 
-    String md5(byte[] bytes) {
-        MessageDigest md;
-        try {
-            md = MessageDigest.getInstance("MD5");
-        } catch (NoSuchAlgorithmException e) {
-            // This should never happen
-            throw new RuntimeException(e);
+    ByteBuffer asByteBuffer(String filename)
+            throws URISyntaxException, IOException {
+        URL url = this.getClass().getClassLoader().getResource(filename);
+        Path inputFile = Paths.get(url.toURI());
+
+        ByteBuffer dataBuffer;
+        try (FileChannel channel = FileChannel.open(inputFile)) {
+            dataBuffer = ByteBuffer.allocateDirect((int)channel.size());
+            channel.read(dataBuffer);
+            dataBuffer.position(0);
         }
-        return DatatypeConverter.printHexBinary(md.digest(bytes)).toLowerCase();
+        return dataBuffer;
     }
 
     @Parameters({"filename", "width", "height", "bpp", "md5"})
     @Test
-    public void test(
+    public void testByteArray(
         String filename, long width, long height, long bpp, String md5)
-            throws IOException {
-        byte[] data = getData(filename);
-        byte[] decodedData;
-        try (TestDecode decode = new TestDecode(data)) {
-            Assert.assertEquals(decode.getWidth(), width);
-            Assert.assertEquals(decode.getHeight(), height);
-            Assert.assertEquals(decode.getBytesPerPixel(), bpp);
-            decodedData = decode.toBytes();
-        }
+            throws IOException, DecodeException {
+        byte[] data = asByteArray(filename);
 
-        Assert.assertEquals(md5, md5(decodedData));
+        TestDecode decode = new TestDecode(data);
+        assertDecode(decode, width, height, bpp, md5);
     }
 
+    @Parameters({"filename", "width", "height", "bpp", "md5"})
+    @Test
+    public void testByteBuffer(
+        String filename, long width, long height, long bpp, String md5)
+            throws IOException, URISyntaxException, DecodeException {
+        ByteBuffer dataBuffer = asByteBuffer(filename);
+        TestDecode decode = new TestDecode(dataBuffer);
+        assertDecode(decode, width, height, bpp, md5);
+    }
+
+    @Test(expectedExceptions={DecodeException.class})
+    public void testInputNotDirect() throws DecodeException {
+        ByteBuffer dataBuffer = ByteBuffer.allocate(1);
+        new TestDecode(dataBuffer);
+    }
+
+    @Parameters({"filename"})
+    @Test(expectedExceptions={DecodeException.class})
+    public void testOutputNotDirect(String filename)
+            throws IOException, URISyntaxException, DecodeException {
+        ByteBuffer dataBuffer = asByteBuffer(filename);
+        TestDecode decode = new TestDecode(dataBuffer);
+        decode.toBytes(ByteBuffer.allocate(1));
+    }
+
+    @Test(expectedExceptions={FormatError.class})
+    public void testInvalidInput()
+            throws IOException, URISyntaxException, DecodeException {
+        new TestDecode(ByteBuffer.allocateDirect(1));
+    }
+
+    // Can be useful if debugging destructors.
+    /*
+    @AfterMethod
+    public void cleanup() {
+        System.err.println("Java cleanup.");
+        System.gc();
+        System.runFinalization();
+    }
+    */
 }

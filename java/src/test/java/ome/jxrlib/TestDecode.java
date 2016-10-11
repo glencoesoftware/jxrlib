@@ -19,6 +19,7 @@
 package ome.jxrlib;
 
 import java.io.File;
+import java.nio.ByteBuffer;
 
 public class TestDecode extends AbstractDecode {
 
@@ -30,8 +31,12 @@ public class TestDecode extends AbstractDecode {
         super(inputFile);
     }
 
-    public TestDecode(byte data[]) {
+    public TestDecode(byte data[]) throws DecodeException {
         super(data);
+    }
+
+    public TestDecode(ByteBuffer dataBuffer) throws DecodeException {
+        super(dataBuffer);
     }
 
 }
