@@ -143,14 +143,14 @@ ERR CopyDescMetadata(DPKPROPVARIANT *pvarDst,
             pvarDst->vt = DPKVT_LPSTR;
             uiSize = strlen(varSrc.VT.pszVal) + 1;
             Call(PKAlloc((void **) &pvarDst->VT.pszVal, uiSize));
-            memcpy(pvarDst->VT.pszVal, varSrc.VT.pszVal, uiSize);
+            memmove(pvarDst->VT.pszVal, varSrc.VT.pszVal, uiSize);
             break;
             
         case DPKVT_LPWSTR:
             pvarDst->vt = DPKVT_LPWSTR;
             uiSize = sizeof(U16) * (wcslen((wchar_t *) varSrc.VT.pwszVal) + 1); // +1 for NULL term
             Call(PKAlloc((void **) &pvarDst->VT.pszVal, uiSize));
-            memcpy(pvarDst->VT.pwszVal, varSrc.VT.pwszVal, uiSize);
+            memmove(pvarDst->VT.pwszVal, varSrc.VT.pwszVal, uiSize);
             break;
 
         case DPKVT_UI2:
@@ -1025,7 +1025,7 @@ static ERR SetMetadata(PKImageEncode *pIE, const U8 *pbMetadata, U32 cbMetadata,
     *pcbSet = 0;
 
     Call(PKAlloc((void **) pbSet, cbMetadata));
-    memcpy(*pbSet, pbMetadata, cbMetadata);
+    memmove(*pbSet, pbMetadata, cbMetadata);
     *pcbSet = cbMetadata;
 
 Cleanup:
@@ -1065,7 +1065,7 @@ ERR PKImageEncode_SetXMPMetadata_WMP(PKImageEncode *pIE, const U8 *pbXMPMetadata
     // but anyway this block will be large enough guaranteed
     cbBuffer = cbXMPMetadata + 1 + sizeof("<dc:format>") - 1 + sizeof("</dc:format>") - 1 + sizeof(szHDPhotoFormat) - 1;
     Call(PKAlloc((void **) &pbTemp, cbBuffer));
-    memcpy(pbTemp, pbXMPMetadata, cbXMPMetadata); // Make a copy of the metadata
+    memmove(pbTemp, pbXMPMetadata, cbXMPMetadata); // Make a copy of the metadata
     pbTemp[cbXMPMetadata] = '\0';
     cbXMPMetadata = (U32)strlen(pbTemp);
     pszFormatBegin = strstr(pbTemp, "<dc:format>");
@@ -1088,7 +1088,7 @@ ERR PKImageEncode_SetXMPMetadata_WMP(PKImageEncode *pIE, const U8 *pbXMPMetadata
             cbBuffer - (pszFormatBegin - pbTemp),
             szHDPhotoFormat),
             WMP_errBufferOverflow);
-        memcpy(pszFormatBegin + sizeof(szHDPhotoFormat) - 1, pbXMPMetadata + ( pszFormatEnd - pbTemp ),
+        memmove(pszFormatBegin + sizeof(szHDPhotoFormat) - 1, pbXMPMetadata + ( pszFormatEnd - pbTemp ),
             cbXMPMetadata - ( pszFormatEnd - pbTemp ));
     }
     else
