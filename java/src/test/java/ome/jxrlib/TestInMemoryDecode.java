@@ -109,6 +109,18 @@ public class TestInMemoryDecode extends AbstractTest {
 
     @Parameters({"filename", "width", "height", "bpp", "md5"})
     @Test
+    public void testFirstFrame(
+        String filename, long width, long height, long bpp, String md5)
+            throws IOException, DecodeException {
+        byte[] data = asByteArray(filename);
+
+        byte[] destination = TestDecode.decodeFirstFrame(
+                data, 0, data.length, (int)(width * height * bpp));
+        Assert.assertEquals(md5, md5(destination));
+    }
+
+    @Parameters({"filename", "width", "height", "bpp", "md5"})
+    @Test
     public void testByteBuffer(
         String filename, long width, long height, long bpp, String md5)
             throws IOException, URISyntaxException, DecodeException {

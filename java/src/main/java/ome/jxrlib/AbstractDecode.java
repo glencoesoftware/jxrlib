@@ -96,4 +96,11 @@ abstract class AbstractDecode {
         }
     }
 
+    public static byte[] decodeFirstFrame(
+            byte[] source, int offset, int length, int size) {
+        DecodeContext decodeContext = new DecodeContext();
+        byte[] destination = new byte[size];
+        decodeContext.decodeFirstFrame(source, destination, offset, length);
+        return destination;
+    }
 }

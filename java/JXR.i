@@ -6,6 +6,7 @@
 %include various.i
 %{
   #include "CodecFactory.hpp"
+  #include "DecodeContext.hpp"
   #include "Factory.hpp"
   #include "FormatConverter.hpp"
   #include "FormatError.hpp"
@@ -101,4 +102,8 @@ namespace jxrlib {
   %typemap(javaclassmodifiers) Stream "class"
   struct Stream {};
 
+  class DecodeContext {
+  public:
+    void decodeFirstFrame(char *BYTE, char *BYTE, size_t offset, size_t length) throw(FormatError);
+  };
 }
