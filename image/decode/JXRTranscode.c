@@ -206,7 +206,7 @@ Void transformDCBlock(PixelI * pOrg, PixelI * pDst, ORIENTATION oOrientation)
             pOrg[i + 4] = -pOrg[i + 4], pOrg[i + 12] = -pOrg[i + 12];
 
     if(oOrientation < O_RCW)
-        memcpy(pDst, pOrg, 16 * sizeof(PixelI));
+        memmove(pDst, pOrg, 16 * sizeof(PixelI));
     else
         for(i = 0; i < 16; i ++)
             pDst[i] = pOrg[(i >> 2) + ((i & 3) << 2)];
@@ -225,7 +225,7 @@ Void transformDCBlock422(PixelI * pOrg, PixelI * pDst, ORIENTATION oOrientation)
     if(bFlipV[oOrientation])
         pDst[0] = pOrg[0], pDst[1] = pOrg[5], pDst[2] = pOrg[6], pDst[3] = pOrg[7], pDst[4] = pOrg[4], pDst[5] = pOrg[1], pDst[6] = pOrg[2], pDst[7] = pOrg[3];
     else
-        memcpy(pDst, pOrg, 8 * sizeof(PixelI));
+        memmove(pDst, pOrg, 8 * sizeof(PixelI));
 }
 
 Void transformDCBlock420(PixelI * pOrg, PixelI * pDst, ORIENTATION oOrientation)
@@ -265,7 +265,7 @@ Void transformACBlocks(PixelI * pOrg, PixelI * pDst, ORIENTATION oOrientation)
             size_t jj = (bFlipH[oOrientation] ? 3 - j : j);
 
             if(oOrientation < O_RCW)
-                memcpy(pDst + (jj * 4 + ii) * 16, pOrg + (j * 4 + i) * 16, 16 * sizeof(PixelI));
+                memmove(pDst + (jj * 4 + ii) * 16, pOrg + (j * 4 + i) * 16, 16 * sizeof(PixelI));
             else{
                 pO = pOrg + (j * 4 + i) * 16;
                 pD = pDst + (ii * 4 + jj) * 16;
@@ -298,7 +298,7 @@ Void transformACBlocks422(PixelI * pOrg, PixelI * pDst, ORIENTATION oOrientation
             size_t ii = (bFlipV[oOrientation] ? 3 - i : i);
             size_t jj = (bFlipH[oOrientation] ? 1 - j : j);
 
-            memcpy(pDst + (jj * 4 + ii) * 16, pOrg + (j * 4 + i) * 16, 16 * sizeof(PixelI));
+            memmove(pDst + (jj * 4 + ii) * 16, pOrg + (j * 4 + i) * 16, 16 * sizeof(PixelI));
         }
 }
 
@@ -324,7 +324,7 @@ Void transformACBlocks420(PixelI * pOrg, PixelI * pDst, ORIENTATION oOrientation
             size_t jj = (bFlipH[oOrientation] ? 1 - j : j);
 
             if(oOrientation < O_RCW)
-                memcpy(pDst + (jj * 2 + ii) * 16, pOrg + (j * 2 + i) * 16, 16 * sizeof(PixelI));
+                memmove(pDst + (jj * 2 + ii) * 16, pOrg + (j * 2 + i) * 16, 16 * sizeof(PixelI));
             else{
                 pO = pOrg + (j * 2 + i) * 16;
                 pD = pDst + (ii * 2 + jj) * 16;
@@ -887,12 +887,12 @@ Int WMPhotoTranscode(struct WMPStream * pStreamIn, struct WMPStream * pStreamOut
 
                     pMBInfo[cOff] = pSCDec->MBInfo;
 
-                    memcpy(&pFrameBuf[cOff * cUnit], pMBBuf, cUnit * sizeof(PixelI));
+                    memmove(&pFrameBuf[cOff * cUnit], pMBBuf, cUnit * sizeof(PixelI));
 
                     if(pParam->uAlphaMode > 0){
                         pMBInfoAlpha[cOff] = pSCDec->m_pNextSC->MBInfo;
                         
-                        memcpy(&pFrameBufAlpha[cOff * 256], MBBufAlpha, 256 * sizeof(PixelI));
+                        memmove(&pFrameBufAlpha[cOff * 256], MBBufAlpha, 256 * sizeof(PixelI));
                     }
                 }
             }

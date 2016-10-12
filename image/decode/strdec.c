@@ -3185,7 +3185,7 @@ static Void InitializeStrDec(CWMImageStrCodec *pSC,
   const CCoreParameters *pParams, const CWMImageStrCodec *pSCIn)
 {
     // copy core parameters
-    memcpy (&(pSC->m_param), pParams, sizeof (CCoreParameters));
+    memmove (&(pSC->m_param), pParams, sizeof (CCoreParameters));
 
     pSC->cbStruct = sizeof(*pSC);
     pSC->WMII = pSCIn->WMII;

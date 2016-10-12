@@ -177,8 +177,8 @@ Void initMRPtr(CWMImageStrCodec* pSC)
     size_t j, jend = (pSC->m_pNextSC != NULL);
 
     for (j = 0; j <= jend; j++) {
-        memcpy (pSC->p0MBbuffer, pSC->a0MBbuffer, sizeof (pSC->p0MBbuffer));
-        memcpy (pSC->p1MBbuffer, pSC->a1MBbuffer, sizeof (pSC->p1MBbuffer));
+        memmove (pSC->p0MBbuffer, pSC->a0MBbuffer, sizeof (pSC->p0MBbuffer));
+        memmove (pSC->p1MBbuffer, pSC->a1MBbuffer, sizeof (pSC->p1MBbuffer));
         pSC = pSC->m_pNextSC;
     }
 }
@@ -226,9 +226,9 @@ Void swapMRPtr(CWMImageStrCodec* pSC)
     size_t j, jend = (pSC->m_pNextSC != NULL);
 
     for (j = 0; j <= jend; j++) {
-        memcpy (pTemp, pSC->a0MBbuffer, sizeof (pSC->a0MBbuffer));
-        memcpy (pSC->a0MBbuffer, pSC->a1MBbuffer, sizeof (pSC->a0MBbuffer));
-        memcpy (pSC->a1MBbuffer, pTemp, sizeof (pSC->a0MBbuffer));
+        memmove (pTemp, pSC->a0MBbuffer, sizeof (pSC->a0MBbuffer));
+        memmove (pSC->a0MBbuffer, pSC->a1MBbuffer, sizeof (pSC->a0MBbuffer));
+        memmove (pSC->a1MBbuffer, pTemp, sizeof (pSC->a0MBbuffer));
         pSC = pSC->m_pNextSC;
     }
 }
@@ -406,7 +406,7 @@ ERR ReadWS_Memory(struct WMPStream* pWS, void* pv, size_t cb)
         cb = pWS->state.buf.cbBuf - pWS->state.buf.cbCur;
     }
 
-    memcpy(pv, pWS->state.buf.pbBuf + pWS->state.buf.cbCur, cb);
+    memmove(pv, pWS->state.buf.pbBuf + pWS->state.buf.cbCur, cb);
     pWS->state.buf.cbCur += cb;
 
 Cleanup:
@@ -420,7 +420,7 @@ ERR WriteWS_Memory(struct WMPStream* pWS, const void* pv, size_t cb)
     FailIf(pWS->state.buf.cbCur + cb < pWS->state.buf.cbCur, WMP_errBufferOverflow);
     FailIf(pWS->state.buf.cbBuf < pWS->state.buf.cbCur + cb, WMP_errBufferOverflow);
 
-    memcpy(pWS->state.buf.pbBuf + pWS->state.buf.cbCur, pv, cb);
+    memmove(pWS->state.buf.pbBuf + pWS->state.buf.cbCur, pv, cb);
     pWS->state.buf.cbCur += cb;
 
 Cleanup:
@@ -517,7 +517,7 @@ ERR ReadWS_List(struct WMPStream* pWS, void* pv, size_t cb)
         size_t cl = PACKETLENGTH - pWS->state.buf.cbCur;
         if (cl > cb)
             cl = cb;
-        memcpy(pv, pWS->state.buf.pbBuf + pWS->state.buf.cbCur, cl);
+        memmove(pv, pWS->state.buf.pbBuf + pWS->state.buf.cbCur, cl);
         pWS->state.buf.cbCur += cl;
         pv = (void *)((U8 *)pv + cl);
         cb -= cl;
@@ -545,7 +545,7 @@ ERR WriteWS_List(struct WMPStream* pWS, const void* pv, size_t cb)
         size_t cl = PACKETLENGTH - pWS->state.buf.cbCur;
         if (cl > cb)
             cl = cb;
-        memcpy(pWS->state.buf.pbBuf + pWS->state.buf.cbCur, pv, cl);
+        memmove(pWS->state.buf.pbBuf + pWS->state.buf.cbCur, pv, cl);
         pWS->state.buf.cbCur += cl;
         pv = (const void *)((U8 *)pv + cl);
         cb -= cl;

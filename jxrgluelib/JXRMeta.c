@@ -39,7 +39,7 @@ ERR getbfcpy(U8* pbdest, const U8* pb, size_t cb, size_t ofs, U32 n)
 {
     ERR err = WMP_errSuccess;
     FailIf(ofs + n > cb, WMP_errBufferOverflow);
-    memcpy(pbdest, &pb[ofs], n);
+    memmove(pbdest, &pb[ofs], n);
 Cleanup:
     return err;
 }
@@ -114,7 +114,7 @@ ERR setbfcpy(U8* pb, size_t cb, size_t ofs, const U8* pbset, size_t cbset)
 {
     ERR err = WMP_errSuccess;
     FailIf(ofs + cbset > cb, WMP_errBufferOverflow);
-    memcpy(&pb[ofs], pbset, cbset);
+    memmove(&pb[ofs], pbset, cbset);
 Cleanup:
     return err;
 }
@@ -394,7 +394,7 @@ ERR BufferCopyIFD(const U8* pbsrc, U32 cbsrc, U32 ofssrc, U8 endian, U8* pbdst, 
             FailIf(ofssrcdata + size > cbsrc || ofsdstdata + size > cbdst, WMP_errBufferOverflow);
             if ( size == count || endian == WMP_INTEL_ENDIAN )
                 // size == count means 8-bit data means endian doesn't matter
-                memcpy(&pbdst[ofsdstdata], &pbsrc[ofssrcdata], size);
+                memmove(&pbdst[ofsdstdata], &pbsrc[ofssrcdata], size);
             else
             {   // big endian source and endian matters
                 U32 j;
