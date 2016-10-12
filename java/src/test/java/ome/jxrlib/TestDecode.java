@@ -39,4 +39,9 @@ public class TestDecode extends AbstractDecode {
         super(dataBuffer);
     }
 
+    public TestDecode(ByteBuffer dataBuffer, int offset, int length)
+            throws DecodeException {
+        super(dataBuffer, offset, length);
+    }
+
 }

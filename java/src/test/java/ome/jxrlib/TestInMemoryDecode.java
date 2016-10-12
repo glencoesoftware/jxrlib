@@ -68,13 +68,29 @@ public class TestInMemoryDecode extends AbstractTest {
 
     ByteBuffer asByteBuffer(String filename)
             throws URISyntaxException, IOException {
+        return asByteBuffer(filename, null, null);
+    }
+
+    ByteBuffer asByteBuffer(String filename, Integer offset, Integer length)
+            throws URISyntaxException, IOException {
         URL url = this.getClass().getClassLoader().getResource(filename);
         Path inputFile = Paths.get(url.toURI());
 
         ByteBuffer dataBuffer;
         try (FileChannel channel = FileChannel.open(inputFile)) {
-            dataBuffer = ByteBuffer.allocateDirect((int)channel.size());
+            if (offset == null) {
+                offset = 0;
+            }
+            if (length == null) {
+                length = (int) channel.size();
+            }
+            dataBuffer = ByteBuffer.allocateDirect(offset + length);
+            dataBuffer.position(offset);
             channel.read(dataBuffer);
+            System.err.println(
+                    "Offset: " + offset + " Capacity: "
+                    + dataBuffer.capacity() + " Position: "
+                    + dataBuffer.position());
             dataBuffer.position(0);
         }
         return dataBuffer;
@@ -98,6 +114,18 @@ public class TestInMemoryDecode extends AbstractTest {
             throws IOException, URISyntaxException, DecodeException {
         ByteBuffer dataBuffer = asByteBuffer(filename);
         TestDecode decode = new TestDecode(dataBuffer);
+        assertDecode(decode, width, height, bpp, md5);
+    }
+
+    @Parameters({"filename", "width", "height", "bpp", "md5"})
+    @Test
+    public void testByteBufferOffsetLength(
+        String filename, long width, long height, long bpp, String md5)
+            throws IOException, URISyntaxException, DecodeException {
+        int offset = 1024 * 1024;
+        ByteBuffer dataBuffer = asByteBuffer(filename, offset, null);
+        TestDecode decode = new TestDecode(
+                dataBuffer, offset, dataBuffer.capacity() - offset);
         assertDecode(decode, width, height, bpp, md5);
     }
 
