@@ -14,7 +14,7 @@ targetCompatibility = 1.7
 
 repositories {
     jcenter()
-    mavenLocal()
+    //mavenLocal()
     mavenCentral()
     maven {
         url 'http://artifacts.openmicroscopy.org/artifactory/ome.releases'
