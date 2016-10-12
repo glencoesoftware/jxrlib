@@ -158,7 +158,7 @@ public class Main {
                         "Decoded bytes MD5: " + md5(imageBuffer));
                 }
             } else if (arguments.size() == 2) {
-                decode.toFile(new File(arguments.get(2)));
+                decode.toFile(new File(arguments.get(1)));
             } else {
                 System.err.println("INVALID DECODE COMMAND");
             }
