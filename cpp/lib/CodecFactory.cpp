@@ -104,12 +104,23 @@ namespace jxrlib {
     throw FormatError(msg.str().c_str());
   }
 
-  void CodecFactory::decoderFromBytes(ImageDecoder &decoder, std::vector<unsigned char> data) {
-    decoderFromBytes(decoder, data.data(), data.size());
+  void CodecFactory::decoderFromBytes(ImageDecoder &decoder,
+                                      std::vector<unsigned char> data) {
+    decoderFromBytes(decoder, data.data(), 0, data.size());
   }
 
-  void CodecFactory::decoderFromBytes(ImageDecoder &decoder, unsigned char *bytes, size_t len) {
-    Stream dataStream(bytes, len);
+  void CodecFactory::decoderFromBytes(ImageDecoder &decoder,
+                                      std::vector<unsigned char> data,
+                                      size_t offset,
+                                      size_t length) {
+    decoderFromBytes(decoder, data.data(), 0, length);
+  }
+
+  void CodecFactory::decoderFromBytes(ImageDecoder &decoder,
+                                      unsigned char *bytes,
+                                      size_t offset,
+                                      size_t length) {
+    Stream dataStream(bytes + offset, length);
     const PKIID *pIID = NULL;
 
     Call(GetImageDecodeIID((const char *)".jxr", &pIID));

@@ -50,9 +50,15 @@ namespace jxrlib {
   %typemap(javaclassmodifiers) CodecFactory "class"
   class CodecFactory {
   public:
-    void decoderFromFile(jxrlib::ImageDecoder& decoder, std::string inputFile) throw(FormatError);
-    void decoderFromBytes(jxrlib::ImageDecoder& decoder, unsigned char *NIOBUFFER, size_t len) throw(FormatError);
-    jxrlib::FormatConverter createFormatConverter(jxrlib::ImageDecoder& decoder, std::string extension) throw(FormatError);
+    void decoderFromFile(jxrlib::ImageDecoder& decoder,
+                         std::string inputFile) throw(FormatError);
+    void decoderFromBytes(jxrlib::ImageDecoder& decoder,
+                          unsigned char *NIOBUFFER,
+                          size_t offset,
+                          size_t length) throw(FormatError);
+    jxrlib::FormatConverter createFormatConverter(
+      jxrlib::ImageDecoder& decoder,
+      std::string extension) throw(FormatError);
   };
 
   %typemap(javaclassmodifiers) Factory "class"
