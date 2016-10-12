@@ -45,29 +45,41 @@ script:
 # Set up our Maven and SWIG environment
   - mkdir -p $HOME/.m2
   - cat java/settings.xml | sed s/__MAVEN_SERVER_USERNAME__/$MAVEN_SERVER_USERNAME/g | sed s/__MAVEN_SERVER_PASSWORD__/$MAVEN_SERVER_PASSWORD/g > $HOME/.m2/settings.xml
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export SWIG=$HOME/swig/bin/swig ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      export SWIG=$HOME/swig/bin/swig;
+      export LD_LIBRARY_PATH="$TRAVIS_BUILD_DIR/build";
+    else
+      export DYLD_LIBRARY_PATH="$TRAVIS_BUILD_DIR/build";
+    fi
 # Build native code
   - make clean swig all
 # Prepare to run tests
   - cd build
   - mkdir -p transcoded/C/ transcoded/C++/ transcoded/Java/
 # Test base jxrlib C library
-  - for input in ../fixtures/first-tiles/*; do bn=${input##*/} ; bn=${bn%.jxr} ; ./JxrDecApp -i "$input" -o "transcoded/C/$bn.tif" ; done
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export DYLD_LIBRARY_PATH=`pwd` ; else export LD_LIBRARY_PATH=`pwd` ; fi
-# Test jxrlib C++ wrapper library (file to file)
-  - for input in ../fixtures/first-tiles/*; do bn=${input##*/} ; bn=${bn%.jxr} ; ./jxrdecode "$input" "transcoded/C++/$bn.tif" ; done
-# Test jxrlib C++ wrapper library (in memory)
-  - for input in ../fixtures/first-tiles/*; do ./jxrdecode --in-memory "$input" &> /dev/null ; done
+  - for input in ../fixtures/first-tiles/*; do
+      basename=${input##*/};
+      basename=${bn%.jxr};
+      ./JxrDecApp -i "$input" -o "transcoded/C/$basename.tif";
+      ./jxrdecode "$input" "transcoded/C++/$basename.tif";
+      ./jxrdecode --in-memory "$input" &> /dev/null;
+    done
 # Test jxrlib Java bindings (in memory and file to file)
+  - mvn -f ../java/pom.xml test
+# Testing was successful
   - cd $TRAVIS_BUILD_DIR
-  - mvn -f java/pom.xml test
-# Testing was successful, deploy the clang environment artifacts when on Linux and we're not building a PR
-  - if [[ "$CXX" == "clang++" ]] && [[ "$TRAVIS_OS_NAME" == "linux" ]] && [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then mvn -f java/pom.xml deploy; fi
-# Package and deploy
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd java/native-osx_64 ; else cd java/native-linux_64 ; fi
-  - mvn package
-# Only deploy the clang compiled artifacts when we're not building a PR
-  - if [[ "$CXX" == "clang++" ]] && [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then mvn deploy ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      mvn -f java/native-linux_64 package;
+      if [[ "$TRAVIS_PULL_REQUEST" == "false" ]] && [[ "$CC" == "gcc" ]]; then
+        mvn -f java/native-linux_64 deploy;
+        mvn -f java/pom.xml deploy;
+      fi
+    else
+      mvn -f java/native-osx_64 package;
+      if [[ "$TRAVIS_PULL_REQUEST" == "false" ]] && [[ "$CC" == "clang" ]]; then
+        mvn -f java/native-osx_64 deploy;
+      fi
+    fi
 
 cache:
   directories:
