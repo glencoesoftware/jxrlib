@@ -78,9 +78,7 @@ void stream_data() {
     bytes.push_back(val);
   }
 
-  std::cerr << "Read bytes:" << std::endl;
-  print_bytes(bytes);
-  std::cerr << std::endl;
+  std::cerr << "Read bytes MD5: " << md5(bytes, 0) << std::endl;
 
   ImageDecoder decoder;
   codecFactory.decoderFromBytes(decoder, bytes);
@@ -97,8 +95,8 @@ void stream_data() {
     decoder.selectFrame(i);
     decoder.getRawBytes(decodedBytes.data());
 
-    std::cerr << decodedBytes.size() << " Bytes:" << std::endl;
-    print_bytes(decodedBytes, stdout);
+    std::cerr << decodedBytes.size() << " Bytes MD5: " << md5(decodedBytes, 0)
+      << std::endl;
   }
 }
 
@@ -157,8 +155,7 @@ void stream_file(std::string inputFile) {
     decoder.selectFrame(i);
     decoder.getRawBytes(bytes.data());
 
-    std::cerr << bytes.size() << " Bytes:" << std::endl;
-    print_bytes(bytes);
+    std::cerr << bytes.size() << " Bytes MD5: " << md5(bytes, 0) << std::endl;
   }
 }
 
@@ -181,8 +178,7 @@ void stream_file(std::string inputFile, long offset) {
     decoder.selectFrame(i);
     decoder.getRawBytes(bytes.data());
 
-    std::cerr << bytes.size() << " Bytes:" << std::endl;
-    print_bytes(bytes);
+    std::cerr << bytes.size() << " Bytes MD5: " << md5(bytes, 0) << std::endl;
   }
 }
 
