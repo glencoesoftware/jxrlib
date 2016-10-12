@@ -115,7 +115,7 @@ CXX_LIBRARIES=$(CXX_STATIC_LIBRARIES)
 endif
 
 LIBS=-L$(DIR_BUILD) $(shell echo $(LIBRARIES) | sed -E 's%$(DIR_BUILD)/lib([^ ]*)\.(a|$(LIBSUFFIX))%-l\1%g') -lm
-CXXLIBS=-L$(DIR_BUILD) -ljxr++
+CXXLIBS=-L$(DIR_BUILD) -ljxr++ -lcrypto
 
 ##--------------------------------
 ##
