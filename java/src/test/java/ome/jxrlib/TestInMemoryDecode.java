@@ -87,10 +87,6 @@ public class TestInMemoryDecode extends AbstractTest {
             dataBuffer = ByteBuffer.allocateDirect(offset + length);
             dataBuffer.position(offset);
             channel.read(dataBuffer);
-            System.err.println(
-                    "Offset: " + offset + " Capacity: "
-                    + dataBuffer.capacity() + " Position: "
-                    + dataBuffer.position());
             dataBuffer.position(0);
         }
         return dataBuffer;
