@@ -62,7 +62,7 @@ script:
       basename=${bn%.jxr};
       ./JxrDecApp -i "$input" -o "transcoded/C/$basename.tif";
       ./jxrdecode "$input" "transcoded/C++/$basename.tif";
-      ./jxrdecode --in-memory "$input" &> /dev/null;
+      ./jxrdecode --in-memory "$input";
     done
 # Test jxrlib Java bindings (in memory and file to file)
   - mvn -f ../java/pom.xml test
