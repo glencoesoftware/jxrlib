@@ -39,15 +39,15 @@ abstract class AbstractDecode {
         frameCount = decoder.getFrameCount();
     }
 
-    public AbstractDecode(byte data[]) throws DecodeException {
+    AbstractDecode(byte data[]) throws DecodeException {
         this(ByteBuffer.allocateDirect(data.length).put(data));
     }
 
-    public AbstractDecode(ByteBuffer dataBuffer) throws DecodeException {
+    AbstractDecode(ByteBuffer dataBuffer) throws DecodeException {
         this(dataBuffer, 0, dataBuffer.capacity());
     }
 
-    public AbstractDecode(ByteBuffer dataBuffer, int offset, int length)
+    AbstractDecode(ByteBuffer dataBuffer, int offset, int length)
             throws DecodeException {
         if (!dataBuffer.isDirect()) {
             throw new DecodeException("Buffer must be allocated direct.");
@@ -96,7 +96,7 @@ abstract class AbstractDecode {
         }
     }
 
-    public static byte[] decodeFirstFrame(
+    protected static byte[] decodeFirstFrame(
             byte[] source, int offset, int length, int size) {
         DecodeContext decodeContext = new DecodeContext();
         byte[] destination = new byte[size];

@@ -46,4 +46,8 @@ public class Decode extends AbstractDecode {
         super(dataBuffer, offset, length);
     }
 
+    public static byte[] decodeFirstFrame(
+            byte[] source, int offset, int length, int size) {
+        return AbstractDecode.decodeFirstFrame(source, offset, length, size);
+    }
 }
