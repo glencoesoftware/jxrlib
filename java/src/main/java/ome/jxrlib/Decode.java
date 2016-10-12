@@ -41,4 +41,9 @@ public class Decode extends AbstractDecode {
         super(dataBuffer);
     }
 
+    public Decode(ByteBuffer dataBuffer, int offset, int length)
+            throws DecodeException {
+        super(dataBuffer, offset, length);
+    }
+
 }

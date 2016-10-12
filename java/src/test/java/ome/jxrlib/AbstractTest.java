@@ -27,6 +27,12 @@ import javax.xml.bind.DatatypeConverter;
 abstract class AbstractTest {
 
     String md5(ByteBuffer byteBuffer) {
+        byte[] bytes = new byte[byteBuffer.capacity()];
+        byteBuffer.get(bytes);
+        return md5(bytes);
+    }
+
+    String md5(byte[] bytes) {
         MessageDigest md;
         try {
             md = MessageDigest.getInstance("MD5");
@@ -34,8 +40,6 @@ abstract class AbstractTest {
             // This should never happen
             throw new RuntimeException(e);
         }
-        byte[] bytes = new byte[byteBuffer.capacity()];
-        byteBuffer.get(bytes);
         return DatatypeConverter.printHexBinary(md.digest(bytes)).toLowerCase();
     }
 
