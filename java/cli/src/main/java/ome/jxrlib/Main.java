@@ -71,11 +71,13 @@ public class Main {
     @Argument
     private List<String> arguments = new ArrayList<String>();
 
-    public static void main(String args[]) throws DecodeException {
+    public static void main(String args[])
+            throws DecodeException, IOException, CmdLineException {
       new Main().go(args);
     }
 
-    public void go(String args[]) throws DecodeException {
+    public void go(String args[])
+            throws DecodeException, IOException, CmdLineException {
         CmdLineParser parser = new CmdLineParser(this);
         try {
             parser.parseArgument(args);
@@ -96,32 +98,27 @@ public class Main {
             root.setLevel(Level.DEBUG);
         }
 
-        if (arguments.size() == 0) {
+        if (arguments.isEmpty()) {
             ByteArrayOutputStream readData = new ByteArrayOutputStream();
             byte[] buffer = new byte[32 * 1024];
 
             int bytesRead;
-            try {
-                while ((bytesRead = System.in.read(buffer)) > 0) {
-                    readData.write(buffer, 0, bytesRead);
-                }
-                byte[] bytes = readData.toByteArray();
-
-                decode = new Decode(bytes);
-                long width = decode.getWidth();
-                long height = decode.getHeight();
-                long bpp = decode.getBytesPerPixel();
-                ByteBuffer imageBuffer = ByteBuffer.allocateDirect(
-                    (int) (width * height * bpp));
-
-                System.err.println("Opened decoder for bytes...");
-                decode.toBytes(imageBuffer);
-                System.err.println("Decoded bytes MD5: " + md5(imageBuffer));
-            } catch (IOException e) {
-                System.err.println("Problem parsing input data! " + e.getMessage());
+            while ((bytesRead = System.in.read(buffer)) > 0) {
+                readData.write(buffer, 0, bytesRead);
             }
+            byte[] bytes = readData.toByteArray();
+
+            decode = new Decode(bytes);
+            long width = decode.getWidth();
+            long height = decode.getHeight();
+            long bpp = decode.getBytesPerPixel();
+            ByteBuffer imageBuffer = ByteBuffer.allocateDirect(
+                (int) (width * height * bpp));
+
+            System.err.println("Opened decoder for bytes...");
+            decode.toBytes(imageBuffer);
+            System.err.println("Decoded bytes MD5: " + md5(imageBuffer));
         } else if (inMemory || inMemoryBytes) {
-          try {
             String inputFilename = arguments.get(0);
             System.err.println("input file = " + inputFilename);
             ByteBuffer inputBuffer;
@@ -132,39 +129,35 @@ public class Main {
               channel.position(0);
             }
 
-            decode = new Decode(inputBuffer);
-            long width = decode.getWidth();
-            long height = decode.getHeight();
-            long bpp = decode.getBytesPerPixel();
-
             System.err.println(
                 "Opened in-memory decoder for file: " + inputFilename);
-            if (arguments.size() == 1) {
-                if (inMemoryBytes) {
-                    System.err.println("Decoding use byte arrays");
-                    byte[] source = new byte[inputBuffer.capacity()];
-                    inputBuffer.position(0);
-                    inputBuffer.get(source);
-                    byte[] destination = Decode.decodeFirstFrame(
-                        source, 0, source.length, (int)(width * height * bpp));
-                    System.err.println(
+            if (inMemoryBytes) {
+                System.err.println("Decoding using byte arrays");
+                byte[] source = new byte[inputBuffer.capacity()];
+                inputBuffer.position(0);
+                inputBuffer.get(source);
+                byte[] destination = Decode.decodeFirstFrame(
+                    source, 0, source.length);
+                System.err.println(
                         "Decoded bytes MD5: " + md5(destination));
-                } else {
-                    System.err.println("Decoding use NIO byte buffers");
-                    ByteBuffer imageBuffer = ByteBuffer.allocateDirect(
-                      (int) (width * height * bpp));
-                    decode.toBytes(imageBuffer);
-                    System.err.println(
-                        "Decoded bytes MD5: " + md5(imageBuffer));
-                }
+                return;
+            }
+            decode = new Decode(inputBuffer);
+            if (arguments.size() == 1) {
+                long width = decode.getWidth();
+                long height = decode.getHeight();
+                long bpp = decode.getBytesPerPixel();
+                System.err.println("Decoding using NIO byte buffers");
+                ByteBuffer imageBuffer = ByteBuffer.allocateDirect(
+                  (int) (width * height * bpp));
+                decode.toBytes(imageBuffer);
+                System.err.println(
+                    "Decoded bytes MD5: " + md5(imageBuffer));
             } else if (arguments.size() == 2) {
                 decode.toFile(new File(arguments.get(1)));
             } else {
-                System.err.println("INVALID DECODE COMMAND");
-            }
-            }
-            catch (IOException e) {
-              System.err.println(e.getMessage());
+                throw new CmdLineException(
+                    parser, "At least one argument required");
             }
         } else {
             String inputFilename = arguments.get(0);
