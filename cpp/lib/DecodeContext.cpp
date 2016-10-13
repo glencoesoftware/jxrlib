@@ -24,19 +24,21 @@
 
 namespace jxrlib {
 
-  void DecodeContext::decodeFirstFrame(char *source,
-                                       char *destination,
-                                       size_t offset,
-                                       size_t length) {
+  signed char* DecodeContext::decodeFirstFrame(char *source,
+                                               size_t offset,
+                                               size_t length,
+                                               size_t *size) {
     ImageDecoder decoder;
     CodecFactory codecFactory;
     codecFactory.decoderFromBytes(
       decoder, (unsigned char *)source, offset, length);
 
-    unsigned int frameSize =
+    *size =
       decoder.getWidth() * decoder.getHeight() * decoder.getBytesPerPixel();
+    signed char *destination = new signed char[*size];
     decoder.selectFrame(0);
     decoder.getRawBytes((unsigned char *)destination);
+    return destination;
   }
 
 } // namespace jxrlib

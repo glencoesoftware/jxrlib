@@ -45,7 +45,7 @@ public class TestDecode extends AbstractDecode {
     }
 
     public static byte[] decodeFirstFrame(
-            byte[] source, int offset, int length, int size) {
-        return AbstractDecode.decodeFirstFrame(source, offset, length, size);
+            byte[] source, int offset, int length) {
+        return AbstractDecode.decodeFirstFrame(source, offset, length);
     }
 }

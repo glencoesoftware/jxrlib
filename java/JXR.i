@@ -102,8 +102,27 @@ namespace jxrlib {
   %typemap(javaclassmodifiers) Stream "class"
   struct Stream {};
 
+  %typemap(in,numinputs=0,noblock=1) size_t *size {
+    size_t temp_size;
+    $1 = &temp_size;
+  }
+  %typemap(jstype) signed char* decodeFirstFrame "byte[]"
+  %typemap(jtype) signed char* decodeFirstFrame "byte[]"
+  %typemap(jni) signed char* decodeFirstFrame "jbyteArray"
+  %typemap(javaout) signed char* decodeFirstFrame {
+    return $jnicall;
+  }
+  %typemap(out) signed char* decodeFirstFrame {
+    $result = JCALL1(NewByteArray, jenv, temp_size);
+    if (!$result) return 0;
+    JCALL4(SetByteArrayRegion, jenv, $result, 0, temp_size, $1);
+    delete[] $1;
+  }
   class DecodeContext {
   public:
-    void decodeFirstFrame(char *BYTE, char *BYTE, size_t offset, size_t length) throw(FormatError);
+    signed char* decodeFirstFrame(char *BYTE,
+                                  size_t offset,
+                                  size_t length,
+                                  size_t *size) throw(FormatError);
   };
 }
