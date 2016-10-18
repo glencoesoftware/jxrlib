@@ -21,17 +21,25 @@ package ome.jxrlib;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import org.perf4j.slf4j.Slf4JStopWatch;
+import org.perf4j.StopWatch;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 public class TestInMemoryDecode extends AbstractTest {
 
@@ -90,6 +98,22 @@ public class TestInMemoryDecode extends AbstractTest {
             dataBuffer.position(0);
         }
         return dataBuffer;
+    }
+
+    private static final Logger logger = LoggerFactory.getLogger(TestInMemoryDecode.class);
+    private Map<Method, StopWatch> timers = new HashMap<>();
+
+    @Parameters({"filename"})
+    @BeforeMethod
+    public void startTimer(Method timedMethod, String filename) {
+        StopWatch sw = new Slf4JStopWatch(logger, Slf4JStopWatch.DEBUG_LEVEL);
+        sw.start(timedMethod.getName(), "Image: " + filename);
+        timers.put(timedMethod, sw);
+    }
+
+    @AfterMethod(alwaysRun = true)
+    public void stopTimer(java.lang.reflect.Method timedMethod) {
+        timers.get(timedMethod).stop(timedMethod.getName());
     }
 
     @Parameters({"filename", "width", "height", "bpp", "md5"})
