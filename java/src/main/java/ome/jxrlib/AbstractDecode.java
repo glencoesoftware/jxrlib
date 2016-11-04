@@ -78,6 +78,10 @@ abstract class AbstractDecode {
         decoder.getRawBytes(imageBuffer);
     }
 
+    public byte[] toByteArray() throws DecodeException {
+        return decoder.getByteArray();
+    }
+
     public void toFile(File outputFile) {
         String fileName = outputFile.getName();
         String extension = fileName.substring(fileName.lastIndexOf('.') + 1);

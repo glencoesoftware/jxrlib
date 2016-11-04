@@ -35,7 +35,7 @@ import org.testng.annotations.Test;
 
 public class TestInMemoryDecode extends AbstractTest {
 
-    void assertDecode(
+    void assertBufferDecode(
             AbstractDecode decode, long width, long height, long bpp,
             String md5) throws DecodeException {
         long _width = decode.getWidth();
@@ -49,6 +49,12 @@ public class TestInMemoryDecode extends AbstractTest {
             (int) (_width * _height * _bpp));
         decode.toBytes(imageBuffer);
 
+        Assert.assertEquals(md5(imageBuffer), md5);
+    }
+
+    void assertByteArrayDecode(AbstractDecode decode, String md5)
+            throws DecodeException {
+        ByteBuffer imageBuffer = ByteBuffer.wrap(decode.toByteArray());
         Assert.assertEquals(md5(imageBuffer), md5);
     }
 
@@ -100,7 +106,7 @@ public class TestInMemoryDecode extends AbstractTest {
         byte[] data = asByteArray(filename);
 
         TestDecode decode = new TestDecode(data);
-        assertDecode(decode, width, height, bpp, md5);
+        assertBufferDecode(decode, width, height, bpp, md5);
     }
 
     @Parameters({"filename", "md5"})
@@ -119,7 +125,7 @@ public class TestInMemoryDecode extends AbstractTest {
             throws IOException, URISyntaxException, DecodeException {
         ByteBuffer dataBuffer = asByteBuffer(filename);
         TestDecode decode = new TestDecode(dataBuffer);
-        assertDecode(decode, width, height, bpp, md5);
+        assertBufferDecode(decode, width, height, bpp, md5);
     }
 
     @Parameters({"filename", "width", "height", "bpp", "md5"})
@@ -131,7 +137,16 @@ public class TestInMemoryDecode extends AbstractTest {
         ByteBuffer dataBuffer = asByteBuffer(filename, offset, null);
         TestDecode decode = new TestDecode(
                 dataBuffer, offset, dataBuffer.capacity() - offset);
-        assertDecode(decode, width, height, bpp, md5);
+        assertBufferDecode(decode, width, height, bpp, md5);
+    }
+
+    @Parameters({"filename", "md5"})
+    @Test
+    public void testByteBufferToByteArray(String filename, String md5)
+            throws IOException, URISyntaxException, DecodeException {
+        ByteBuffer dataBuffer = asByteBuffer(filename);
+        TestDecode decode = new TestDecode(dataBuffer);
+        assertByteArrayDecode(decode, md5);
     }
 
     @Test(expectedExceptions={DecodeException.class})
