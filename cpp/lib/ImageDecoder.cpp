@@ -190,4 +190,28 @@ namespace jxrlib {
     throw FormatError(errMsg);
   }
 
+  std::vector<unsigned char> ImageDecoder::getRawBytes() {
+    I32 width, height, bytesPerPixel;
+    PKRect rc;
+    std::vector<unsigned char> decodedData;
+
+    bytesPerPixel = (I32) getBytesPerPixel();
+    Call(pDecoder->GetSize(pDecoder, &width, &height));
+
+    rc.X = 0;
+    rc.Y = 0;
+    rc.Width = width;
+    rc.Height = height;
+
+    decodedData.resize(width * height * bytesPerPixel);
+
+      Call(pDecoder->Copy(pDecoder, &rc, decodedData.data(), width * bytesPerPixel));
+    return decodedData;
+  Cleanup:
+    std::stringstream msg;
+    msg << "ERROR: Could not get image bytes: " << err;
+    std::string errMsg = msg.str();
+    throw FormatError(errMsg);
+  }
+
 } // namespace jxrlib
