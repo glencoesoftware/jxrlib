@@ -30,6 +30,7 @@
 #include "windowsmediaphoto.h"
 
 #include "CodecFactory.hpp"
+#include "DecodeContext.hpp"
 #include "Factory.hpp"
 #include "FormatConverter.hpp"
 #include "FormatError.hpp"
@@ -71,6 +72,7 @@ static void print_bytes(std::vector<unsigned char>bytes, std::FILE *out = stderr
 void stream_data() {
   Factory factory;
   CodecFactory codecFactory;
+  DecodeContext decodeContext;
   std::vector<unsigned char> bytes;
 
   std::cin.unsetf(std::ios_base::skipws);
@@ -82,7 +84,7 @@ void stream_data() {
 
   std::vector<unsigned char> decodedBytes;
 
-  decodedBytes = ImageDecoder::decodeFirstFrame(bytes);
+  decodedBytes = decodeContext.decodeFirstFrame(bytes);
 
   std::cerr << decodedBytes.size() << " Bytes MD5: " << md5(decodedBytes, 0)
       << std::endl;
