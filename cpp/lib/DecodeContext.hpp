@@ -19,6 +19,8 @@
  */
 #pragma once
 
+#include <vector>
+
 namespace jxrlib {
 
   class DecodeContext {
@@ -27,6 +29,7 @@ namespace jxrlib {
                                   size_t offset,
                                   size_t length,
                                   size_t *size);
+    std::vector<unsigned char> decodeFirstFrame(std::vector<unsigned char> &image);
   };
 
 } // namespace jxrlib
