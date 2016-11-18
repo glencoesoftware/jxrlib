@@ -24,10 +24,33 @@
 
 namespace jxrlib {
 
-  signed char* DecodeContext::decodeFirstFrame(char *source,
-                                               size_t offset,
-                                               size_t length,
-                                               size_t *size) {
+  void DecodeContext::decodeFrame(int frame,
+                                  ImageDecoder *source,
+                                  signed char *destination) {
+    source->selectFrame(frame);
+    source->getRawBytes((unsigned char *)destination);
+  }
+
+  void DecodeContext::decodeFrame(int frame,
+                                  unsigned char *source,
+                                  size_t sourceOffset,
+                                  size_t sourceLength,
+                                  unsigned char *destination,
+                                  size_t destinationOffset) {
+    ImageDecoder decoder;
+    CodecFactory codecFactory;
+    codecFactory.decoderFromBytes(
+      decoder, source, sourceOffset, sourceLength);
+
+    this->decodeFrame(
+      frame, &decoder, (signed char *)(destination + destinationOffset));
+  }
+
+  signed char* DecodeContext::decodeFrame(int frame,
+                                          char *source,
+                                          size_t offset,
+                                          size_t length,
+                                          size_t *size) {
     ImageDecoder decoder;
     CodecFactory codecFactory;
     codecFactory.decoderFromBytes(
@@ -36,8 +59,7 @@ namespace jxrlib {
     *size =
       decoder.getWidth() * decoder.getHeight() * decoder.getBytesPerPixel();
     signed char *destination = new signed char[*size];
-    decoder.selectFrame(0);
-    decoder.getRawBytes((unsigned char *)destination);
+    this->decodeFrame(frame, &decoder, destination);
     return destination;
   }
 

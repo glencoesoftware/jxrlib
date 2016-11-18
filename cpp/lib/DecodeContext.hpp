@@ -23,10 +23,22 @@ namespace jxrlib {
 
   class DecodeContext {
   public:
-    signed char* decodeFirstFrame(char *source,
-                                  size_t offset,
-                                  size_t length,
-                                  size_t *size);
+    void decodeFrame(int frame,
+                     ImageDecoder *source,
+                     signed char *destination);
+
+    void decodeFrame(int frame,
+                     unsigned char *source,
+                     size_t sourceOffset,
+                     size_t sourceLength,
+                     unsigned char *destination,
+                     size_t destinationOffset);
+
+    signed char* decodeFrame(int frame,
+                             char *source,
+                             size_t offset,
+                             size_t length,
+                             size_t *size);
   };
 
 } // namespace jxrlib

@@ -106,13 +106,13 @@ namespace jxrlib {
     size_t temp_size;
     $1 = &temp_size;
   }
-  %typemap(jstype) signed char* decodeFirstFrame "byte[]"
-  %typemap(jtype) signed char* decodeFirstFrame "byte[]"
-  %typemap(jni) signed char* decodeFirstFrame "jbyteArray"
-  %typemap(javaout) signed char* decodeFirstFrame {
+  %typemap(jstype) signed char* decodeFrame "byte[]"
+  %typemap(jtype) signed char* decodeFrame "byte[]"
+  %typemap(jni) signed char* decodeFrame "jbyteArray"
+  %typemap(javaout) signed char* decodeFrame {
     return $jnicall;
   }
-  %typemap(out) signed char* decodeFirstFrame {
+  %typemap(out) signed char* decodeFrame {
     $result = JCALL1(NewByteArray, jenv, temp_size);
     if (!$result) return 0;
     JCALL4(SetByteArrayRegion, jenv, $result, 0, temp_size, $1);
@@ -120,9 +120,18 @@ namespace jxrlib {
   }
   class DecodeContext {
   public:
-    signed char* decodeFirstFrame(char *BYTE,
-                                  size_t offset,
-                                  size_t length,
-                                  size_t *size) throw(FormatError);
+    signed char* decodeFrame(int frame,
+                             char *BYTE,
+                             size_t offset,
+                             size_t length,
+                             size_t *size) throw(FormatError);
+
+    void decodeFrame(int frame,
+                     unsigned char *NIOBUFFER,
+                     size_t sourceOffset,
+                     size_t sourceLength,
+                     unsigned char *NIOBUFFER,
+                     size_t destinationOffset) throw(FormatError);
+
   };
 }
