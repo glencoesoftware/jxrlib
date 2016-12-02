@@ -29,25 +29,4 @@ public class Decode extends AbstractDecode {
         NativeLibraryUtil.loadNativeLibrary(Decode.class, "jxrjava");
     }
 
-    public Decode(File inputFile) {
-        super(inputFile);
-    }
-
-    public Decode(byte data[]) throws DecodeException {
-        super(data);
-    }
-
-    public Decode(ByteBuffer dataBuffer) throws DecodeException {
-        super(dataBuffer);
-    }
-
-    public Decode(ByteBuffer dataBuffer, int offset, int length)
-            throws DecodeException {
-        super(dataBuffer, offset, length);
-    }
-
-    public static byte[] decodeFirstFrame(
-            byte[] source, int offset, int length) {
-        return AbstractDecode.decodeFirstFrame(source, offset, length);
-    }
 }

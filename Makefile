@@ -117,6 +117,12 @@ endif
 LIBS=-L$(DIR_BUILD) $(shell echo $(LIBRARIES) | sed -E 's%$(DIR_BUILD)/lib([^ ]*)\.(a|$(LIBSUFFIX))%-l\1%g') -lm
 CXXLIBS=-L$(DIR_BUILD) -ljxr++ -lcrypto
 
+ifdef HOMEBREW
+CFLAGS:=$(CFLAGS) -I$(shell brew --prefix openssl)/include
+CXXFLAGS:=$(CXXFLAGS) -I$(shell brew --prefix openssl)/include
+LIBS:=$(LIBS) -L$(shell brew --prefix openssl)/lib
+endif
+
 ##--------------------------------
 ##
 ## Common files

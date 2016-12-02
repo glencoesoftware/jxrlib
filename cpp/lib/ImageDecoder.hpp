@@ -21,6 +21,7 @@
 
 #include <vector>
 
+#include "ImageMetadata.hpp"
 #include "JXRGlue.h"
 #include "Resolution.hpp"
 #include "Stream.hpp"
@@ -47,6 +48,7 @@ namespace jxrlib {
     size_t getHeight();
     size_t getBytesPerPixel();
     Resolution getResolution();
+    ImageMetadata getImageMetadata();
     void getRawBytes(unsigned char *image_buffer);
   };
 

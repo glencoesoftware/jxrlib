@@ -18,8 +18,7 @@
  * #%L
  */
 
-#ifndef _Resolution
-#define _Resolution
+#pragma once
 
 namespace jxrlib {
 
@@ -31,5 +30,3 @@ namespace jxrlib {
   };
 
 } // namespace jxrlib
-
-#endif // _Resolution

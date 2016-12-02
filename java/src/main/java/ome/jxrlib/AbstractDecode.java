@@ -24,45 +24,40 @@ import java.nio.ByteBuffer;
 abstract class AbstractDecode {
 
     public ImageMetadata getImageMetadata(byte[] source) {
-        DecodeContext decodeContext = new DecodeContext();
-        return decodeContext.getImageMetadata(source);
+        return new DecodeContext().getImageMetadata(source);
     }
 
-    public byte[] decodeFrame(
-            int frame, byte[] source, int offset, int length) {
-        DecodeContext decodeContext = new DecodeContext();
-        return decodeContext.decodeFrame(frame, source, offset, length);
+    public ImageMetadata getImageMetadata(File source) {
+        return new DecodeContext().getImageMetadata(source.getAbsolutePath());
     }
+
+    public byte[] decodeFrame(int frame, byte[] source) {
+        return new DecodeContext().decodeFrame(frame, source, 0, source.length);
+    }
+
+    public byte[] decodeFrame(int frame, byte[] source, int offset, int length) {
+        return new DecodeContext().decodeFrame(frame, source, offset, length);
+    }
+
+    public byte[] decodeFrame(int frame, File source) {
+        return new DecodeContext().decodeFrame(frame, source.getAbsolutePath());}
 
     public void decodeFrame(
             int frame, ByteBuffer source, int sourceOffset, int sourceLength,
             ByteBuffer destination, int destinationOffset) {
-        DecodeContext decodeContext = new DecodeContext();
-        decodeContext.decodeFrame(
-            frame, source, sourceOffset, sourceLength,
-            destination, destinationOffset);
-    }
-
-    public byte[] decodeFrame(
-        int frame, File source) {
-        DecodeContext decodeContext = new DecodeContext();
-        return decodeContext.decodeFrame(
-            frame, source.getAbsolutePath());
+        new DecodeContext().decodeFrame(frame, source, sourceOffset, sourceLength,
+                                        destination, destinationOffset);
     }
 
     public void decodeFrame(
-            int frame, File source, ByteBuffer destination,
-            int offset, int length) {
-        DecodeContext decodeContext = new DecodeContext();
-        return decodeContext.decodeFrame(
-            frame, source.getAbsolutePath(), destination);
+            int frame, File source, int offset, ByteBuffer destination) {
+        new DecodeContext().decodeFrame(frame, source.getAbsolutePath(),
+                                        offset, destination);
     }
 
-    public void decodeFrame(
-        int frame, File source, File destination) {
-        DecodeContext decodeContext = new DecodeContext();
-        return decodeContext.decodeFrame(
-            frame, source.getAbsolutePath(), destination.getAbsolutePath());
+    public void decodeFrame(int frame, File source, File destination) {
+        new DecodeContext().decodeFrame(frame, source.getAbsolutePath(),
+                                        destination.getAbsolutePath());
     }
 
 }

@@ -19,13 +19,32 @@
  */
 #pragma once
 
+#include <string>
+#include <vector>
+
+#include "ImageMetadata.hpp"
+#include "ImageDecoder.hpp"
+
 namespace jxrlib {
 
   class DecodeContext {
   public:
     void decodeFrame(int frame,
-                     ImageDecoder *source,
+                     ImageDecoder &source,
                      signed char *destination);
+
+    signed char *decodeFrame(int frame,
+                             std::string inputFile,
+                             size_t *size);
+
+    void decodeFrame(int frame,
+                     std::string inputFile,
+                     std::string outputFile);
+
+    void decodeFrame(int frame,
+                     std::string inputFile,
+                     size_t offset,
+                     unsigned char *destination);
 
     void decodeFrame(int frame,
                      unsigned char *source,
@@ -39,6 +58,13 @@ namespace jxrlib {
                              size_t offset,
                              size_t length,
                              size_t *size);
+
+    ImageMetadata getImageMetadata(char *source,
+                                   size_t offset,
+                                   size_t length);
+
+    ImageMetadata getImageMetadata(std::string inputFile,
+                                   size_t offset);
   };
 
 } // namespace jxrlib

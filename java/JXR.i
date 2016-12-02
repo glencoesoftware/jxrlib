@@ -12,6 +12,7 @@
   #include "FormatError.hpp"
   #include "ImageDecoder.hpp"
   #include "ImageEncoder.hpp"
+  #include "ImageMetadata.hpp"
   #include "Resolution.hpp"
   #include "Stream.hpp"
 %}
@@ -97,7 +98,18 @@ namespace jxrlib {
   };
 
   %typemap(javaclassmodifiers) Resolution "class"
-  struct Resolution {};
+  struct Resolution {
+    float X;
+    float Y;
+  };
+
+  %typemap(javaclassmodifiers) ImageMetadata "class"
+  struct ImageMetadata {
+    Resolution resolution;
+    size_t width;
+    size_t height;
+    size_t bytesPerPixel;
+  };
 
   %typemap(javaclassmodifiers) Stream "class"
   struct Stream {};
@@ -118,8 +130,31 @@ namespace jxrlib {
     JCALL4(SetByteArrayRegion, jenv, $result, 0, temp_size, $1);
     delete[] $1;
   }
+  %typemap(javacode) DecodeContext %{
+    public ImageMetadata getImageMetadata(byte[] source) {
+      return new DecodeContext().getImageMetadata(source, 0, source.length);
+    }
+
+    public ImageMetadata getImageMetadata(String filepath) {
+      return new DecodeContext().getImageMetadata(filepath, 0);
+    }
+  %}
+
   class DecodeContext {
   public:
+    signed char* decodeFrame(int frame,
+                             std::string inputFile,
+                             size_t *size);
+
+    void decodeFrame(int frame,
+                     std::string inputFile,
+                     std::string outputFile);
+
+    void decodeFrame(int frame,
+                     std::string inputFile,
+                     size_t offset,
+                     unsigned char *NIOBUFFER);
+
     signed char* decodeFrame(int frame,
                              char *BYTE,
                              size_t offset,
@@ -133,5 +168,11 @@ namespace jxrlib {
                      unsigned char *NIOBUFFER,
                      size_t destinationOffset) throw(FormatError);
 
+    ImageMetadata getImageMetadata(char *BYTE,
+                                   size_t offset,
+                                   size_t length);
+
+    ImageMetadata getImageMetadata(std::string inputFile,
+                                   size_t offset);
   };
 }

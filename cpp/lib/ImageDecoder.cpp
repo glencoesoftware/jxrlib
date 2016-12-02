@@ -168,6 +168,13 @@ namespace jxrlib {
     throw FormatError("ERROR: Could not get decoder resolution");
   }
 
+  ImageMetadata ImageDecoder::getImageMetadata() {
+    return ImageMetadata(getResolution(),
+                         getWidth(),
+                         getHeight(),
+                         getBytesPerPixel());
+  }
+
   void ImageDecoder::getRawBytes(unsigned char *image_buffer) {
     ERR err = WMP_errSuccess;
 	I32 width, height, bytesPerPixel;

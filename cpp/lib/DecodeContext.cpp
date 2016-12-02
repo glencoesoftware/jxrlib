@@ -20,15 +20,63 @@
 
 #include "CodecFactory.hpp"
 #include "DecodeContext.hpp"
+#include "Factory.hpp"
 #include "ImageDecoder.hpp"
+#include "ImageEncoder.hpp"
 
 namespace jxrlib {
 
   void DecodeContext::decodeFrame(int frame,
-                                  ImageDecoder *source,
+                                  ImageDecoder &source,
                                   signed char *destination) {
-    source->selectFrame(frame);
-    source->getRawBytes((unsigned char *)destination);
+    source.selectFrame(frame);
+    source.getRawBytes((unsigned char *)destination);
+  }
+
+  signed char* DecodeContext::decodeFrame(int frame,
+                                          std::string inputFile,
+                                          size_t *size) {
+    ImageDecoder decoder;
+    CodecFactory codecFactory;
+    codecFactory.decoderFromFile(decoder, inputFile);
+    ImageMetadata metadata = decoder.getImageMetadata();
+
+    *size = metadata.height * metadata.width * metadata.bytesPerPixel;
+    signed char *destination = new signed char[*size];
+    decodeFrame(frame, decoder, destination);
+    return destination;
+  }
+
+  void DecodeContext::decodeFrame(int frame,
+                                  std::string inputFile,
+                                  std::string outputFile) {
+    Factory factory;
+    CodecFactory codecFactory;
+
+    ImageDecoder decoder;
+    codecFactory.decoderFromFile(decoder, inputFile);
+    decoder.selectFrame(frame);
+
+    std::string extension = outputFile.substr(outputFile.find_last_of(".") + 1);
+    FormatConverter converter = codecFactory.createFormatConverter(decoder, extension);
+    Stream outputStream = factory.createStreamFromFilename(outputFile);
+    ImageEncoder encoder(outputStream, "." + extension);
+
+    encoder.initializeWithDecoder(decoder);
+    encoder.writeSource(converter);
+    encoder.close();
+  }
+
+  void DecodeContext::decodeFrame(int frame,
+                                  std::string inputFile,
+                                  size_t offset,
+                                  unsigned char *destination) {
+    Factory factory;
+    CodecFactory codecFactory;
+
+    ImageDecoder decoder;
+    codecFactory.decoderFromFile(decoder, inputFile, offset);
+    decodeFrame(frame, decoder, (signed char *)destination);
   }
 
   void DecodeContext::decodeFrame(int frame,
@@ -43,7 +91,7 @@ namespace jxrlib {
       decoder, source, sourceOffset, sourceLength);
 
     this->decodeFrame(
-      frame, &decoder, (signed char *)(destination + destinationOffset));
+      frame, decoder, (signed char *)(destination + destinationOffset));
   }
 
   signed char* DecodeContext::decodeFrame(int frame,
@@ -59,8 +107,25 @@ namespace jxrlib {
     *size =
       decoder.getWidth() * decoder.getHeight() * decoder.getBytesPerPixel();
     signed char *destination = new signed char[*size];
-    this->decodeFrame(frame, &decoder, destination);
+    this->decodeFrame(frame, decoder, destination);
     return destination;
   }
 
+  ImageMetadata DecodeContext::getImageMetadata(char *source,
+                                                size_t offset,
+                                                size_t length) {
+    ImageDecoder decoder;
+    CodecFactory codecFactory;
+    codecFactory.decoderFromBytes(
+      decoder, (unsigned char *)source, offset, length);
+    return decoder.getImageMetadata();
+  }
+
+  ImageMetadata DecodeContext::getImageMetadata(std::string inputFile,
+                                                size_t offset) {
+    ImageDecoder decoder;
+    CodecFactory codecFactory;
+    codecFactory.decoderFromFile(decoder, inputFile, offset);
+    return decoder.getImageMetadata();
+  }
 } // namespace jxrlib
