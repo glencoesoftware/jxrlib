@@ -3,6 +3,19 @@
 
 <suite name="ome.jxrlib">
 
+  <test name="FL_3channel_noZ_compression_lossless">
+    <parameter name="filename" value="FL_3channel_noZ_compression_lossless.jxr" />
+    <parameter name="width" value="2040" />
+    <parameter name="height" value="2040" />
+    <parameter name="bpp" value="2" />
+    <parameter name="md5" value="9bce4515d533c5617f206f5935bc8c4e" />
+    <parameter name="tiffMd5" value="0xdeadbeef" />
+    <classes>
+      <class name="ome.jxrlib.TestInMemoryDecode"/>
+      <class name="ome.jxrlib.TestFileToFileDecode"/>
+    </classes>
+  </test>
+
   <test name="BF-1scene-nozstack-compression50pct">
     <parameter name="filename" value="BF-1scene-nozstack-compression50pct.jxr" />
     <parameter name="width" value="587" />
@@ -152,19 +165,6 @@
     <parameter name="height" value="2040" />
     <parameter name="bpp" value="2" />
     <parameter name="md5" value="2ac92d7699f3a4a77e260c0b5a51c8c6" />
-    <parameter name="tiffMd5" value="0xdeadbeef" />
-    <classes>
-      <class name="ome.jxrlib.TestInMemoryDecode"/>
-      <class name="ome.jxrlib.TestFileToFileDecode"/>
-    </classes>
-  </test>
-
-  <test name="FL_3channel_noZ_compression_lossless">
-    <parameter name="filename" value="FL_3channel_noZ_compression_lossless.jxr" />
-    <parameter name="width" value="2040" />
-    <parameter name="height" value="2040" />
-    <parameter name="bpp" value="2" />
-    <parameter name="md5" value="9bce4515d533c5617f206f5935bc8c4e" />
     <parameter name="tiffMd5" value="0xdeadbeef" />
     <classes>
       <class name="ome.jxrlib.TestInMemoryDecode"/>
