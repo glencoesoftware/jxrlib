@@ -142,7 +142,11 @@ public class TestInMemoryDecode extends AbstractTest {
         String filename, long width, long height, long bpp, String md5)
             throws IOException, URISyntaxException, DecodeException {
         ByteBuffer dataBuffer = asByteBuffer(filename);
-        ImageMetadata metadata = new TestDecode().getImageMetadata(new File(filename));
+
+        URL url = this.getClass().getClassLoader().getResource(filename);
+        Path inputFile = Paths.get(url.toURI());
+        ImageMetadata metadata = new TestDecode().getImageMetadata(inputFile.toFile());
+
         assertDecode(dataBuffer, metadata, width, height, bpp, md5);
     }
 
@@ -153,7 +157,11 @@ public class TestInMemoryDecode extends AbstractTest {
             throws IOException, URISyntaxException, DecodeException {
         int offset = 1024 * 1024;
         ByteBuffer dataBuffer = asByteBuffer(filename, offset, null);
-        ImageMetadata metadata = new TestDecode().getImageMetadata(new File(filename));
+
+        URL url = this.getClass().getClassLoader().getResource(filename);
+        Path inputFile = Paths.get(url.toURI());
+        ImageMetadata metadata = new TestDecode().getImageMetadata(inputFile.toFile());
+
         assertDecode(dataBuffer, metadata, offset, dataBuffer.capacity() - offset,
                      width, height, bpp, md5);
     }
