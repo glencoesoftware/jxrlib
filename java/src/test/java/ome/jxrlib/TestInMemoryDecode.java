@@ -143,6 +143,7 @@ public class TestInMemoryDecode extends AbstractTest {
         Assert.assertEquals(md5, md5(destination));
     }
 
+    /*
     @Parameters({"filename", "width", "height", "bpp", "md5"})
     @Test
     public void testByteBuffer(
@@ -173,7 +174,6 @@ public class TestInMemoryDecode extends AbstractTest {
                      width, height, bpp, md5);
     }
 
-    /*
     @Parameters({"filename"})
     @Test(expectedExceptions={DecodeException.class})
     public void testOutputNotDirect(String filename)
