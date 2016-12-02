@@ -173,6 +173,7 @@ public class TestInMemoryDecode extends AbstractTest {
                      width, height, bpp, md5);
     }
 
+    /*
     @Parameters({"filename"})
     @Test(expectedExceptions={DecodeException.class})
     public void testOutputNotDirect(String filename)
@@ -187,6 +188,7 @@ public class TestInMemoryDecode extends AbstractTest {
             throws IOException, URISyntaxException, DecodeException {
         new TestDecode().decodeFrame(0, ByteBuffer.allocateDirect(1).array(), 0, 1);
     }
+    */
 
     // Can be useful if debugging destructors.
     /*
