@@ -7,7 +7,7 @@
 
   <groupId>ome</groupId>
   <artifactId>jxrlib-native-linux_64</artifactId>
-  <version>0.2.0</version>
+  <version>0.2.1</version>
   <packaging>jar</packaging>
 
   <name>JXRLib native library dependencies for Linux x86-84</name>
