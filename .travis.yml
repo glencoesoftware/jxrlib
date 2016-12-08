@@ -21,6 +21,10 @@ matrix:
             - libpcre3-dev
       compiler: clang
     - os: osx
+<<<<<<< HEAD
+=======
+      osx_image: xcode6.4  # Mac OS X 10.10
+>>>>>>> Explicitly set xcode version
       compiler: gcc
       before_install:
         - brew update
@@ -29,6 +33,10 @@ matrix:
       env:
         - HOMEBREW=1
     - os: osx
+<<<<<<< HEAD
+=======
+      osx_image: xcode6.4  # Mac OS X 10.10
+>>>>>>> Explicitly set xcode version
       compiler: clang
       before_install:
         - brew update
