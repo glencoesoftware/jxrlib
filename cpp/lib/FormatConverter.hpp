@@ -23,6 +23,11 @@
 
 namespace jxrlib {
 
+  /**
+   *  The FormatConverter class wraps the `pConverter` struct and corresponding
+   *  methods from the jxrlib C code. At present its only use is to aid in
+   *  transcoding from a ImageDecoder to an ImageEncoder.
+   */
   class FormatConverter {
     PKFormatConverter *pConverter;
     ERR err;

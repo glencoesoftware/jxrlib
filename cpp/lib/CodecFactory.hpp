@@ -29,6 +29,11 @@
 
 namespace jxrlib {
 
+  /**
+   *  The CodecFactory class wraps the `pCodecFactory` struct and corresponding
+   *  methods from the jxrlib C code. It contains methods to generate image
+   *  decoders and format converters.
+   */
   class CodecFactory {
     PKCodecFactory *pCodecFactory;
     ERR err;
@@ -36,20 +41,76 @@ namespace jxrlib {
     CodecFactory();
     ~CodecFactory();
 
+    /**
+     *  Initialize an ImageDecoder from a file.
+     *
+     *  @param decoder   A pre-instantiated ImageDecoder instance to be initialized
+     *  @param inputFile The JPEG XR file to be decoded
+     */
     void decoderFromFile(ImageDecoder &decoder, std::string inputFile);
+
+    /**
+     *  Initialize an ImageDecoder from data inside a file.
+     *
+     *  @param decoder   A pre-instantiated ImageDecoder instance to be
+     *                   initialized
+     *  @param inputFile The file containing the JPEG XR data to be decoded
+     *  @param offset    The offset within the file where image data begins
+     */
     void decoderFromFile(ImageDecoder &decoder,
                          std::string inputFile,
                          long offset);
+
+    /**
+     *  Initialize an ImageDecoder directly from JPEG XR data
+     *
+     *  @param decoder A pre-instantiated ImageDecoder instance to be
+     *                 initialized
+     *  @param data    The raw JPEG XR data
+     */
     void decoderFromBytes(ImageDecoder &decoder,
                           std::vector<unsigned char> data);
+
+    /**
+     *  Initialize an ImageDecoder directly from in-memory data containing a
+     *  JPEG XR image
+     *
+     *  @param decoder A pre-instantiated ImageDecoder instance to be
+     *                 initialized
+     *  @param data    The data containing the JPEG XR image
+     *  @param offset  Where in the `data` the JPEG XR image begins
+     *  @param length  The length of the JPEG XR image data
+     */
     void decoderFromBytes(ImageDecoder &decoder,
                           std::vector<unsigned char> data,
                           size_t offset,
                           size_t length);
+
+    /**
+     *  Initialize an ImageDecoder directly from in-memory data containing a
+     *  JPEG XR image
+     *
+     *  @param decoder A pre-instantiated ImageDecoder instance to be
+     *                 initialized
+     *  @param bytes   A pointer to the location of the data containing the JPEG
+     *                 XR image
+     *  @param offset  The offset from `bytes` where the JPEG XR image begins
+     *  @param length  The length of the JPEG XR image data
+     */
     void decoderFromBytes(ImageDecoder &decoder,
                           unsigned char *bytes,
                           size_t offset,
                           size_t length);
+
+    /**
+     *  Generate a FormatConverter from a decoder which will convert a JPEG XR
+     *  image into an image format specified by extension
+     *
+     *  @param decoder   An ImageDecoder initialized with a JPEG XR image
+     *  @param extension The file extension of the image format to convert to
+     *  @return          A FormatConverter ready to be used with an ImageEncoder
+     *                   to transcode a JPEG XR image
+     */
     FormatConverter createFormatConverter(ImageDecoder &decoder,
                                           std::string extension);
   };

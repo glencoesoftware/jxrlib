@@ -1,3 +1,4 @@
 build
 java/target
+doc/html
 *.userprefs

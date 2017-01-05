@@ -266,6 +266,10 @@ $(DIR_BUILD)/libjxrjava.$(LIBSUFFIX): $(LIBRARIES) $(CXX_LIBRARIES)
 	@echo "JAVA_INCLUDE=$(JAVA_INCLUDE)"
 	$(CXX) -o $(DIR_BUILD)/libjxrjava.$(LIBSUFFIX) -shared -I$(JAVA_INCLUDE) -I$(JAVA_INCLUDE)/$(PLATFORM) -I$(DIR_CXX)/lib $(CXXFLAGS) $(OBJ_SYS) $(OBJ_ENC) $(OBJ_DEC) $(OBJ_GLUE) $(OBJ_TEST) $(OBJ_CXX) $(DIR_JAVA)/JXR_wrap.cxx
 
+.PHONY: doc
+doc:
+	doxygen Doxyfile
+
 ##--------------------------------
 ##
 ## Enc app files
