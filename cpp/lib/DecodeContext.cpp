@@ -27,10 +27,10 @@
 namespace jxrlib {
 
   void DecodeContext::decodeFrame(int frame,
-                                  ImageDecoder &source,
+                                  ImageDecoder *source,
                                   signed char *destination) {
-    source.selectFrame(frame);
-    source.getRawBytes((unsigned char *)destination);
+    source->selectFrame(frame);
+    source->getRawBytes((unsigned char *)destination);
   }
 
   signed char* DecodeContext::decodeFrame(int frame,
@@ -43,7 +43,7 @@ namespace jxrlib {
 
     *size = metadata.height * metadata.width * metadata.bytesPerPixel;
     signed char *destination = new signed char[*size];
-    decodeFrame(frame, decoder, destination);
+    decodeFrame(frame, &decoder, destination);
     return destination;
   }
 
@@ -76,7 +76,7 @@ namespace jxrlib {
 
     ImageDecoder decoder;
     codecFactory.decoderFromFile(decoder, inputFile, offset);
-    decodeFrame(frame, decoder, (signed char *)destination);
+    decodeFrame(frame, &decoder, (signed char *)destination);
   }
 
   void DecodeContext::decodeFrame(int frame,
@@ -91,7 +91,7 @@ namespace jxrlib {
       decoder, source, sourceOffset, sourceLength);
 
     this->decodeFrame(
-      frame, decoder, (signed char *)(destination + destinationOffset));
+      frame, &decoder, (signed char *)(destination + destinationOffset));
   }
 
   signed char* DecodeContext::decodeFrame(int frame,
@@ -107,7 +107,7 @@ namespace jxrlib {
     *size =
       decoder.getWidth() * decoder.getHeight() * decoder.getBytesPerPixel();
     signed char *destination = new signed char[*size];
-    this->decodeFrame(frame, decoder, destination);
+    this->decodeFrame(frame, &decoder, destination);
     return destination;
   }
 
