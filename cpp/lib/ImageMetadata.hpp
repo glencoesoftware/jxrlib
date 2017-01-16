@@ -25,11 +25,33 @@
 
 namespace jxrlib {
 
+  /**
+   *  The ImageMetadata struct holds all relevant information for a JPEG-XR
+   *  encoded image.
+   */
   struct ImageMetadata {
+
+    /**
+     *  A Resolution object containing information about the encoded image's
+     *  Resolution
+     */
     Resolution resolution;
+
+    /**
+     *  Width in pixels of the encoded image
+     */
     size_t width;
+
+    /**
+     *  Height in pixels of the encoded image
+     */
     size_t height;
+
+    /**
+     *  Number of bytes used to encode each pixel in the image
+     */
     size_t bytesPerPixel;
+
     ImageMetadata() : width(0), height(0), bytesPerPixel(0) {}
     ImageMetadata(Resolution resolution,
                   size_t width,

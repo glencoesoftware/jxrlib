@@ -22,9 +22,22 @@
 
 namespace jxrlib {
 
+  /**
+   *  The Resolution struct contains information about the resolution of a
+   *  JPEG-XR encoded image
+   */
   struct Resolution {
+
+    /**
+     *  The resolution of the encoded image in the X direction
+     */
     float X;
+
+    /**
+     *  The resolution of the encoded image in the Y direction
+     */
     float Y;
+    
     Resolution() : X(0.0), Y(0.0) {}
     Resolution(float X, float Y) : X(X), Y(Y) {}
   };

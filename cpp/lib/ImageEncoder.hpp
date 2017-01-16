@@ -29,15 +29,49 @@
 
 namespace jxrlib {
 
+  /**
+   *  The ImageEncoder class wraps the `pEncoder` struct and corresponding
+   *  methods from the jxrlib C code. It contains methods to initialize the
+   *  encoder given an ImageDecoder and to transcode between formats supported
+   *  by the FormatConverter class.
+   */
   class ImageEncoder {
     PKImageEncode *pEncoder;
     ERR err;
   public:
+
+    /**
+     *  Instantiates an ImageEncoder object for writing out to the provided
+     *  Stream
+     *
+     *  @param encodeStream The Stream object encapsulating the destination for
+     *                      the image to be written
+     *  @param extension    A std::string containing the file extension
+     *                      corresponding to the image format to use for encoding
+     */
     ImageEncoder(Stream encodeStream, std::string extension);
 
+    /**
+     *  Initializes the underlying `pEncoder` struct using values obtained from
+     *  the provided ImageDecoder
+     *
+     *  @param decoder The ImageDecoder from which to obtain image properties
+     */
     void initializeWithDecoder(ImageDecoder& decoder);
+
+    /**
+     *  Encodes an image from and to the formats specified by the provided
+     *  Format Converter
+     *
+     *  @param converter The FormatConverter object containing information about
+     *                   which formats to convert from/to and the data to be
+     *                   transcoded
+     */
     void writeSource(FormatConverter& converter);
 
+    /**
+     *  Closes out the ImageEncoder and finalizes any pending writes.
+     */
     void close();
   };
 
