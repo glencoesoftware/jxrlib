@@ -166,20 +166,32 @@ public class TestInMemoryDecode extends AbstractTest {
                      width, height, bpp, md5);
     }
 
-    /*
     @Parameters({"filename"})
-    @Test(expectedExceptions={DecodeException.class})
+    @Test(expectedExceptions={AssertionError.class})
     public void testOutputNotDirect(String filename)
             throws IOException, URISyntaxException, DecodeException {
         ByteBuffer dataBuffer = asByteBuffer(filename);
-        new TestDecode().decodeFrame(0, dataBuffer, 0, dataBuffer.capacity(),
-                                     ByteBuffer.allocate(1), 0);
+        new TestDecode().decodeFrame(
+            0, dataBuffer, 0, dataBuffer.capacity(), ByteBuffer.allocate(1), 0
+        );
+    }
+
+    @Test(expectedExceptions={AssertionError.class})
+    public void testSourceNotDirect()
+            throws IOException, URISyntaxException, DecodeException {
+        new TestDecode().decodeFrame(
+                0, ByteBuffer.allocate(1), 0, 1, ByteBuffer.allocate(1), 0
+            );
     }
 
     @Test(expectedExceptions={FormatError.class})
     public void testInvalidInput()
             throws IOException, URISyntaxException, DecodeException {
-        new TestDecode().decodeFrame(0, ByteBuffer.allocateDirect(1).array(), 0, 1);
+        new TestDecode().decodeFrame(
+            0,
+            ByteBuffer.allocateDirect(1), 0, 1,
+            ByteBuffer.allocateDirect(1), 0
+        );
     }
 
     // Can be useful if debugging destructors.
