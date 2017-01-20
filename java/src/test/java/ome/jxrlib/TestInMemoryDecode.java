@@ -66,7 +66,7 @@ public class TestInMemoryDecode extends AbstractTest {
         ByteBuffer imageBuffer = ByteBuffer.allocateDirect(size);
 
         TestDecode decode = new TestDecode();
-        decode.decodeFrame(0, inputBuffer, 0, size, imageBuffer, 0);
+        decode.decodeFrame(0, inputBuffer, (int) offset, size, imageBuffer, 0);
         Assert.assertEquals(md5(imageBuffer), md5);
     }
 
