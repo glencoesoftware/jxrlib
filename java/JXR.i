@@ -144,16 +144,16 @@ namespace jxrlib {
   public:
     signed char* decodeFrame(int frame,
                              std::string inputFile,
-                             size_t *size);
+                             size_t *size) throw(FormatError);
 
     void decodeFrame(int frame,
                      std::string inputFile,
-                     std::string outputFile);
+                     std::string outputFile) throw(FormatError);
 
     void decodeFrame(int frame,
                      std::string inputFile,
                      size_t offset,
-                     unsigned char *NIOBUFFER);
+                     unsigned char *NIOBUFFER) throw(FormatError);
 
     signed char* decodeFrame(int frame,
                              char *BYTE,
@@ -170,9 +170,9 @@ namespace jxrlib {
 
     ImageMetadata getImageMetadata(char *BYTE,
                                    size_t offset,
-                                   size_t length);
+                                   size_t length) throw(FormatError);
 
     ImageMetadata getImageMetadata(std::string inputFile,
-                                   size_t offset);
+                                   size_t offset) throw(FormatError);
   };
 }
