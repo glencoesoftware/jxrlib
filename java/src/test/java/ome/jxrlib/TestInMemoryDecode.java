@@ -36,8 +36,6 @@ import org.testng.annotations.Test;
 
 public class TestInMemoryDecode extends AbstractTest {
 
-    public static ByteBuffer readBuffer = null, imageBuffer = null;
-
     void assertDecode(byte[] inputData, long width, long height, long bpp,
             String md5) throws DecodeException {
         TestDecode decode = new TestDecode();
@@ -65,15 +63,11 @@ public class TestInMemoryDecode extends AbstractTest {
         Assert.assertEquals(_bpp, bpp);
 
         int size = (int)_width * (int)_height * (int)_bpp;
-        if (imageBuffer == null || imageBuffer.capacity() < size) {
-            imageBuffer = ByteBuffer.allocateDirect(size);
-        }
+        ByteBuffer imageBuffer = ByteBuffer.allocateDirect(size);
 
         TestDecode decode = new TestDecode();
         decode.decodeFrame(0, inputBuffer, 0, size, imageBuffer, 0);
-        byte[] imageData = new byte[size];
-        imageBuffer.get(imageData);
-        Assert.assertEquals(md5(imageData), md5);
+        Assert.assertEquals(md5(imageBuffer), md5);
     }
 
     void assertDecode(ByteBuffer inputBuffer, ImageMetadata metadata,
@@ -107,6 +101,7 @@ public class TestInMemoryDecode extends AbstractTest {
         URL url = this.getClass().getClassLoader().getResource(filename);
         Path inputFile = Paths.get(url.toURI());
 
+        ByteBuffer dataBuffer;
         try (FileChannel channel = FileChannel.open(inputFile)) {
             if (offset == null) {
                 offset = 0;
@@ -114,14 +109,12 @@ public class TestInMemoryDecode extends AbstractTest {
             if (length == null) {
                 length = (int) channel.size();
             }
-            if (readBuffer == null || readBuffer.capacity() < offset + length) {
-                readBuffer = ByteBuffer.allocateDirect(offset + length);
-            }
-            readBuffer.position(offset);
-            channel.read(readBuffer);
-            readBuffer.position(0);
+            dataBuffer = ByteBuffer.allocateDirect(offset + length);
+            dataBuffer.position(offset);
+            channel.read(dataBuffer);
+            dataBuffer.position(0);
         }
-        return readBuffer;
+        return dataBuffer;
     }
 
     @Parameters({"filename", "width", "height", "bpp", "md5"})
