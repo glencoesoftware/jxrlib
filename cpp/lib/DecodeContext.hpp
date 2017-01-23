@@ -47,7 +47,7 @@ namespace jxrlib {
      *                     should be written
      */
     void decodeFrame(int frame,
-                     ImageDecoder *source,
+                     ImageDecoder &source,
                      signed char *destination);
 
     /**
