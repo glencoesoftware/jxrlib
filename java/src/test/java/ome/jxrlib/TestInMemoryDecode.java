@@ -75,7 +75,7 @@ public class TestInMemoryDecode extends AbstractTest {
     void assertDecode(ByteBuffer inputBuffer, ImageMetadata metadata,
                       long width, long height, long bpp,
                       String md5) throws DecodeException {
-        assertDecode(inputBuffer, metadata, 0, width * height * bpp,
+        assertDecode(inputBuffer, metadata, 0, inputBuffer.capacity(),
                      width, height, bpp, md5);
     }
 
