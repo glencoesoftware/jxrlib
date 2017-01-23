@@ -35,18 +35,22 @@ abstract class AbstractDecode {
         return new DecodeContext().decodeFrame(frame, source, 0, source.length);
     }
 
-    public byte[] decodeFrame(int frame, byte[] source, int offset, int length) {
+    public byte[] decodeFrame(
+            int frame, byte[] source, int offset, int length) {
         return new DecodeContext().decodeFrame(frame, source, offset, length);
     }
 
     public byte[] decodeFrame(int frame, File source) {
-        return new DecodeContext().decodeFrame(frame, source.getAbsolutePath());}
+        return new DecodeContext().decodeFrame(frame, source.getAbsolutePath());
+    }
 
     public void decodeFrame(
             int frame, ByteBuffer source, int sourceOffset, int sourceLength,
             ByteBuffer destination, int destinationOffset) {
-        new DecodeContext().decodeFrame(frame, source, sourceOffset, sourceLength,
-                                        destination, destinationOffset);
+        new DecodeContext().decodeFrame(
+            frame, source, sourceOffset, sourceLength,
+            destination, destinationOffset
+        );
     }
 
     public void decodeFrame(
