@@ -52,9 +52,9 @@ public class TestInMemoryDecode extends AbstractTest {
         Assert.assertEquals(md5(imageData), md5);
     }
 
-    void assertDecode(ByteBuffer inputBuffer, ImageMetadata metadata, long offset,
-                      long length, long width, long height, long bpp,
-                      String md5) throws DecodeException {
+    void assertDecode(ByteBuffer inputBuffer, ImageMetadata metadata,
+                      long offset, long length, long width, long height,
+                      long bpp, String md5) throws DecodeException {
         long _width = metadata.getWidth();
         Assert.assertEquals(_width, width);
         long _height = metadata.getHeight();
@@ -66,7 +66,9 @@ public class TestInMemoryDecode extends AbstractTest {
         ByteBuffer imageBuffer = ByteBuffer.allocateDirect(size);
 
         TestDecode decode = new TestDecode();
-        decode.decodeFrame(0, inputBuffer, (int) offset, (int) length, imageBuffer, 0);
+        decode.decodeFrame(
+            0, inputBuffer, (int) offset, (int) length, imageBuffer, 0
+        );
         Assert.assertEquals(md5(imageBuffer), md5);
     }
 
@@ -145,7 +147,9 @@ public class TestInMemoryDecode extends AbstractTest {
 
         URL url = this.getClass().getClassLoader().getResource(filename);
         Path inputFile = Paths.get(url.toURI());
-        ImageMetadata metadata = new TestDecode().getImageMetadata(inputFile.toFile());
+        ImageMetadata metadata = new TestDecode().getImageMetadata(
+            inputFile.toFile()
+        );
 
         assertDecode(dataBuffer, metadata, width, height, bpp, md5);
     }
@@ -160,10 +164,14 @@ public class TestInMemoryDecode extends AbstractTest {
 
         URL url = this.getClass().getClassLoader().getResource(filename);
         Path inputFile = Paths.get(url.toURI());
-        ImageMetadata metadata = new TestDecode().getImageMetadata(inputFile.toFile());
+        ImageMetadata metadata = new TestDecode().getImageMetadata(
+            inputFile.toFile()
+        );
 
-        assertDecode(dataBuffer, metadata, offset, dataBuffer.capacity() - offset,
-                     width, height, bpp, md5);
+        assertDecode(
+            dataBuffer, metadata, offset, dataBuffer.capacity() - offset,
+            width, height, bpp, md5
+        );
     }
 
     @Parameters({"filename"})
