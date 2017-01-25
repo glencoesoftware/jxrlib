@@ -36,8 +36,9 @@ import org.testng.annotations.Test;
 
 public class TestInMemoryDecode extends AbstractTest {
 
-    void assertDecode(byte[] inputData, long width, long height, long bpp,
-            String md5) throws DecodeException {
+    void assertDecode(byte[] inputData,
+                      int width, int height, int bpp,
+                      String md5) throws DecodeException {
         TestDecode decode = new TestDecode();
         ImageMetadata metadata = decode.getImageMetadata(inputData);
         long _width = metadata.getWidth();
@@ -52,9 +53,11 @@ public class TestInMemoryDecode extends AbstractTest {
         Assert.assertEquals(md5(imageData), md5);
     }
 
-    void assertDecode(ByteBuffer inputBuffer, ImageMetadata metadata,
-                      long offset, long length, long width, long height,
-                      long bpp, String md5) throws DecodeException {
+    void assertDecode(ByteBuffer inputBuffer, int offset, int length,
+                      int width, int height, int bpp,
+                      String md5, int writeOffset) throws DecodeException {
+        TestDecode decode = new TestDecode();
+        ImageMetadata metadata = decode.getImageMetadata(inputBuffer, offset, length);
         long _width = metadata.getWidth();
         Assert.assertEquals(_width, width);
         long _height = metadata.getHeight();
@@ -63,20 +66,27 @@ public class TestInMemoryDecode extends AbstractTest {
         Assert.assertEquals(_bpp, bpp);
 
         int size = (int)_width * (int)_height * (int)_bpp;
-        ByteBuffer imageBuffer = ByteBuffer.allocateDirect(size);
+        ByteBuffer imageBuffer = ByteBuffer.allocateDirect(size + writeOffset);
 
-        TestDecode decode = new TestDecode();
         decode.decodeFrame(
-            0, inputBuffer, (int) offset, (int) length, imageBuffer, 0
+            0, inputBuffer, offset, length, imageBuffer, writeOffset
         );
-        Assert.assertEquals(md5(imageBuffer), md5);
+        Assert.assertEquals(md5(imageBuffer, writeOffset), md5);
     }
 
-    void assertDecode(ByteBuffer inputBuffer, ImageMetadata metadata,
-                      long width, long height, long bpp,
+    void assertDecode(ByteBuffer inputBuffer,
+                      int offset, int length,
+                      int width, int height, int bpp,
                       String md5) throws DecodeException {
-        assertDecode(inputBuffer, metadata, 0, inputBuffer.capacity(),
-                     width, height, bpp, md5);
+        assertDecode(inputBuffer, offset, length,
+                     width, height, bpp, md5, 0);
+    }
+
+    void assertDecode(ByteBuffer inputBuffer,
+                      int width, int height, int bpp,
+                      String md5) throws DecodeException {
+        assertDecode(inputBuffer, 0, inputBuffer.capacity(),
+                     width, height, bpp, md5, 0);
     }
 
     byte[] asByteArray(String filename) throws IOException {
@@ -122,7 +132,7 @@ public class TestInMemoryDecode extends AbstractTest {
     @Parameters({"filename", "width", "height", "bpp", "md5"})
     @Test
     public void testByteArray(
-        String filename, long width, long height, long bpp, String md5)
+        String filename, int width, int height, int bpp, String md5)
             throws IOException, DecodeException {
         byte[] data = asByteArray(filename);
 
@@ -141,37 +151,38 @@ public class TestInMemoryDecode extends AbstractTest {
     @Parameters({"filename", "width", "height", "bpp", "md5"})
     @Test
     public void testByteBuffer(
-        String filename, long width, long height, long bpp, String md5)
+        String filename, int width, int height, int bpp, String md5)
             throws IOException, URISyntaxException, DecodeException {
         ByteBuffer dataBuffer = asByteBuffer(filename);
 
-        URL url = this.getClass().getClassLoader().getResource(filename);
-        Path inputFile = Paths.get(url.toURI());
-        ImageMetadata metadata = new TestDecode().getImageMetadata(
-            inputFile.toFile()
-        );
-
-        assertDecode(dataBuffer, metadata, width, height, bpp, md5);
+        assertDecode(dataBuffer, width, height, bpp, md5);
     }
 
     @Parameters({"filename", "width", "height", "bpp", "md5"})
     @Test
     public void testByteBufferOffsetLength(
-        String filename, long width, long height, long bpp, String md5)
+        String filename, int width, int height, int bpp, String md5)
             throws IOException, URISyntaxException, DecodeException {
         int offset = 1024 * 1024;
         ByteBuffer dataBuffer = asByteBuffer(filename, offset, null);
 
-        URL url = this.getClass().getClassLoader().getResource(filename);
-        Path inputFile = Paths.get(url.toURI());
-        ImageMetadata metadata = new TestDecode().getImageMetadata(
-            inputFile.toFile()
-        );
-
         assertDecode(
-            dataBuffer, metadata, offset, dataBuffer.capacity() - offset,
+            dataBuffer, offset, dataBuffer.capacity() - offset,
             width, height, bpp, md5
         );
+    }
+
+    @Parameters({"filename", "width", "height", "bpp", "md5"})
+    @Test
+    public void testByteBufferWriteOffset(
+        String filename, int width, int height, int bpp, String md5)
+            throws IOException, URISyntaxException, DecodeException {
+        int offset = 1024 * 1024;
+        ByteBuffer dataBuffer = asByteBuffer(filename);
+
+        assertDecode(
+            dataBuffer, 0, dataBuffer.capacity(),
+            width, height, bpp, md5, offset);
     }
 
     @Parameters({"filename"})
@@ -186,7 +197,7 @@ public class TestInMemoryDecode extends AbstractTest {
 
     @Test(expectedExceptions={AssertionError.class})
     public void testSourceNotDirect()
-            throws IOException, URISyntaxException, DecodeException {
+            throws IOException, DecodeException {
         new TestDecode().decodeFrame(
                 0, ByteBuffer.allocate(1), 0, 1, ByteBuffer.allocate(1), 0
             );
@@ -194,7 +205,7 @@ public class TestInMemoryDecode extends AbstractTest {
 
     @Test(expectedExceptions={FormatError.class})
     public void testInvalidInput()
-            throws IOException, URISyntaxException, DecodeException {
+            throws IOException, DecodeException {
         new TestDecode().decodeFrame(
             0,
             ByteBuffer.allocateDirect(1), 0, 1,

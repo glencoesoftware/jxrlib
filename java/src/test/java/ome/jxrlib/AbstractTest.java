@@ -27,7 +27,12 @@ import javax.xml.bind.DatatypeConverter;
 abstract class AbstractTest {
 
     String md5(ByteBuffer byteBuffer) {
-        byte[] bytes = new byte[byteBuffer.capacity()];
+        return md5(byteBuffer, 0);
+    }
+
+    String md5(ByteBuffer byteBuffer, int offset) {
+        byte[] bytes = new byte[byteBuffer.capacity() - offset];
+        byteBuffer.position(offset);
         byteBuffer.get(bytes);
         return md5(bytes);
     }

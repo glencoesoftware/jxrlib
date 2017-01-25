@@ -46,6 +46,7 @@ abstract class AbstractDecode {
 
     public byte[] decodeFrame(
             int frame, byte[] source, int offset, int length) {
+        assert (source.length >= offset + length);
         return new DecodeContext().decodeFrame(frame, source, offset, length);
     }
 
@@ -56,6 +57,7 @@ abstract class AbstractDecode {
     public void decodeFrame(
             int frame, ByteBuffer source, int sourceOffset, int sourceLength,
             ByteBuffer destination, int destinationOffset) {
+        assert (source.capacity() >= sourceOffset + sourceLength);
         new DecodeContext().decodeFrame(
             frame, source, sourceOffset, sourceLength,
             destination, destinationOffset
@@ -63,7 +65,10 @@ abstract class AbstractDecode {
     }
 
     public void decodeFrame(
-            int frame, File source, int offset, ByteBuffer destination) {
+            int frame, File source, int offset, ByteBuffer destination) throws DecodeException {
+        if (!destination.isDirect()) {
+            throw new DecodeException("ByteBuffers must be allocated direct!");
+        }
         new DecodeContext().decodeFrame(frame, source.getAbsolutePath(),
                                         offset, destination);
     }
