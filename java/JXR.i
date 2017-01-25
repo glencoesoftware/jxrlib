@@ -172,6 +172,10 @@ namespace jxrlib {
                                    size_t offset,
                                    size_t length) throw(FormatError);
 
+    ImageMetadata getImageMetadata(unsigned char *NIOBUFFER,
+                                   size_t offset,
+                                   size_t length) throw(FormatError);
+
     ImageMetadata getImageMetadata(std::string inputFile,
                                    size_t offset) throw(FormatError);
   };

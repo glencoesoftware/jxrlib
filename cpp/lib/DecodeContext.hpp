@@ -137,6 +137,10 @@ namespace jxrlib {
     ImageMetadata getImageMetadata(char *source,
                                    size_t offset,
                                    size_t length);
+
+    ImageMetadata getImageMetadata(unsigned char *source,
+                                   size_t offset,
+                                   size_t length);
     /**
      *  Extracts metadata from a JPEG XR file
      *

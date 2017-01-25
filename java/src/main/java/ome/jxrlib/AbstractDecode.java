@@ -27,6 +27,15 @@ abstract class AbstractDecode {
         return new DecodeContext().getImageMetadata(source);
     }
 
+    public ImageMetadata getImageMetadata(ByteBuffer source) {
+        return new DecodeContext().getImageMetadata(source, 0, source.capacity());
+    }
+
+    public ImageMetadata getImageMetadata(ByteBuffer source, int offset, int length) {
+        assert (source.capacity() >= offset + length);
+        return new DecodeContext().getImageMetadata(source, offset, length);
+    }
+
     public ImageMetadata getImageMetadata(File source) {
         return new DecodeContext().getImageMetadata(source.getAbsolutePath());
     }

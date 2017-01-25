@@ -121,6 +121,12 @@ namespace jxrlib {
     return decoder.getImageMetadata();
   }
 
+  ImageMetadata DecodeContext::getImageMetadata(unsigned char *source,
+                                                size_t offset,
+                                                size_t length) {
+    return getImageMetadata((char *)source, offset, length);
+  }
+
   ImageMetadata DecodeContext::getImageMetadata(std::string inputFile,
                                                 size_t offset) {
     ImageDecoder decoder;
