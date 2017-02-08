@@ -3,7 +3,6 @@
 %include std_vector.i
 %include std_string.i
 %include arrays_java.i
-%include various.i
 %{
   #include "CodecFactory.hpp"
   #include "DecodeContext.hpp"
@@ -17,6 +16,71 @@
   #include "Stream.hpp"
 %}
 
+/* 
+ * char *BYTE typemaps. 
+ * These are input typemaps for mapping a Java byte[] array to a C char array.
+ * Note that as a Java array is used and thus passeed by reference, the C routine 
+ * can return data to Java via the parameter.
+ *
+ * Example usage wrapping:
+ *   void foo(char *array);
+ *  
+ * Java usage:
+ *   byte b[] = new byte[20];
+ *   modulename.foo(b);
+ */
+%typemap(jni) unsigned char *BYTE "jbyteArray"
+%typemap(jtype) unsigned char *BYTE "byte[]"
+%typemap(jstype) unsigned char *BYTE "byte[]"
+%typemap(in) unsigned char *BYTE {
+  $1 = (unsigned char *) JCALL2(GetByteArrayElements, jenv, $input, 0); 
+}
+
+%typemap(argout) unsigned char *BYTE {
+  JCALL3(ReleaseByteArrayElements, jenv, $input, (jbyte *) $1, 0); 
+}
+
+%typemap(javain) unsigned char *BYTE "$javainput"
+
+/* Prevent default freearg typemap from being used */
+%typemap(freearg) unsigned char *BYTE ""
+
+/* 
+ * unsigned char *NIOBUFFER typemaps. 
+ * This is for mapping Java nio buffers to C char arrays.
+ * It is useful for performance critical code as it reduces the memory copy an marshaling overhead.
+ * Note: The Java buffer has to be allocated with allocateDirect.
+ *
+ * Example usage wrapping:
+ *   %apply unsigned char *NIOBUFFER { unsigned char *buf };
+ *   void foo(unsigned char *buf);
+ *  
+ * Java usage:
+ *   java.nio.ByteBuffer b = ByteBuffer.allocateDirect(20); 
+ *   modulename.foo(b);
+ */
+%typemap(jni) unsigned char *NIOBUFFER "jobject"  
+%typemap(jtype) unsigned char *NIOBUFFER "java.nio.ByteBuffer"  
+%typemap(jstype) unsigned char *NIOBUFFER "java.nio.ByteBuffer"  
+%typemap(javain,
+  pre="  assert $javainput.isDirect() : \"Buffer must be allocated direct.\";") unsigned char *NIOBUFFER "$javainput"
+%typemap(javaout) unsigned char *NIOBUFFER {  
+  return $jnicall;  
+}  
+%typemap(in) unsigned char *NIOBUFFER {  
+  $1 = (unsigned char *) JCALL1(GetDirectBufferAddress, jenv, $input); 
+  if ($1 == NULL) {  
+    SWIG_JavaThrowException(jenv, SWIG_JavaRuntimeException, "Unable to get address of a java.nio.ByteBuffer direct byte buffer. Buffer must be a direct buffer and not a non-direct buffer.");  
+  }  
+}  
+%typemap(memberin) unsigned char *NIOBUFFER {  
+  if ($input) {  
+    $1 = $input;  
+  } else {  
+    $1 = 0;  
+  }  
+}  
+%typemap(freearg) unsigned char *NIOBUFFER ""  
 %pragma(java) moduleclassmodifiers="class"
 %pragma(java) jniclassclassmodifiers="class"
 
@@ -131,52 +195,140 @@ namespace jxrlib {
     delete[] $1;
   }
   %typemap(javacode) DecodeContext %{
-    public ImageMetadata getImageMetadata(byte[] source) {
-      return new DecodeContext().getImageMetadata(source, 0, source.length);
-    }
-
-    public ImageMetadata getImageMetadata(String filepath) {
-      return new DecodeContext().getImageMetadata(filepath, 0);
+    public ImageMetadata getImageMetadataFromBytes(byte[] source) {
+      return new DecodeContext().getImageMetadataFromBytes(source, 0, source.length);
     }
   %}
 
   class DecodeContext {
   public:
+    %rename(transcodeFile) decodeFrame(int frame,
+                                       std::string inputFile,
+                                       std::string outputFile,
+                                       size_t sourceOffset = 0) throw(FormatError);
+    void decodeFrame(int frame,
+                     std::string inputFile,
+                     std::string outputFile,
+                     size_t offset = 0) throw(FormatError);
+
+    %rename(decodeFile) decodeFrame(int frame,
+                                    std::string inputFile,
+                                    size_t *size,
+                                    size_t sourceOffset = 0) throw(FormatError);
     signed char* decodeFrame(int frame,
                              std::string inputFile,
-                             size_t *size) throw(FormatError);
+                             size_t *size,
+                             size_t sourceOffset = 0) throw(FormatError);
 
+    %rename(decodeFileToBytes) decodeFrame(int frame,
+                                           std::string inputFile,
+                                           unsigned char *BYTE,
+                                           size_t sourceOffset = 0) throw(FormatError);
     void decodeFrame(int frame,
                      std::string inputFile,
-                     std::string outputFile) throw(FormatError);
+                     unsigned char *BYTE,
+                     size_t sourceOffset = 0) throw(FormatError);
 
+    %rename(decodeFileToBuffer) decodeFrame(int frame,
+                                            std::string inputFile,
+                                            unsigned char *NIOBUFFER,
+                                            size_t sourceOffset = 0) throw(FormatError);
     void decodeFrame(int frame,
                      std::string inputFile,
-                     size_t offset,
-                     unsigned char *NIOBUFFER) throw(FormatError);
+                     unsigned char *NIOBUFFER,
+                     size_t sourceOffset = 0) throw(FormatError);
 
+    %rename(decodeBytes) decodeFrame(int frame,
+                                     unsigned char *BYTE,
+                                     size_t *size,
+                                     size_t sourceOffset,
+                                     size_t sourceLength) throw(FormatError);
     signed char* decodeFrame(int frame,
-                             char *BYTE,
-                             size_t offset,
-                             size_t length,
-                             size_t *size) throw(FormatError);
+                             unsigned char *BYTE,
+                             size_t *size,
+                             size_t sourceOffset,
+                             size_t sourceLength) throw(FormatError);
 
+    %rename(decodeBuffer) decodeFrame(int frame,
+                                      unsigned char *NIOBUFFER,
+                                      size_t *size,
+                                      size_t sourceOffset,
+                                      size_t sourceLength) throw(FormatError);
+    signed char* decodeFrame(int frame,
+                             unsigned char *NIOBUFFER,
+                             size_t *size,
+                             size_t sourceOffset,
+                             size_t sourceLength) throw(FormatError);
+
+    %rename(decodeBytesToBytes) decodeFrame(int frame,
+                                            unsigned char *BYTE,
+                                            unsigned char *BYTE,
+                                            size_t sourceOffset,
+                                            size_t sourceLength,
+                                            size_t destinationOffset = 0) throw(FormatError);
     void decodeFrame(int frame,
+                     unsigned char *BYTE,
+                     unsigned char *BYTE,
+                     size_t sourceOffset,
+                     size_t sourceLength,
+                     size_t destinationOffset = 0) throw(FormatError);
+
+    %rename(decodeBytesToBuffer) decodeFrame(int frame,
+                                             unsigned char *BYTE,
+                                             unsigned char *NIOBUFFER,
+                                             size_t sourceOffset,
+                                             size_t sourceLength,
+                                             size_t destinationOffset = 0) throw(FormatError);
+    void decodeFrame(int frame,
+                     unsigned char *BYTE,
                      unsigned char *NIOBUFFER,
                      size_t sourceOffset,
                      size_t sourceLength,
+                     size_t destinationOffset = 0) throw(FormatError);
+
+    %rename(decodeBufferToBytes) decodeFrame(int frame,
+                                             unsigned char *NIOBUFFER,
+                                             unsigned char *BYTE,
+                                             size_t sourceOffset,
+                                             size_t sourceLength,
+                                             size_t destinationOffset = 0) throw(FormatError);
+    void decodeFrame(int frame,
                      unsigned char *NIOBUFFER,
-                     size_t destinationOffset) throw(FormatError);
+                     unsigned char *BYTE,
+                     size_t sourceOffset,
+                     size_t sourceLength,
+                     size_t destinationOffset = 0) throw(FormatError);
 
-    ImageMetadata getImageMetadata(char *BYTE,
-                                   size_t offset,
-                                   size_t length) throw(FormatError);
+    %rename(decodeBufferToBuffer) decodeFrame(int frame,
+                                              unsigned char *NIOBUFFER,
+                                              unsigned char *NIOBUFFER,
+                                              size_t sourceOffset,
+                                              size_t sourceLength,
+                                              size_t destinationOffset = 0) throw(FormatError);
+    void decodeFrame(int frame,
+                     unsigned char *NIOBUFFER,
+                     unsigned char *NIOBUFFER,
+                     size_t sourceOffset,
+                     size_t sourceLength,
+                     size_t destinationOffset = 0) throw(FormatError);
 
-    ImageMetadata getImageMetadata(unsigned char *NIOBUFFER,
-                                   size_t offset,
-                                   size_t length) throw(FormatError);
-
+    %rename(getImageMetadataFromFile) getImageMetadata(std::string inputFile,
+                                                       size_t offset = 0) throw(FormatError);
     ImageMetadata getImageMetadata(std::string inputFile,
-                                   size_t offset) throw(FormatError);
+                                   size_t offset = 0) throw(FormatError);
+
+    %rename(getImageMetadataFromBytes) getImageMetadata(unsigned char *BYTE,
+                                                        size_t sourceOffset,
+                                                        size_t sourceLength) throw(FormatError);
+    ImageMetadata getImageMetadata(unsigned char *BYTE,
+                                   size_t sourceOffset,
+                                   size_t sourceLength) throw(FormatError);
+
+    %rename(getImageMetadataFromBuffer) getImageMetadata(unsigned char *NIOBUFFER,
+                                                         size_t sourceOffset,
+                                                         size_t sourceLength) throw(FormatError);
+    ImageMetadata getImageMetadata(unsigned char *NIOBUFFER,
+                                   size_t sourceOffset,
+                                   size_t sourceLength) throw(FormatError);
   };
 }

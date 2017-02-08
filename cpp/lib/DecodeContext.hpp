@@ -48,19 +48,7 @@ namespace jxrlib {
      */
     void decodeFrame(int frame,
                      ImageDecoder &source,
-                     signed char *destination);
-
-    /**
-     *  Decodes a single frame from a JPEG XR file
-     *
-     *  @param      frame     The (0-based) index of the frame to decode
-     *  @param      inputFile Path to the JPEG XR file to decode
-     *  @param[out] size      The size of the decoded image
-     *  @return Pointer to the memory containing the decoded image data
-     */
-    signed char *decodeFrame(int frame,
-                             std::string inputFile,
-                             size_t *size);
+                     unsigned char *destination);
 
     /**
      *  Transcodes a single frame from a JPEG XR file to the format specified by
@@ -72,7 +60,21 @@ namespace jxrlib {
      */
     void decodeFrame(int frame,
                      std::string inputFile,
-                     std::string outputFile);
+                     std::string outputFile,
+                     size_t sourceOffset = 0);
+
+    /**
+     *  Decodes a single frame from a JPEG XR file
+     *
+     *  @param      frame     The (0-based) index of the frame to decode
+     *  @param      inputFile Path to the JPEG XR file to decode
+     *  @param[out] size      The size of the decoded image
+     *  @return Pointer to the memory containing the decoded image data
+     */
+    signed char *decodeFrame(int frame,
+                             std::string inputFile,
+                             size_t *size,
+                             size_t sourceOffset = 0);
 
     /**
      *  Decodes a single frame from a file containing JPEG XR data
@@ -85,8 +87,24 @@ namespace jxrlib {
      */
     void decodeFrame(int frame,
                      std::string inputFile,
-                     size_t offset,
-                     unsigned char *destination);
+                     unsigned char *destination,
+                     size_t sourceOffset = 0);
+
+    /**
+     *  Decodes a single frame from JPEG XR image data
+     *
+     *  @param      frame  The (0-based) index of the frame to decode
+     *  @param      source Location of the data containing the JPEG XR image
+     *  @param      offset Offset within the source data where image data begins
+     *  @param      length Length of the JPEG XR image data
+     *  @param[out] size   The size of the decoded image
+     *  @return Pointer to the memory containing the decoded image data
+     */
+    signed char* decodeFrame(int frame,
+                             unsigned char *source,
+                             size_t *size,
+                             size_t sourceOffset,
+                             size_t sourceLength);
 
     /**
      *  Decodes a single frame from data containing a JPEG XR image
@@ -104,26 +122,21 @@ namespace jxrlib {
      */
     void decodeFrame(int frame,
                      unsigned char *source,
+                     unsigned char *destination,
                      size_t sourceOffset,
                      size_t sourceLength,
-                     unsigned char *destination,
-                     size_t destinationOffset);
+                     size_t destinationOffset = 0);
 
     /**
-     *  Decodes a single frame from JPEG XR image data
+     *  Extracts metadata from a JPEG XR file
      *
-     *  @param      frame  The (0-based) index of the frame to decode
-     *  @param      source Location of the data containing the JPEG XR image
-     *  @param      offset Offset within the source data where image data begins
-     *  @param      length Length of the JPEG XR image data
-     *  @param[out] size   The size of the decoded image
-     *  @return Pointer to the memory containing the decoded image data
+     *  @param inputFile  Path to the JPEG XR file to decode
+     *  @param offset     Location within the file where the JPEG XR data begins
+     *  @return An ImageMetadata object instantiated with the extracted image
+     *          parameters
      */
-    signed char* decodeFrame(int frame,
-                             char *source,
-                             size_t offset,
-                             size_t length,
-                             size_t *size);
+    ImageMetadata getImageMetadata(std::string inputFile,
+                                   size_t sourceOffset = 0);
 
     /**
      *  Extracts metadata from JPEG XR image data
@@ -134,23 +147,9 @@ namespace jxrlib {
      *  @return An ImageMetadata object instantiated with the extracted image
      *          parameters
      */
-    ImageMetadata getImageMetadata(char *source,
-                                   size_t offset,
-                                   size_t length);
-
     ImageMetadata getImageMetadata(unsigned char *source,
-                                   size_t offset,
-                                   size_t length);
-    /**
-     *  Extracts metadata from a JPEG XR file
-     *
-     *  @param inputFile  Path to the JPEG XR file to decode
-     *  @param offset     Location within the file where the JPEG XR data begins
-     *  @return An ImageMetadata object instantiated with the extracted image
-     *          parameters
-     */
-    ImageMetadata getImageMetadata(std::string inputFile,
-                                   size_t offset);
+                                   size_t sourceOffset,
+                                   size_t sourceLength);
   };
 
 } // namespace jxrlib
