@@ -21,31 +21,24 @@ matrix:
             - libpcre3-dev
       compiler: clang
     - os: osx
-<<<<<<< HEAD
-=======
       osx_image: xcode6.4  # Mac OS X 10.10
->>>>>>> Explicitly set xcode version
       compiler: gcc
       before_install:
         - brew update
         - brew install openssl
-        - brew install swig
       env:
         - HOMEBREW=1
     - os: osx
-<<<<<<< HEAD
-=======
       osx_image: xcode6.4  # Mac OS X 10.10
->>>>>>> Explicitly set xcode version
       compiler: clang
       before_install:
         - brew update
-        - brew install openssl --force
-        - brew install swig
+        - brew install openssl
       env:
         - HOMEBREW=1
 
 before_install:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update ; brew install swig ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       cd /tmp/;
       curl -s -J -O -k -L 'https://sourceforge.net/projects/swig/files/swig/swig-3.0.10/swig-3.0.10.tar.gz/download';
