@@ -25,6 +25,7 @@ matrix:
       before_install:
         - brew update
         - brew install openssl
+        - brew install swig
       env:
         - HOMEBREW=1
     - os: osx
@@ -32,11 +33,11 @@ matrix:
       before_install:
         - brew update
         - brew install openssl
+        - brew install swig
       env:
         - HOMEBREW=1
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update ; brew install swig ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
       cd /tmp/;
       curl -s -J -O -k -L 'https://sourceforge.net/projects/swig/files/swig/swig-3.0.10/swig-3.0.10.tar.gz/download';
