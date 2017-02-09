@@ -113,54 +113,6 @@ namespace jxrlib {
     return $null;
   }
 
-  %typemap(javaclassmodifiers) CodecFactory "class"
-  class CodecFactory {
-  public:
-    void decoderFromFile(jxrlib::ImageDecoder& decoder,
-                         std::string inputFile) throw(FormatError);
-    void decoderFromBytes(jxrlib::ImageDecoder& decoder,
-                          unsigned char *NIOBUFFER,
-                          size_t offset,
-                          size_t length) throw(FormatError);
-    jxrlib::FormatConverter createFormatConverter(
-      jxrlib::ImageDecoder& decoder,
-      std::string extension) throw(FormatError);
-  };
-
-  %typemap(javaclassmodifiers) Factory "class"
-  class Factory {
-  public:
-    Factory() throw(FormatError);
-    jxrlib::Stream createStreamFromFilename(std::string filename) throw(FormatError);;
-  };
-
-  %typemap(javaclassmodifiers) FormatConverter "class"
-  class FormatConverter {};
-
-  %typemap(javaclassmodifiers) ImageDecoder "class"
-  class ImageDecoder {
-  public:
-    void initialize() throw(FormatError);
-    unsigned int getFrameCount() throw(FormatError);
-    void selectFrame(unsigned int frameNum) throw(FormatError);
-    GUID getGUIDPixFormat();
-    bool getBlackWhite();
-    size_t getWidth();
-    size_t getHeight();
-    size_t getBytesPerPixel();
-    jxrlib::Resolution getResolution() throw(FormatError);
-    void getRawBytes(unsigned char *NIOBUFFER) throw(FormatError);
-  };
-
-  %typemap(javaclassmodifiers) ImageEncoder "class"
-  class ImageEncoder {
-  public:
-    ImageEncoder(jxrlib::Stream encodeStream, std::string extension) throw(FormatError);
-    void initializeWithDecoder(jxrlib::ImageDecoder& decoder) throw(FormatError);
-    void writeSource(jxrlib::FormatConverter& converter) throw(FormatError);
-    void close();
-  };
-
   %typemap(javaclassmodifiers) Resolution "class"
   struct Resolution {
     float X;
@@ -175,9 +127,6 @@ namespace jxrlib {
     size_t bytesPerPixel;
     unsigned int frameCount;
   };
-
-  %typemap(javaclassmodifiers) Stream "class"
-  struct Stream {};
 
   %typemap(in,numinputs=0,noblock=1) size_t *size {
     size_t temp_size;
