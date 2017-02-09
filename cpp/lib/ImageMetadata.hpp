@@ -52,15 +52,22 @@ namespace jxrlib {
      */
     size_t bytesPerPixel;
 
-    ImageMetadata() : width(0), height(0), bytesPerPixel(0) {}
+    /**
+     *  Number of frames contained in the image
+     */
+    unsigned int frameCount;
+
+    ImageMetadata() : width(0), height(0), bytesPerPixel(0), frameCount(1) {}
     ImageMetadata(Resolution resolution,
                   size_t width,
                   size_t height,
-                  size_t bytesPerPixel)
+                  size_t bytesPerPixel,
+                  unsigned int frameCount)
       : resolution(resolution),
         width(width),
         height(height),
-        bytesPerPixel(bytesPerPixel) {}
+        bytesPerPixel(bytesPerPixel),
+        frameCount(frameCount) {}
   };
 
 } // namespace jxrlib

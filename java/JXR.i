@@ -173,6 +173,7 @@ namespace jxrlib {
     size_t width;
     size_t height;
     size_t bytesPerPixel;
+    unsigned int frameCount;
   };
 
   %typemap(javaclassmodifiers) Stream "class"

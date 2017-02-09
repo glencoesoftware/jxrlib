@@ -172,7 +172,8 @@ namespace jxrlib {
     return ImageMetadata(getResolution(),
                          getWidth(),
                          getHeight(),
-                         getBytesPerPixel());
+                         getBytesPerPixel(),
+                         getFrameCount());
   }
 
   void ImageDecoder::getRawBytes(unsigned char *image_buffer) {
