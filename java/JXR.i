@@ -195,11 +195,6 @@ namespace jxrlib {
     JCALL4(SetByteArrayRegion, jenv, $result, 0, temp_size, $1);
     delete[] $1;
   }
-  %typemap(javacode) DecodeContext %{
-    public ImageMetadata getImageMetadataFromBytes(byte[] source) {
-      return new DecodeContext().getImageMetadataFromBytes(source, 0, source.length);
-    }
-  %}
 
   class DecodeContext {
   public:
@@ -220,15 +215,6 @@ namespace jxrlib {
                              std::string inputFile,
                              size_t *size,
                              size_t sourceOffset = 0) throw(FormatError);
-
-    %rename(decodeFileToBytes) decodeFrame(int frame,
-                                           std::string inputFile,
-                                           unsigned char *BYTE,
-                                           size_t sourceOffset = 0) throw(FormatError);
-    void decodeFrame(int frame,
-                     std::string inputFile,
-                     unsigned char *BYTE,
-                     size_t sourceOffset = 0) throw(FormatError);
 
     %rename(decodeFileToBuffer) decodeFrame(int frame,
                                             std::string inputFile,
@@ -261,19 +247,6 @@ namespace jxrlib {
                              size_t sourceOffset,
                              size_t sourceLength) throw(FormatError);
 
-    %rename(decodeBytesToBytes) decodeFrame(int frame,
-                                            unsigned char *BYTE,
-                                            unsigned char *BYTE,
-                                            size_t sourceOffset,
-                                            size_t sourceLength,
-                                            size_t destinationOffset = 0) throw(FormatError);
-    void decodeFrame(int frame,
-                     unsigned char *BYTE,
-                     unsigned char *BYTE,
-                     size_t sourceOffset,
-                     size_t sourceLength,
-                     size_t destinationOffset = 0) throw(FormatError);
-
     %rename(decodeBytesToBuffer) decodeFrame(int frame,
                                              unsigned char *BYTE,
                                              unsigned char *NIOBUFFER,
@@ -283,19 +256,6 @@ namespace jxrlib {
     void decodeFrame(int frame,
                      unsigned char *BYTE,
                      unsigned char *NIOBUFFER,
-                     size_t sourceOffset,
-                     size_t sourceLength,
-                     size_t destinationOffset = 0) throw(FormatError);
-
-    %rename(decodeBufferToBytes) decodeFrame(int frame,
-                                             unsigned char *NIOBUFFER,
-                                             unsigned char *BYTE,
-                                             size_t sourceOffset,
-                                             size_t sourceLength,
-                                             size_t destinationOffset = 0) throw(FormatError);
-    void decodeFrame(int frame,
-                     unsigned char *NIOBUFFER,
-                     unsigned char *BYTE,
                      size_t sourceOffset,
                      size_t sourceLength,
                      size_t destinationOffset = 0) throw(FormatError);
