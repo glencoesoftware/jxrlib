@@ -210,7 +210,7 @@ namespace jxrlib {
     void decodeFrame(int frame,
                      std::string inputFile,
                      std::string outputFile,
-                     size_t offset = 0) throw(FormatError);
+                     size_t sourceOffset = 0) throw(FormatError);
 
     %rename(decodeFile) decodeFrame(int frame,
                                     std::string inputFile,

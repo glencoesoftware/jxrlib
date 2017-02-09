@@ -186,7 +186,7 @@ public class TestInMemoryDecode extends AbstractTest {
     }
 
     @Parameters({"filename"})
-    @Test(expectedExceptions={AssertionError.class})
+    @Test(expectedExceptions={DecodeException.class})
     public void testOutputNotDirect(String filename)
             throws IOException, URISyntaxException, DecodeException {
         ByteBuffer dataBuffer = asByteBuffer(filename);
@@ -195,7 +195,7 @@ public class TestInMemoryDecode extends AbstractTest {
         );
     }
 
-    @Test(expectedExceptions={AssertionError.class})
+    @Test(expectedExceptions={DecodeException.class})
     public void testSourceNotDirect()
             throws IOException, DecodeException {
         new TestDecode().decodeFrame(
