@@ -32,7 +32,7 @@ matrix:
       compiler: clang
       before_install:
         - brew update
-        - brew install openssl
+        - brew install openssl --force
         - brew install swig
       env:
         - HOMEBREW=1
@@ -59,7 +59,6 @@ script:
       export LD_LIBRARY_PATH="$TRAVIS_BUILD_DIR/build";
     else
       export DYLD_LIBRARY_PATH="$TRAVIS_BUILD_DIR/build";
-      export HOMEBREW=1;
     fi
 # Build native code
   - make clean swig all
