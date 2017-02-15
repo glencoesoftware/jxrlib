@@ -59,6 +59,7 @@ script:
       export LD_LIBRARY_PATH="$TRAVIS_BUILD_DIR/build";
     else
       export DYLD_LIBRARY_PATH="$TRAVIS_BUILD_DIR/build";
+      export HOMEBREW=1;
     fi
 # Build native code
   - make clean swig all
