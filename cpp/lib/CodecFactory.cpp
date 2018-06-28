@@ -86,13 +86,13 @@ namespace jxrlib {
 #ifdef DEBUG
     printf("Advanced file...");
     printf("First couple characters: %c%c%c", std::fgetc(pStream->state.file.pFile),  std::fgetc(pStream->state.file.pFile), std::fgetc(pStream->state.file.pFile));
+    std::fseek(pStream->state.file.pFile, -3, SEEK_CUR);
 #endif
 
     // initialize the decoder with the prepared stream
     Call(decoder.pDecoder->Initialize(decoder.pDecoder, pStream));
 #ifdef DEBUG
     printf("Initialized with the stream...");
-    std::fseek(pStream->state.file.pFile, -3, SEEK_CUR);
 #endif
     decoder.pDecoder->fStreamOwner = !0;
     decoder.initialize();

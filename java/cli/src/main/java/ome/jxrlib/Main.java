@@ -91,6 +91,7 @@ public class Main {
         }
 
         Decode decode;
+        ImageMetadata metadata;
 
         if (debug) {
             Logger root =
@@ -108,16 +109,10 @@ public class Main {
             }
             byte[] bytes = readData.toByteArray();
 
-            decode = new Decode(bytes);
-            long width = decode.getWidth();
-            long height = decode.getHeight();
-            long bpp = decode.getBytesPerPixel();
-            ByteBuffer imageBuffer = ByteBuffer.allocateDirect(
-                (int) (width * height * bpp));
-
+            decode = new Decode();
             System.err.println("Opened decoder for bytes...");
-            decode.toBytes(imageBuffer);
-            System.err.println("Decoded bytes MD5: " + md5(imageBuffer));
+            byte[] imageData = decode.decodeFrame(0, bytes, 0, bytes.length);
+            System.err.println("Decoded bytes MD5: " + md5(imageData));
         } else if (inMemory || inMemoryBytes) {
             String inputFilename = arguments.get(0);
             System.err.println("input file = " + inputFilename);
@@ -136,25 +131,27 @@ public class Main {
                 byte[] source = new byte[inputBuffer.capacity()];
                 inputBuffer.position(0);
                 inputBuffer.get(source);
-                byte[] destination = Decode.decodeFirstFrame(
-                    source, 0, source.length);
+                byte[] destination = new Decode().decodeFrame(0, source,
+                                                              0, source.length);
                 System.err.println(
                         "Decoded bytes MD5: " + md5(destination));
                 return;
             }
-            decode = new Decode(inputBuffer);
+            decode = new Decode();
             if (arguments.size() == 1) {
-                long width = decode.getWidth();
-                long height = decode.getHeight();
-                long bpp = decode.getBytesPerPixel();
+                metadata = decode.getImageMetadata(inputBuffer.array());
+                long width = metadata.getWidth();
+                long height = metadata.getHeight();
+                long bpp = metadata.getBytesPerPixel();
                 System.err.println("Decoding using NIO byte buffers");
                 ByteBuffer imageBuffer = ByteBuffer.allocateDirect(
                   (int) (width * height * bpp));
-                decode.toBytes(imageBuffer);
+                decode.decodeFrame(0, inputBuffer, 0, inputBuffer.length,
+                                   imageBuffer, 0);
                 System.err.println(
                     "Decoded bytes MD5: " + md5(imageBuffer));
             } else if (arguments.size() == 2) {
-                decode.toFile(new File(arguments.get(1)));
+                System.err.println("Not implemented in API v0.3.0");
             } else {
                 throw new CmdLineException(
                     parser, "At least one argument required");
@@ -163,19 +160,20 @@ public class Main {
             String inputFilename = arguments.get(0);
             File inputFile = new File(inputFilename);
 
-            decode = new Decode(inputFile);
-            long width = decode.getWidth();
-            long height = decode.getHeight();
-            long bpp = decode.getBytesPerPixel();
+            decode = new Decode();
+            metadata = decode.getImageMetadata(inputFile);
+            long width = metadata.getWidth();
+            long height = metadata.getHeight();
+            long bpp = metadata.getBytesPerPixel();
             ByteBuffer imageBuffer = ByteBuffer.allocateDirect(
                 (int) (width * height * bpp));
 
             System.err.println("Opened decoder for file: " + inputFilename);
             if (args.length == 1) {
-                decode.toBytes(imageBuffer);
+                decode.decodeFrame(0, inputFile, 0, imageBuffer);
                 System.err.println("Decoded bytes MD5: " + md5(imageBuffer));
             } else if (args.length == 2) {
-                decode.toFile(new File(args[1]));
+                decode.decodeFrame(0, inputFile, new File(args[1]));
             } else {
                 System.err.println("INVALID DECODE COMMAND");
             }

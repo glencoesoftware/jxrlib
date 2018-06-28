@@ -28,12 +28,24 @@
 
 namespace jxrlib {
 
+  /**
+   *  The Factory class wraps the `pFactory` struct and corresponding methods
+   *  from the jxrlib C code. It contains methods to generate streams from image
+   *  files.
+   */
   class Factory {
     PKFactory *pFactory;
     ERR err;
   public:
     Factory();
     ~Factory();
+
+    /**
+     *  Create a Stream, useful for initializing an ImageDecoder, from a file.
+     *
+     *  @param filename Path to the file which should be converted to a Stream
+     *  @return A Stream object encapsulating the data from the provided file
+     */
     Stream createStreamFromFilename(std::string filename);
   };
 

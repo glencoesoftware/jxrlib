@@ -27,25 +27,4 @@ public class TestDecode extends AbstractDecode {
         System.loadLibrary("jxrjava");
     }
 
-    public TestDecode(File inputFile) {
-        super(inputFile);
-    }
-
-    public TestDecode(byte data[]) throws DecodeException {
-        super(data);
-    }
-
-    public TestDecode(ByteBuffer dataBuffer) throws DecodeException {
-        super(dataBuffer);
-    }
-
-    public TestDecode(ByteBuffer dataBuffer, int offset, int length)
-            throws DecodeException {
-        super(dataBuffer, offset, length);
-    }
-
-    public static byte[] decodeFirstFrame(
-            byte[] source, int offset, int length) {
-        return AbstractDecode.decodeFirstFrame(source, offset, length);
-    }
 }

@@ -19,6 +19,7 @@
 package ome.jxrlib;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -35,21 +36,57 @@ import org.testng.annotations.Test;
 
 public class TestInMemoryDecode extends AbstractTest {
 
-    void assertDecode(
-            AbstractDecode decode, long width, long height, long bpp,
-            String md5) throws DecodeException {
-        long _width = decode.getWidth();
+    void assertDecode(byte[] inputData,
+                      int width, int height, int bpp,
+                      String md5) throws DecodeException {
+        TestDecode decode = new TestDecode();
+        ImageMetadata metadata = decode.getImageMetadata(inputData);
+        long _width = metadata.getWidth();
         Assert.assertEquals(_width, width);
-        long _height = decode.getHeight();
+        long _height = metadata.getHeight();
         Assert.assertEquals(_height, height);
-        long _bpp = decode.getBytesPerPixel();
+        long _bpp = metadata.getBytesPerPixel();
         Assert.assertEquals(_bpp, bpp);
 
-        ByteBuffer imageBuffer = ByteBuffer.allocateDirect(
-            (int) (_width * _height * _bpp));
-        decode.toBytes(imageBuffer);
+        byte[] imageData = decode.decodeFrame(0, inputData);
 
-        Assert.assertEquals(md5(imageBuffer), md5);
+        Assert.assertEquals(md5(imageData), md5);
+    }
+
+    void assertDecode(ByteBuffer inputBuffer, int offset, int length,
+                      int width, int height, int bpp,
+                      String md5, int writeOffset) throws DecodeException {
+        TestDecode decode = new TestDecode();
+        ImageMetadata metadata = decode.getImageMetadata(inputBuffer, offset, length);
+        long _width = metadata.getWidth();
+        Assert.assertEquals(_width, width);
+        long _height = metadata.getHeight();
+        Assert.assertEquals(_height, height);
+        long _bpp = metadata.getBytesPerPixel();
+        Assert.assertEquals(_bpp, bpp);
+
+        int size = (int)_width * (int)_height * (int)_bpp;
+        ByteBuffer imageBuffer = ByteBuffer.allocateDirect(size + writeOffset);
+
+        decode.decodeFrame(
+            0, inputBuffer, offset, length, imageBuffer, writeOffset
+        );
+        Assert.assertEquals(md5(imageBuffer, writeOffset), md5);
+    }
+
+    void assertDecode(ByteBuffer inputBuffer,
+                      int offset, int length,
+                      int width, int height, int bpp,
+                      String md5) throws DecodeException {
+        assertDecode(inputBuffer, offset, length,
+                     width, height, bpp, md5, 0);
+    }
+
+    void assertDecode(ByteBuffer inputBuffer,
+                      int width, int height, int bpp,
+                      String md5) throws DecodeException {
+        assertDecode(inputBuffer, 0, inputBuffer.capacity(),
+                     width, height, bpp, md5, 0);
     }
 
     byte[] asByteArray(String filename) throws IOException {
@@ -95,12 +132,11 @@ public class TestInMemoryDecode extends AbstractTest {
     @Parameters({"filename", "width", "height", "bpp", "md5"})
     @Test
     public void testByteArray(
-        String filename, long width, long height, long bpp, String md5)
+        String filename, int width, int height, int bpp, String md5)
             throws IOException, DecodeException {
         byte[] data = asByteArray(filename);
 
-        TestDecode decode = new TestDecode(data);
-        assertDecode(decode, width, height, bpp, md5);
+        assertDecode(data, width, height, bpp, md5);
     }
 
     @Parameters({"filename", "md5"})
@@ -108,36 +144,45 @@ public class TestInMemoryDecode extends AbstractTest {
     public void testFirstFrame(String filename, String md5)
             throws IOException, DecodeException {
         byte[] data = asByteArray(filename);
-        byte[] destination = TestDecode.decodeFirstFrame(data, 0, data.length);
+        byte[] destination = new TestDecode().decodeFrame(0, data);
         Assert.assertEquals(md5, md5(destination));
     }
 
     @Parameters({"filename", "width", "height", "bpp", "md5"})
     @Test
     public void testByteBuffer(
-        String filename, long width, long height, long bpp, String md5)
+        String filename, int width, int height, int bpp, String md5)
             throws IOException, URISyntaxException, DecodeException {
         ByteBuffer dataBuffer = asByteBuffer(filename);
-        TestDecode decode = new TestDecode(dataBuffer);
-        assertDecode(decode, width, height, bpp, md5);
+
+        assertDecode(dataBuffer, width, height, bpp, md5);
     }
 
     @Parameters({"filename", "width", "height", "bpp", "md5"})
     @Test
     public void testByteBufferOffsetLength(
-        String filename, long width, long height, long bpp, String md5)
+        String filename, int width, int height, int bpp, String md5)
             throws IOException, URISyntaxException, DecodeException {
         int offset = 1024 * 1024;
         ByteBuffer dataBuffer = asByteBuffer(filename, offset, null);
-        TestDecode decode = new TestDecode(
-                dataBuffer, offset, dataBuffer.capacity() - offset);
-        assertDecode(decode, width, height, bpp, md5);
+
+        assertDecode(
+            dataBuffer, offset, dataBuffer.capacity() - offset,
+            width, height, bpp, md5
+        );
     }
 
-    @Test(expectedExceptions={DecodeException.class})
-    public void testInputNotDirect() throws DecodeException {
-        ByteBuffer dataBuffer = ByteBuffer.allocate(1);
-        new TestDecode(dataBuffer);
+    @Parameters({"filename", "width", "height", "bpp", "md5"})
+    @Test
+    public void testByteBufferWriteOffset(
+        String filename, int width, int height, int bpp, String md5)
+            throws IOException, URISyntaxException, DecodeException {
+        int offset = 1024 * 1024;
+        ByteBuffer dataBuffer = asByteBuffer(filename);
+
+        assertDecode(
+            dataBuffer, 0, dataBuffer.capacity(),
+            width, height, bpp, md5, offset);
     }
 
     @Parameters({"filename"})
@@ -145,14 +190,27 @@ public class TestInMemoryDecode extends AbstractTest {
     public void testOutputNotDirect(String filename)
             throws IOException, URISyntaxException, DecodeException {
         ByteBuffer dataBuffer = asByteBuffer(filename);
-        TestDecode decode = new TestDecode(dataBuffer);
-        decode.toBytes(ByteBuffer.allocate(1));
+        new TestDecode().decodeFrame(
+            0, dataBuffer, 0, dataBuffer.capacity(), ByteBuffer.allocate(1), 0
+        );
+    }
+
+    @Test(expectedExceptions={DecodeException.class})
+    public void testSourceNotDirect()
+            throws IOException, DecodeException {
+        new TestDecode().decodeFrame(
+                0, ByteBuffer.allocate(1), 0, 1, ByteBuffer.allocate(1), 0
+            );
     }
 
     @Test(expectedExceptions={FormatError.class})
     public void testInvalidInput()
-            throws IOException, URISyntaxException, DecodeException {
-        new TestDecode(ByteBuffer.allocateDirect(1));
+            throws IOException, DecodeException {
+        new TestDecode().decodeFrame(
+            0,
+            ByteBuffer.allocateDirect(1), 0, 1,
+            ByteBuffer.allocateDirect(1), 0
+        );
     }
 
     // Can be useful if debugging destructors.

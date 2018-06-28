@@ -26,6 +26,11 @@
 
 namespace jxrlib {
 
+  /**
+   *  The Stream struct holds a reference to the `pStream` C struct from the
+   *  jxrlib C library. It has the ability to be instantiated from random data
+   *  in memory, as well as to be used by other methods (e.g. to open a file).
+   */
   struct Stream {
     struct WMPStream *pStream;
     ERR err;
@@ -33,6 +38,13 @@ namespace jxrlib {
     // No destructor required as resources are cleaned up by
     // PKImageDecode_Release
     //~Stream();
+
+    /**
+     *  Instantiates a Stream backed by data, of a specified length, in memory
+     *
+     *  @param bytes The location of the beginning of the in memory data
+     *  @param len   The length in bytes of the memory to treat as a stream
+     */
     Stream(unsigned char *bytes, size_t len);
   };
 

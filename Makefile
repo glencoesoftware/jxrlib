@@ -117,6 +117,12 @@ endif
 LIBS=-L$(DIR_BUILD) $(shell echo $(LIBRARIES) | sed -E 's%$(DIR_BUILD)/lib([^ ]*)\.(a|$(LIBSUFFIX))%-l\1%g') -lm
 CXXLIBS=-L$(DIR_BUILD) -ljxr++ -lcrypto
 
+ifdef HOMEBREW
+CFLAGS:=$(CFLAGS) -I$(shell brew --prefix openssl)/include
+CXXFLAGS:=$(CXXFLAGS) -I$(shell brew --prefix openssl)/include
+LIBS:=$(LIBS) -L$(shell brew --prefix openssl)/lib
+endif
+
 ##--------------------------------
 ##
 ## Common files
@@ -259,6 +265,10 @@ $(DIR_BUILD)/libjxrjava.$(LIBSUFFIX): $(LIBRARIES) $(CXX_LIBRARIES)
 	@echo "Building JNI"
 	@echo "JAVA_INCLUDE=$(JAVA_INCLUDE)"
 	$(CXX) -o $(DIR_BUILD)/libjxrjava.$(LIBSUFFIX) -shared -I$(JAVA_INCLUDE) -I$(JAVA_INCLUDE)/$(PLATFORM) -I$(DIR_CXX)/lib $(CXXFLAGS) $(OBJ_SYS) $(OBJ_ENC) $(OBJ_DEC) $(OBJ_GLUE) $(OBJ_TEST) $(OBJ_CXX) $(DIR_JAVA)/JXR_wrap.cxx
+
+.PHONY: doc
+doc:
+	doxygen Doxyfile
 
 ##--------------------------------
 ##

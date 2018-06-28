@@ -21,84 +21,162 @@ package ome.jxrlib;
 import java.io.File;
 import java.nio.ByteBuffer;
 
+/**
+ *  The AbstractDecode class implements a series of methods to decode JPEG-XR
+ *  encoded images from files or data in memory, but does not specify how to
+ *  load or where to locate the actual JPEG-XR C library and C++ wrappers. This
+ *  detail is left to the concrete subclasses of AbstractDecode.
+ */
 abstract class AbstractDecode {
 
-    private final Factory factory = new Factory();
-    private final CodecFactory codecFactory = new CodecFactory();
-
-    private final File inputFile;
-    private final ByteBuffer dataBuffer;
-    private final ImageDecoder decoder;
-    private final long frameCount;
-
-    public AbstractDecode(File inputFile) {
-        this.inputFile = inputFile;
-        this.dataBuffer = null;
-        decoder = new ImageDecoder();
-        codecFactory.decoderFromFile(decoder, inputFile.getAbsolutePath());
-        frameCount = decoder.getFrameCount();
+    private void checkBuffer(ByteBuffer buffer) throws DecodeException {
+        if (!buffer.isDirect()) {
+            throw new DecodeException("ByteBuffers must be allocated direct!");
+        }
+    }
+    
+    public void decodeFrame(int frame, File source, File destination) {
+        new DecodeContext()
+            .transcodeFile(frame, source.getAbsolutePath(),
+                           destination.getAbsolutePath());
     }
 
-    AbstractDecode(byte data[]) throws DecodeException {
-        this(ByteBuffer.allocateDirect(data.length).put(data));
+    public void decodeFrame(int frame, File source, int sourceOffset,
+                            File destination) {
+        new DecodeContext()
+            .transcodeFile(frame, source.getAbsolutePath(),
+                          destination.getAbsolutePath(), sourceOffset);
     }
 
-    AbstractDecode(ByteBuffer dataBuffer) throws DecodeException {
-        this(dataBuffer, 0, dataBuffer.capacity());
+    public byte[] decodeFrame(int frame, File source) {
+        return new DecodeContext().decodeFile(frame, source.getAbsolutePath());
     }
 
-    AbstractDecode(ByteBuffer dataBuffer, int offset, int length)
+    public byte[] decodeFrame(int frame, File source, int sourceOffset) {
+        return new DecodeContext()
+            .decodeFile(frame, source.getAbsolutePath(), sourceOffset);
+    }
+
+    public void decodeFrame(int frame, File source, ByteBuffer destination)
             throws DecodeException {
-        if (!dataBuffer.isDirect()) {
-            throw new DecodeException("Buffer must be allocated direct.");
-        }
-        this.inputFile = null;
-        this.dataBuffer = dataBuffer;
-        decoder = new ImageDecoder();
-        codecFactory.decoderFromBytes(decoder, dataBuffer, offset, length);
-        frameCount = decoder.getFrameCount();
+        checkBuffer(destination);
+        new DecodeContext()
+            .decodeFileToBuffer(frame, source.getAbsolutePath(), destination);
     }
 
-    public long getWidth() {
-        return decoder.getWidth();
+    public void decodeFrame(int frame, File source, int sourceOffset,
+                            ByteBuffer destination) throws DecodeException {
+        checkBuffer(destination);
+        new DecodeContext()
+            .decodeFileToBuffer(frame, source.getAbsolutePath(), destination,
+                                sourceOffset);
     }
 
-    public long getHeight() {
-        return decoder.getHeight();
+    public byte[] decodeFrame(int frame, byte[] source) {
+        return new DecodeContext()
+            .decodeBytes(frame, source, 0, source.length);
+    }
+    
+    public byte[] decodeFrame(int frame, byte[] source,
+                              int sourceOffset, int sourceLength) {
+        assert (source.length >= sourceOffset + sourceLength);
+        return new DecodeContext()
+            .decodeBytes(frame, source, sourceOffset, sourceLength);
     }
 
-    public long getBytesPerPixel() {
-        return decoder.getBytesPerPixel();
+    public byte[] decodeFrame(int frame, ByteBuffer source)
+            throws DecodeException {
+        checkBuffer(source);
+        return new DecodeContext()
+            .decodeBuffer(frame, source, 0, source.capacity());
+    }
+    
+    public byte[] decodeFrame(int frame, ByteBuffer source,
+                              int sourceOffset, int sourceLength)
+            throws DecodeException {
+        checkBuffer(source);
+        assert (source.capacity() >= sourceOffset + sourceLength);
+        return new DecodeContext()
+            .decodeBuffer(frame, source, sourceOffset, sourceLength);
     }
 
-    public void toBytes(ByteBuffer imageBuffer) throws DecodeException {
-        if (!imageBuffer.isDirect()) {
-            throw new DecodeException("Buffer must be allocated direct.");
-        }
-        decoder.getRawBytes(imageBuffer);
+    public void decodeFrame(int frame, byte[] source,
+                            int sourceOffset, int sourceLength,
+                            ByteBuffer destination)
+            throws DecodeException {
+        checkBuffer(destination);
+        assert (source.length >= sourceOffset + sourceLength);
+        new DecodeContext().decodeBytesToBuffer(frame, source, destination,
+                                                sourceOffset, sourceLength);
     }
 
-    public void toFile(File outputFile) {
-        String fileName = outputFile.getName();
-        String extension = fileName.substring(fileName.lastIndexOf('.') + 1);
-
-        for (long i = 0 ; i < frameCount ; i++) {
-            decoder.selectFrame(i);
-            FormatConverter converter = codecFactory.createFormatConverter(decoder, extension);
-            System.err.println("Created format converter for extension: " + extension);
-            Stream outputStream = factory.createStreamFromFilename(outputFile.getAbsolutePath());
-            System.err.println("Created output stream for file: " + fileName);
-            ImageEncoder encoder = new ImageEncoder(outputStream, "." + extension);
-            System.err.println("Created image encoder");
-            encoder.initializeWithDecoder(decoder);
-            encoder.writeSource(converter);
-            encoder.close();
-        }
+    public void decodeFrame(int frame, byte[] source,
+                            int sourceOffset, int sourceLength,
+                            ByteBuffer destination, int destinationOffset)
+            throws DecodeException {
+        checkBuffer(destination);
+        assert (source.length >= sourceOffset + sourceLength);
+        assert (destinationOffset < destination.capacity());
+        new DecodeContext().decodeBytesToBuffer(frame, source, destination,
+                                                sourceOffset, sourceLength,
+                                                destinationOffset);
     }
 
-    protected static byte[] decodeFirstFrame(
-            byte[] source, int offset, int length) {
-        DecodeContext decodeContext = new DecodeContext();
-        return decodeContext.decodeFirstFrame(source, offset, length);
+    public void decodeFrame(int frame, ByteBuffer source,
+                            int sourceOffset, int sourceLength,
+                            ByteBuffer destination)
+            throws DecodeException {
+        checkBuffer(source);
+        checkBuffer(destination);
+        assert (source.capacity() >= sourceOffset + sourceLength);
+        new DecodeContext().decodeBufferToBuffer(frame, source, destination,
+                                                 sourceOffset, sourceLength);
     }
+
+    public void decodeFrame(int frame, ByteBuffer source,
+                            int sourceOffset, int sourceLength,
+                            ByteBuffer destination, int destinationOffset)
+            throws DecodeException {
+        checkBuffer(source);
+        checkBuffer(destination);
+        assert (source.capacity() >= sourceOffset + sourceLength);
+        assert (destinationOffset < destination.capacity());
+        new DecodeContext().decodeBufferToBuffer(frame, source, destination,
+                                                 sourceOffset, sourceLength,
+                                                 destinationOffset);
+    }
+
+    public ImageMetadata getImageMetadata(File source) {
+        return new DecodeContext()
+            .getImageMetadataFromFile(source.getAbsolutePath());
+    }
+
+    public ImageMetadata getImageMetadata(File source, int sourceOffset) {
+        return new DecodeContext()
+            .getImageMetadataFromFile(source.getAbsolutePath(), sourceOffset);
+    }
+
+    public ImageMetadata getImageMetadata(byte[] source) {
+        return new DecodeContext()
+            .getImageMetadataFromBytes(source, 0, source.length);
+    }
+
+    public ImageMetadata getImageMetadata(byte[] source,
+                                          int sourceOffset, int sourceLength) {
+        return new DecodeContext()
+            .getImageMetadataFromBytes(source, sourceOffset, sourceLength);
+    }
+
+    public ImageMetadata getImageMetadata(ByteBuffer source) {
+        return new DecodeContext()
+            .getImageMetadataFromBuffer(source, 0, source.capacity());
+    }
+
+    public ImageMetadata getImageMetadata(ByteBuffer source,
+                                          int sourceOffset, int sourceLength) {
+        assert (source.capacity() >= sourceOffset + sourceLength);
+        return new DecodeContext()
+            .getImageMetadataFromBuffer(source, sourceOffset, sourceLength);
+    }
+
 }

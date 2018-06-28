@@ -11,21 +11,31 @@ matrix:
       addons:
         apt:
           packages:
-            - pcre3-dev
+            - libpcre3-dev
       compiler: gcc
     - os: linux
       sudo: false
       addons:
         apt:
           packages:
-            - pcre3-dev
+            - libpcre3-dev
       compiler: clang
     - os: osx
       osx_image: xcode6.4  # Mac OS X 10.10
       compiler: gcc
+      before_install:
+        - brew update
+        - brew install openssl
+      env:
+        - HOMEBREW=1
     - os: osx
       osx_image: xcode6.4  # Mac OS X 10.10
       compiler: clang
+      before_install:
+        - brew update
+        - brew install openssl
+      env:
+        - HOMEBREW=1
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update ; brew install swig ; fi
