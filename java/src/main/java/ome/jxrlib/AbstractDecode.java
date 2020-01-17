@@ -75,6 +75,10 @@ abstract class AbstractDecode {
         return decoder.getGUIDPixFormat();
     }
 
+    public boolean isBGR() {
+        return decoder.isBGR();
+    }
+
     public void toBytes(ByteBuffer imageBuffer) throws DecodeException {
         if (!imageBuffer.isDirect()) {
             throw new DecodeException("Buffer must be allocated direct.");

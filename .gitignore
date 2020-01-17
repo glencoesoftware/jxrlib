@@ -1,3 +1,4 @@
 build
 java/target
+java/**/target
 *.userprefs
