@@ -43,6 +43,7 @@ namespace jxrlib {
 
     GUID getGUIDPixFormat();
     bool getBlackWhite();
+    bool isBGR();
     size_t getWidth();
     size_t getHeight();
     size_t getBytesPerPixel();

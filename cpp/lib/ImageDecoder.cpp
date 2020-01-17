@@ -145,6 +145,13 @@ namespace jxrlib {
     return pDecoder->WMP.wmiSCP.bBlackWhite == TRUE;
   }
 
+  bool ImageDecoder::isBGR() {
+    return IsEqualGUID(getGUIDPixFormat(), GUID_PKPixelFormat24bppBGR) ||
+      IsEqualGUID(getGUIDPixFormat(), GUID_PKPixelFormat32bppBGR) ||
+      IsEqualGUID(getGUIDPixFormat(), GUID_PKPixelFormat32bppBGRA) ||
+      IsEqualGUID(getGUIDPixFormat(), GUID_PKPixelFormat32bppPBGRA);
+  }
+
   size_t ImageDecoder::getWidth() {
     return pDecoder->WMP.wmiI.cROIWidth;
   }
