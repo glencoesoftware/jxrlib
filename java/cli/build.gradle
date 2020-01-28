@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'ome.jxrlib-cli'
-version = '0.2.2-SNAPSHOT'
+version = '0.2.2'
 
 mainClassName = 'ome.jxrlib.Main'
 
@@ -30,6 +30,6 @@ configurations.all {
 
 dependencies {
     compile 'ch.qos.logback:logback-classic:1.1.7'
-    compile 'ome:jxrlib-all:0.2.2-SNAPSHOT'
+    compile 'ome:jxrlib-all:0.2.2'
     compile 'args4j:args4j:2.33'
 }
