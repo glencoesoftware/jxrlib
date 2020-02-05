@@ -67,6 +67,7 @@ script:
     done
 # Test jxrlib Java bindings (in memory and file to file)
   - mvn -f ../java/pom.xml test
+  - mvn -f ../java/cli/pom.xml package
 # Testing was successful
   - cd $TRAVIS_BUILD_DIR
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
