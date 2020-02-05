@@ -17,6 +17,7 @@ Building
 Linux
 -----
 
+```
 # $JXRLIB is the path to the clone of this repository
 $ export SWIG=`which swig`
 $ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$JXRLIB/build
@@ -30,6 +31,7 @@ $ mvn -f ../java/native-$PLATFORM/pom.xml package
 $ mvn -f ../java/pom.xml package
 # package all native libraries and Java bindings into a single jar
 $ mvn -f ../java/all/pom.xml package
+```
 
 Build artifacts are in $JXRLIB/build and $JXRLIB/java/all/target/.
 
