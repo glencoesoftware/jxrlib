@@ -109,11 +109,7 @@ public class Main {
             byte[] bytes = readData.toByteArray();
 
             decode = new Decode(bytes);
-            long width = decode.getWidth();
-            long height = decode.getHeight();
-            long bpp = decode.getBytesPerPixel();
-            ByteBuffer imageBuffer = ByteBuffer.allocateDirect(
-                (int) (width * height * bpp));
+            ByteBuffer imageBuffer = allocateBuffer(decode);
 
             System.err.println("Opened decoder for bytes...");
             decode.toBytes(imageBuffer);
@@ -144,12 +140,8 @@ public class Main {
             }
             decode = new Decode(inputBuffer);
             if (arguments.size() == 1) {
-                long width = decode.getWidth();
-                long height = decode.getHeight();
-                long bpp = decode.getBytesPerPixel();
+                ByteBuffer imageBuffer = allocateBuffer(decode);
                 System.err.println("Decoding using NIO byte buffers");
-                ByteBuffer imageBuffer = ByteBuffer.allocateDirect(
-                  (int) (width * height * bpp));
                 decode.toBytes(imageBuffer);
                 System.err.println(
                     "Decoded bytes MD5: " + md5(imageBuffer));
@@ -164,11 +156,7 @@ public class Main {
             File inputFile = new File(inputFilename);
 
             decode = new Decode(inputFile);
-            long width = decode.getWidth();
-            long height = decode.getHeight();
-            long bpp = decode.getBytesPerPixel();
-            ByteBuffer imageBuffer = ByteBuffer.allocateDirect(
-                (int) (width * height * bpp));
+            ByteBuffer imageBuffer = allocateBuffer(decode);
 
             System.err.println("Opened decoder for file: " + inputFilename);
             if (args.length == 1) {
@@ -180,6 +168,19 @@ public class Main {
                 System.err.println("INVALID DECODE COMMAND");
             }
         }
+    }
+
+    /**
+     * Allocate a buffer for the given initialized decoder.
+     *
+     * @param decode non-null decoder
+     * @return directly allocated buffer for storing decoded data
+     */
+    private ByteBuffer allocateBuffer(Decode decode) {
+        long width = decode.getWidth();
+        long height = decode.getHeight();
+        long bpp = decode.getBytesPerPixel();
+        return ByteBuffer.allocateDirect((int) (width * height * bpp));
     }
 
 }
