@@ -21,6 +21,10 @@ package ome.jxrlib;
 import java.io.File;
 import java.nio.ByteBuffer;
 
+/**
+ * Abstract class for decoding JPEG-XR data.
+ * @see Decode
+ */
 abstract class AbstractDecode {
 
     private final Factory factory = new Factory();
@@ -31,6 +35,12 @@ abstract class AbstractDecode {
     private final ImageDecoder decoder;
     private final long frameCount;
 
+    /**
+     * Construct a decoder for the JPEG-XR data in the given file.
+     *
+     * @param inputFile file containing JPEG-XR data.
+     *        Should exist and be non-null.
+     */
     public AbstractDecode(File inputFile) {
         this.inputFile = inputFile;
         this.dataBuffer = null;
@@ -39,14 +49,35 @@ abstract class AbstractDecode {
         frameCount = decoder.getFrameCount();
     }
 
+    /**
+     * Construct a decoder for the JPEG-XR data in the given byte array.
+     *
+     * @param data array containing JPEG-XR data; should be non-null
+     */
     AbstractDecode(byte data[]) throws DecodeException {
         this(ByteBuffer.allocateDirect(data.length).put(data));
     }
 
+    /**
+     * Construct a decoder for the JPEG-XR data in the given buffer.
+     *
+     * @param dataBuffer buffer containing JPEG-XR data.
+     *        Should be non-null and directly allocated.
+     * @throws DecodeException if the buffer was not directly allocated
+     */
     AbstractDecode(ByteBuffer dataBuffer) throws DecodeException {
         this(dataBuffer, 0, dataBuffer.capacity());
     }
 
+    /**
+     * Construct a decoder for the JPEG-XR data in the given buffer.
+     *
+     * @param dataBuffer buffer containing JPEG-XR data.
+     *        Should be non-null and directly allocated.
+     * @param offset starting offset within the given buffer
+     * @param length number of bytes to read from the given buffer
+     * @throws DecodeException if the buffer was not directly allocated
+     */
     AbstractDecode(ByteBuffer dataBuffer, int offset, int length)
             throws DecodeException {
         if (!dataBuffer.isDirect()) {
@@ -59,26 +90,48 @@ abstract class AbstractDecode {
         frameCount = decoder.getFrameCount();
     }
 
+    /**
+     * @return image width in pixels
+     */
     public long getWidth() {
         return decoder.getWidth();
     }
 
+    /**
+     * @return image height in pixels
+     */
     public long getHeight() {
         return decoder.getHeight();
     }
 
+    /**
+     * @return number of bytes per pixel, equal to the number of channels
+     *         multiplied by the number of bytes per channel
+     */
     public long getBytesPerPixel() {
         return decoder.getBytesPerPixel();
     }
 
+    /**
+     * @return the pixel format
+     */
     public GUID getPixelFormat() {
         return decoder.getGUIDPixFormat();
     }
 
+    /**
+     * @return true if channels are returned in BGR order
+     */
     public boolean isBGR() {
         return decoder.isBGR();
     }
 
+    /**
+     * Decode the current JPEG-XR data into the given buffer.
+     *
+     * @param imageBuffer directly allocated buffer to store decoded data
+     * @throws DecodeException if the buffer is not directly allocated
+     */
     public void toBytes(ByteBuffer imageBuffer) throws DecodeException {
         if (!imageBuffer.isDirect()) {
             throw new DecodeException("Buffer must be allocated direct.");
@@ -86,6 +139,14 @@ abstract class AbstractDecode {
         decoder.getRawBytes(imageBuffer);
     }
 
+    /**
+     * Transcode the current JPEG-XR data to a file in a supported output
+     * format (e.g. BMP).
+     * The file extension is used to determine the output format.
+     *
+     * @param outputFile location to write data,
+     *        should be neither null nor an existing file
+     */
     public void toFile(File outputFile) {
         String fileName = outputFile.getName();
         String extension = fileName.substring(fileName.lastIndexOf('.') + 1);
@@ -104,6 +165,14 @@ abstract class AbstractDecode {
         }
     }
 
+    /**
+     * Decode the first JPEG-XR frame from the given byte array.
+     *
+     * @param source byte array containing JPEG-XR data
+     * @param offset starting index in the source byte array
+     * @param length number of valid bytes in the array starting at offset
+     * @return uncompressed data
+     */
     protected static byte[] decodeFirstFrame(
             byte[] source, int offset, int length) {
         DecodeContext decodeContext = new DecodeContext();
