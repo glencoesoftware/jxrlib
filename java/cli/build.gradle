@@ -16,10 +16,10 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven {
-        url 'http://artifacts.openmicroscopy.org/artifactory/maven'
+        url 'https://artifacts.openmicroscopy.org/artifactory/maven'
     }
     maven {
-        url 'http://artifacts.openmicroscopy.org/artifactory/ome.staging'
+        url 'https://artifacts.openmicroscopy.org/artifactory/ome.staging'
     }
 }
 
