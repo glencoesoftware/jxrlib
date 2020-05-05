@@ -22,7 +22,6 @@ on_success:
   - IF NOT EXIST C:\Users\appveyor\.m2 mkdir C:\Users\appveyor\.m2
   - ps: (Get-Content java\settings.xml) -replace '__MAVEN_SERVER_USERNAME__', "$env:MAVEN_SERVER_USERNAME" | %{$_ -replace '__MAVEN_SERVER_PASSWORD__', "$env:MAVEN_SERVER_PASSWORD"} | Out-File -encoding ASCII C:\Users\appveyor\.m2\settings.xml
   - mvn -f java/pom.xml -DargLine="-Djava.library.path=vc14projects\Release\JXRJava\x64" test
-  - mvn -f java/cli/pom.xml package
   - IF NOT DEFINED APPVEYOR_PULL_REQUEST_NUMBER mvn -f java\native-windows_64\pom.xml deploy
 artifacts:
   - path: 'java\native-windows_64\target\*.jar'
