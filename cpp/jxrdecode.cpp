@@ -54,20 +54,6 @@ static std::string md5(std::vector<T> bytes, size_t offset) {
   return ss.str();
 }
 
-static void print_bytes(std::vector<char>bytes, std::FILE *out = stderr) {
-  for (int i = 0 ; i < bytes.size() ; ){
-    fprintf(out, "0x%.2x%.2x%.2x%.2x%c", bytes[i++], bytes[i++], bytes[i++], bytes[i++],
-            i % 40 == 0 ? '\n' : ' ');
-  }
-}
-
-static void print_bytes(std::vector<unsigned char>bytes, std::FILE *out = stderr) {
-  for (int i = 0 ; i < bytes.size() ; ){
-    fprintf(out, "0x%.2x%.2x%.2x%.2x%c", bytes[i++], bytes[i++], bytes[i++], bytes[i++],
-            i % 40 == 0 ? '\n' : ' ');
-  }
-}
-
 void stream_data() {
   Factory factory;
   CodecFactory codecFactory;
