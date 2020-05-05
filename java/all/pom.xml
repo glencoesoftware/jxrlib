@@ -12,7 +12,7 @@
 
   <name>JXRLib Java Bindings</name>
   <description>Java bindings and pre-built native binaries for jxrlib.</description>
-  <url>https://jxrlib.codeplex.com/</url>
+  <url>https://github.com/glencoesoftware/jxrlib</url>
   <inceptionYear>2016</inceptionYear>
 
   <licenses>
@@ -61,6 +61,11 @@
       <artifactId>jxrlib-native-osx_64</artifactId>
       <version>0.2.3-SNAPSHOT</version>
       <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>args4j</groupId>
+      <artifactId>args4j</artifactId>
+      <version>2.33</version>
     </dependency>
   </dependencies>
 
