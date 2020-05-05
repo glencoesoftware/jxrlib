@@ -16,10 +16,10 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven {
-        url 'http://artifacts.openmicroscopy.org/artifactory/ome.releases'
+        url 'https://artifacts.openmicroscopy.org/artifactory/ome.releases'
     }
     maven {
-        url 'http://artifacts.openmicroscopy.org/artifactory/ome.snapshots'
+        url 'https://artifacts.openmicroscopy.org/artifactory/ome.snapshots'
     }
 }
 
