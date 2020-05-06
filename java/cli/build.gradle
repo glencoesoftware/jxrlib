@@ -1,7 +1,6 @@
 plugins {
     id 'application'
     id 'eclipse'
-    id 'java'
 }
 
 group = 'ome.jxrlib-cli'
@@ -9,18 +8,18 @@ version = '0.3.0-SNAPSHOT'
 
 mainClassName = 'ome.jxrlib.Main'
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
     jcenter()
-    //mavenLocal()
+    mavenLocal()
     mavenCentral()
     maven {
-        url 'http://artifacts.openmicroscopy.org/artifactory/maven'
+        url 'https://artifacts.openmicroscopy.org/artifactory/maven'
     }
     maven {
-        url 'http://artifacts.openmicroscopy.org/artifactory/ome.staging'
+        url 'https://artifacts.openmicroscopy.org/artifactory/ome.staging'
     }
 }
 
@@ -29,7 +28,10 @@ configurations.all {
 }
 
 dependencies {
-    compile 'ch.qos.logback:logback-classic:1.1.7'
-    compile 'ome:jxrlib-all:0.3.0-SNAPSHOT'
-    compile 'args4j:args4j:2.33'
+    implementation 'ch.qos.logback:logback-classic:1.1.7'
+    implementation 'ome:jxrlib-all:0.3.0-SNAPSHOT'
+    implementation 'args4j:args4j:2.33'
+    implementation 'javax.xml.bind:jaxb-api:2.3.0'
+    implementation 'com.sun.xml.bind:jaxb-core:2.3.0'
+    implementation 'com.sun.xml.bind:jaxb-impl:2.3.0'
 }
