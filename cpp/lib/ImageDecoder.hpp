@@ -49,6 +49,7 @@ namespace jxrlib {
     size_t getBytesPerPixel();
     Resolution getResolution();
     void getRawBytes(unsigned char *image_buffer);
+    std::vector<unsigned char> getRawBytes();
   };
 
 } // namespace jxrlib

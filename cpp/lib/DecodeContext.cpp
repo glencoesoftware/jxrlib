@@ -18,9 +18,12 @@
  * #%L
  */
 
+#include <sstream>
 #include "CodecFactory.hpp"
 #include "DecodeContext.hpp"
 #include "ImageDecoder.hpp"
+#include "FormatError.hpp"
+#include "JXRGlue.h"
 
 namespace jxrlib {
 
@@ -39,6 +42,20 @@ namespace jxrlib {
     decoder.selectFrame(0);
     decoder.getRawBytes((unsigned char *)destination);
     return destination;
+  }
+
+  std::vector<unsigned char> DecodeContext::decodeFirstFrame(std::vector<unsigned char> &image) {
+    ERR err = WMP_errSuccess;
+    ImageDecoder decoder;
+    CodecFactory codecFactory;
+    codecFactory.decoderFromVector(decoder, image);
+    decoder.selectFrame(0);
+    return decoder.getRawBytes();
+  Cleanup:
+    std::stringstream msg;
+    msg << "ERROR: Could not decode image: " << err;
+    std::string errMsg = msg.str();
+    throw FormatError(errMsg);
   }
 
 } // namespace jxrlib

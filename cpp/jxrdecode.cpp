@@ -30,6 +30,7 @@
 #include "windowsmediaphoto.h"
 
 #include "CodecFactory.hpp"
+#include "DecodeContext.hpp"
 #include "Factory.hpp"
 #include "FormatConverter.hpp"
 #include "FormatError.hpp"
@@ -57,6 +58,7 @@ static std::string md5(std::vector<T> bytes, size_t offset) {
 void stream_data() {
   Factory factory;
   CodecFactory codecFactory;
+  DecodeContext decodeContext;
   std::vector<unsigned char> bytes;
 
   std::cin.unsetf(std::ios_base::skipws);
@@ -66,24 +68,13 @@ void stream_data() {
 
   std::cerr << "Read bytes MD5: " << md5(bytes, 0) << std::endl;
 
-  ImageDecoder decoder;
-  codecFactory.decoderFromBytes(decoder, bytes);
-  std::cerr << "Opened decoder with " << bytes.size() << " bytes" << std::endl;
+  std::vector<unsigned char> decodedBytes;
 
-  unsigned int frameSize =
-    decoder.getWidth() * decoder.getHeight() * decoder.getBytesPerPixel();
-  std::vector<unsigned char> decodedBytes(frameSize);
+  decodedBytes = decodeContext.decodeFirstFrame(bytes);
 
-  unsigned int frameCount = decoder.getFrameCount();
-  std::cerr << "Found " << frameCount << " frames" << std::endl;
-
-  for(int i = 0 ; i < frameCount ; i++) {
-    decoder.selectFrame(i);
-    decoder.getRawBytes(decodedBytes.data());
-
-    std::cerr << decodedBytes.size() << " Bytes MD5: " << md5(decodedBytes, 0)
+  std::cerr << decodedBytes.size() << " Bytes MD5: " << md5(decodedBytes, 0)
       << std::endl;
-  }
+
 }
 
 void stream_file_bytes(std::string inputFile, size_t offset) {

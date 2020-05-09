@@ -131,6 +131,19 @@ namespace jxrlib {
     throw FormatError("ERROR: Unable to create decoder from bytes in memory");
   }
 
+  void CodecFactory::decoderFromVector(ImageDecoder &decoder,
+                                       std::vector<unsigned char> bytes) {
+    Stream dataStream(bytes.data(), bytes.size());
+    const PKIID *pIID = NULL;
+
+    Call(GetImageDecodeIID((const char *)".jxr", &pIID));
+    Call(PKCodecFactory_CreateCodec(pIID, (void **)&decoder.pDecoder));
+    decoder.initialize(dataStream);
+    return;
+  Cleanup:
+    throw FormatError("ERROR: Unable to create decoder from unsigned char vector.");
+  }
+
   FormatConverter CodecFactory::createFormatConverter(ImageDecoder &imageDecoder,
                                         std::string extension) {
     FormatConverter converter;

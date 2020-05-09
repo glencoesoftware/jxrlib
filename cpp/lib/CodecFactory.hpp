@@ -50,6 +50,8 @@ namespace jxrlib {
                           unsigned char *bytes,
                           size_t offset,
                           size_t length);
+    void decoderFromVector(ImageDecoder &decoder,
+                           std::vector<unsigned char> data);
     FormatConverter createFormatConverter(ImageDecoder &decoder,
                                           std::string extension);
   };
