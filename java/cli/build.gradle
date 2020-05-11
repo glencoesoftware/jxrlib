@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'ome.jxrlib-cli'
-version = '0.2.4-SNAPSHOT'
+version = '0.2.4'
 
 mainClassName = 'ome.jxrlib.Main'
 
@@ -29,7 +29,7 @@ configurations.all {
 
 dependencies {
     implementation 'ch.qos.logback:logback-classic:1.1.7'
-    implementation 'ome:jxrlib-all:0.2.4-SNAPSHOT'
+    implementation 'ome:jxrlib-all:0.2.4'
     implementation 'args4j:args4j:2.33'
     implementation 'javax.xml.bind:jaxb-api:2.3.0'
     implementation 'com.sun.xml.bind:jaxb-core:2.3.0'
