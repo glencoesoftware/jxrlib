@@ -1,0 +1,39 @@
+name: Windows Native Artifact Build
+
+on:
+  push:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install SWIG
+        run: cinst swig
+
+      - name: Run SWIG
+        run: |
+          mkdir java\target\swig\ome\jxrlib
+          swig.exe -java -c++ -package ome.jxrlib -outdir java\target\swig\ome\jxrlib -o java\target\swig\JXR_wrap.cxx java\JXR.i
+
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.2
+
+      - name: Build native code
+        run: msbuild jxrencoderdecoder\JXR_vc14.sln
+
+      - name: Build native artifacts
+        run: mvn -f java\native-windows_64\pom.xml package
+
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifacts
+          path: java\native-windows_64\target\*.jar
