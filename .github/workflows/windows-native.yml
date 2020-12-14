@@ -27,7 +27,7 @@ jobs:
         uses: microsoft/setup-msbuild@v1.0.2
 
       - name: Build native code
-        run: msbuild jxrencoderdecoder\JXR_vc16.sln
+        run: msbuild jxrencoderdecoder\JXR_vc16.sln /p:Configuration=Release /p:Platform="x64"
 
       - name: Build native artifacts
         run: mvn -f java\native-windows_64\pom.xml package
