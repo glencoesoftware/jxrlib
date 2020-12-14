@@ -53,6 +53,7 @@ jobs:
 
       - name: Run tests
         run: |
+          export LD_LIBRARY_PATH=${GITHUB_WORKSPACE}/build
           cd build
           mkdir -p transcoded/C/ transcoded/C++/ transcoded/Java/
           # Test base jxrlib C library
@@ -65,6 +66,8 @@ jobs:
           done
           # Test jxrlib Java bindings (in memory and file to file)
           mvn -f ../java/pom.xml test
+          # Testing was successful
+          cd ${GITHUB_WORKSPACE}
           mvn -f java/native-linux_64 package;
 
       - name: Archive build artifacts
