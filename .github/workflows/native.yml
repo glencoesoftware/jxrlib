@@ -6,10 +6,9 @@ on:
     types: [opened, edited, reopened, synchronize]
 
 jobs:
-  build:
+  build-win64:
     runs-on: windows-latest
     steps:
-
       - name: Checkout
         uses: actions/checkout@v2
         with:
@@ -37,3 +36,39 @@ jobs:
         with:
           name: artifacts
           path: java\native-windows_64\target\*.jar
+
+  build-linux64:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install SWIG
+        run: sudo apt-get install -y swig
+
+      - name: Build native code
+        run: make clean swig all
+
+      - name: Run tests
+        run: |
+          cd build
+          mkdir -p transcoded/C/ transcoded/C++/ transcoded/Java/
+          # Test base jxrlib C library
+          for input in ../fixtures/first-tiles/*; do
+            basename=${input##*/};
+            basename=${bn%.jxr};
+            ./JxrDecApp -i "$input" -o "transcoded/C/$basename.tif";
+            ./jxrdecode "$input" "transcoded/C++/$basename.tif";
+            ./jxrdecode --in-memory "$input";
+          done
+          # Test jxrlib Java bindings (in memory and file to file)
+          mvn -f ../java/pom.xml test
+          mvn -f java/native-linux_64 package;
+
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifacts
+          path: java\native-linux_64\target\*.jar
