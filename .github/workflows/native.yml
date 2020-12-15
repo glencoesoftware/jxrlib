@@ -75,3 +75,42 @@ jobs:
         with:
           name: artifacts
           path: java/native-linux_64/target/*.jar
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install SWIG
+        run: brew install swig
+
+      - name: Build native code
+        run: make clean swig all
+
+      - name: Run tests
+        run: |
+          export DYLD_LIBRARY_PATH=${GITHUB_WORKSPACE}/build
+          cd build
+          mkdir -p transcoded/C/ transcoded/C++/ transcoded/Java/
+          # Test base jxrlib C library
+          for input in ../fixtures/first-tiles/*; do
+            basename=${input##*/};
+            basename=${bn%.jxr};
+            ./JxrDecApp -i "$input" -o "transcoded/C/$basename.tif";
+            ./jxrdecode "$input" "transcoded/C++/$basename.tif";
+            ./jxrdecode --in-memory "$input";
+          done
+          # Test jxrlib Java bindings (in memory and file to file)
+          mvn -f ../java/pom.xml test
+          # Testing was successful
+          cd ${GITHUB_WORKSPACE}
+          mvn -f java/native-osx_64 package;
+
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifacts
+          path: java/native-osx_64/target/*.jar
