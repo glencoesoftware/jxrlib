@@ -34,7 +34,7 @@ jobs:
       - name: Archive build artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: artifacts
+          name: artifacts-win64
           path: java\native-windows_64\target\*.jar
 
   build-linux64:
@@ -73,7 +73,7 @@ jobs:
       - name: Archive build artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: artifacts
+          name: artifacts-linux64
           path: java/native-linux_64/target/*.jar
 
   build-macos:
@@ -116,5 +116,46 @@ jobs:
       - name: Archive build artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: artifacts
+          name: artifacts-macos
           path: java/native-osx_64/target/*.jar
+
+  build-all:
+    runs-on: ubuntu-latest
+    needs: [build-win64, build-linux64, build-macos]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Download native artifacts
+        uses: actions/download-artifact@v2
+
+      - name: Install artifacts in local Maven repository
+        run: |
+          for jar in artifacts*/*.jar; do
+          mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=${jar}
+          done
+
+      - name: Build all artifact
+        run: mvn -f java/all/pom.xml package install
+
+      - name: Run tests
+        run: |
+          gradle -b java/cli/build.gradle install
+          mkdir -p build/transcoded/C/ build/transcoded/C++/ build/transcoded/Java/
+          export EXT="tif"
+          export IFS="
+          "
+
+          for input in fixtures/first-tiles/*; do
+            output=$(basename "$input")
+            output=$(basename "$output" .jxr)
+            java/cli/build/install/cli/bin/cli --in-memory "$input" "build/transcoded/Java/in-memory-$output.$EXT"
+          done
+
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifacts-all
+          path: java/all/target/*.jar
