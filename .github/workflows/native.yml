@@ -48,8 +48,13 @@ jobs:
       - name: Install SWIG
         run: sudo apt-get install -y swig
 
+      - name: Run SWIG
+        run: make swig
+
       - name: Build native code
-        run: make clean swig all
+        run: |
+          docker build -f Dockerfile2010 . -t native_builder
+          docker run -v $(pwd):/jxrlib --user ${UID} -t native_builder make -C /jxrlib
 
       - name: Run tests
         run: |
