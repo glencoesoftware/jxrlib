@@ -25,8 +25,6 @@
 #include <string>
 #include <sstream>
 
-#include <openssl/md5.h>
-
 #include "windowsmediaphoto.h"
 
 #include "CodecFactory.hpp"
@@ -40,20 +38,6 @@
 
 using namespace jxrlib;
 
-template<typename T>
-static std::string md5(std::vector<T> bytes, size_t offset) {
-  std::vector<unsigned char> md5_bytes(MD5_DIGEST_LENGTH);
-  MD5(
-    (const unsigned char *)bytes.data() + offset,
-    bytes.size() - offset,
-    md5_bytes.data());
-  std::stringstream ss;
-  for (int i = 0; i < MD5_DIGEST_LENGTH; i++) {
-    ss << std::hex << (int)md5_bytes[i];
-  }
-  return ss.str();
-}
-
 void stream_data() {
   Factory factory;
   CodecFactory codecFactory;
@@ -63,8 +47,6 @@ void stream_data() {
   for(unsigned char val ; std::cin >> val ; ){
     bytes.push_back(val);
   }
-
-  std::cerr << "Read bytes MD5: " << md5(bytes, 0) << std::endl;
 
   ImageDecoder decoder;
   codecFactory.decoderFromBytes(decoder, bytes);
@@ -81,8 +63,7 @@ void stream_data() {
     decoder.selectFrame(i);
     decoder.getRawBytes(decodedBytes.data());
 
-    std::cerr << decodedBytes.size() << " Bytes MD5: " << md5(decodedBytes, 0)
-      << std::endl;
+    std::cerr << decodedBytes.size() << " Bytes" << std::endl;
   }
 }
 
@@ -95,8 +76,6 @@ void stream_file_bytes(std::string inputFile, size_t offset) {
   std::cerr << "Reading bytes from file: " << inputFile << std::endl;
   input.seekg(0, std::ios::beg);
   input.read(bytes.data() + offset, length);
-
-  std::cerr << "Read bytes MD5: " << md5(bytes, offset) << std::endl;
 
   Factory factory;
   CodecFactory codecFactory;
@@ -117,8 +96,7 @@ void stream_file_bytes(std::string inputFile, size_t offset) {
     decoder.selectFrame(i);
     decoder.getRawBytes(decodedBytes.data());
 
-    std::cerr << decodedBytes.size() << " Bytes MD5: " << md5(decodedBytes, 0)
-      << std::endl;
+    std::cerr << decodedBytes.size() << " Bytes" << std::endl;
   }
 }
 
@@ -141,7 +119,7 @@ void stream_file(std::string inputFile) {
     decoder.selectFrame(i);
     decoder.getRawBytes(bytes.data());
 
-    std::cerr << bytes.size() << " Bytes MD5: " << md5(bytes, 0) << std::endl;
+    std::cerr << bytes.size() << " Bytes" << std::endl;
   }
 }
 
@@ -164,7 +142,7 @@ void stream_file(std::string inputFile, long offset) {
     decoder.selectFrame(i);
     decoder.getRawBytes(bytes.data());
 
-    std::cerr << bytes.size() << " Bytes MD5: " << md5(bytes, 0) << std::endl;
+    std::cerr << bytes.size() << " Bytes" << std::endl;
   }
 }
 
