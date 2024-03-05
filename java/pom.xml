@@ -12,7 +12,7 @@
 
   <name>JXRLib Java Bindings</name>
   <description>Java bindings for jxrlib.</description>
-  <url>https://jxrlib.codeplex.com/</url>
+  <url>https://github.com/glencoesoftware/jxrlib</url>
   <inceptionYear>2016</inceptionYear>
 
   <licenses>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2106 Glencoe Software, Inc. All rights reserved.
+ * Copyright (C) 2016-2020 Glencoe Software, Inc. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,29 +23,50 @@ import java.nio.ByteBuffer;
 
 import org.scijava.nativelib.NativeLibraryUtil;
 
+/**
+ * Concrete class for decoding JPEG-XR data.
+ * Automatically loads the relevant native libraries.
+ *
+ * @see AbstractDecode
+ */
 public class Decode extends AbstractDecode {
 
     static {
         NativeLibraryUtil.loadNativeLibrary(Decode.class, "jxrjava");
     }
 
+    /**
+     * @see AbstractDecode(File)
+     */
     public Decode(File inputFile) {
         super(inputFile);
     }
 
+    /**
+     * @see AbstractDecode(byte[])
+     */
     public Decode(byte data[]) throws DecodeException {
         super(data);
     }
 
+    /**
+     * @see AbstractDecode(ByteBuffer)
+     */
     public Decode(ByteBuffer dataBuffer) throws DecodeException {
         super(dataBuffer);
     }
 
+    /**
+     * @see AbstractDecode(ByteBuffer, int, int)
+     */
     public Decode(ByteBuffer dataBuffer, int offset, int length)
             throws DecodeException {
         super(dataBuffer, offset, length);
     }
 
+    /**
+     * @see AbstractDecode#decodeFirstFrame(byte[], int, int)
+     */
     public static byte[] decodeFirstFrame(
             byte[] source, int offset, int length) {
         return AbstractDecode.decodeFirstFrame(source, offset, length);
