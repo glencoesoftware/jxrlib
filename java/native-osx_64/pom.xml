@@ -25,7 +25,7 @@
   <repositories>
     <repository>
       <id>ome.releases</id>
-      <url>http://artifacts.openmicroscopy.org/artifactory/ome.releases</url>
+      <url>https://artifacts.openmicroscopy.org/artifactory/ome.releases</url>
     </repository>
   </repositories>
 
@@ -72,12 +72,12 @@
     <repository>
       <id>ome.staging</id>
       <name>OME Staging Repository</name>
-      <url>http://artifacts.openmicroscopy.org/artifactory/ome.staging</url>
+      <url>https://artifacts.openmicroscopy.org/artifactory/ome.staging</url>
     </repository>
     <snapshotRepository>
       <id>ome.snapshots</id>
       <name>OME Snapshots Repository</name>
-      <url>http://artifacts.openmicroscopy.org/artifactory/ome.snapshots</url>
+      <url>https://artifacts.openmicroscopy.org/artifactory/ome.snapshots</url>
     </snapshotRepository>
   </distributionManagement>
 
